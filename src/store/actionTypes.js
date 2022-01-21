@@ -1,0 +1,19 @@
+export const LOGIN = "LOGIN";
+export const LOGOUT = "LOGOUT";
+export const GET_USER = "GET_USER";
+export const UPDATE_USER = "UPDATE_USER";
+
+export const CHATS_LIST_GET = "CHATS_LIST_GET";
+export const CHATS_LIST_CLEAN = "CHATS_LIST_CLEAN";
+
+export const REVIEWS_LIST_GET = "REVIEWS_LIST_GET";
+export const REVIEWS_LIST_CLEAN = "REVIEWS_LIST_CLEAN";
+
+export const DOCTORS_LIST_GET = "DOCTORS_LIST_GET";
+export const DOCTORS_LIST_CLEAN = "DOCTORS_LIST_CLEAN";
+
+export const USERS_LIST_GET = "USERS_LIST_GET";
+export const USERS_LIST_CLEAN = "USERS_LIST_CLEAN";
+
+export const CLEAN_ON_UNMOUNT_TRUE = "CLEAN_ON_UNMOUNT_TRUE";
+export const CLEAN_ON_UNMOUNT_FALSE = "CLEAN_ON_UNMOUNT_FALSE";

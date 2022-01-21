@@ -1,0 +1,25 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": "latest",
+    "spread": true
+  },
+
+  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:react-hooks/recommended"],
+
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "warn",
+    "no-unused-vars": "warn",
+    "react/jsx-uses-vars": "error",
+    "react/no-unknown-property": "warn",
+    "react/self-closing-comp": "error",
+    "no-console": "warn"
+  }
+}
