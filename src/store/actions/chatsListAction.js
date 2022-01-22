@@ -1,6 +1,7 @@
 import {
   CHATS_LIST_CLEAN,
   CHATS_LIST_GET,
+  CHATS_LIST_UPDATE_ROW,
   CLEAN_ON_UNMOUNT_FALSE,
   CLEAN_ON_UNMOUNT_TRUE,
 } from "../actionTypes";
@@ -19,6 +20,11 @@ export const getChatsList =
       return Promise.reject(error);
     }
   };
+
+export const updateChatsListRow =
+  (rowId, updatedData = {}) =>
+  async (dispatch) =>
+    dispatch({ type: CHATS_LIST_UPDATE_ROW, payload: { id: rowId, updatedData } });
 
 export const cleanChatsList = () => (dispatch) =>
   dispatch({

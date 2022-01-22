@@ -3,6 +3,16 @@
     margin-left: 60px;
   }
 
+  .chat-view-comment-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ant-comment-avatar img {
+    width: 48px;
+    height: 48px;
+  }
+
   .ant-image {
     border-radius: 4px;
     overflow: hidden;
@@ -19,6 +29,13 @@
     .anticon {
       transform: translateY(-1px);
     }
+  }
+}
+
+.chat-view {
+  &.closed {
+    color: var(--bs-gray-200) !important;
+    font-style: italic;
   }
 }
 
@@ -42,8 +59,7 @@
   }
 }
 
-.chat-view-comment-avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.chat-settings-tab {
+  max-width: 400px;
+  padding-left: 2px;
 }

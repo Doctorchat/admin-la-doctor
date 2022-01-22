@@ -1,9 +1,8 @@
 import { Alert, Tag } from "antd";
 import PropTypes from "prop-types";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { useMount, useSessionStorage, useUnmount } from "react-use";
 import { DcTable } from "../components";
 import {
@@ -20,7 +19,7 @@ const initialState = {
   sort_direction: "descend",
 };
 
-const chatStatuses = {
+export const chatStatuses = {
   initied: <Tag color="blue">Inițializat</Tag>,
   open: <Tag color="orange">În așteptare</Tag>,
   closed: <Tag>Arhivat</Tag>,
@@ -28,7 +27,7 @@ const chatStatuses = {
   unpaid: <Tag color="red">Achitare</Tag>,
 };
 
-const chatTypes = {
+export const chatTypes = {
   standard: <Tag>Standard</Tag>,
   consilium: <Tag color="#FFD700">Consiliu</Tag>,
   auto: <Tag>Auto</Tag>,
@@ -69,9 +68,8 @@ export default function ChatsList(props) {
     }
   }, [dispatch, simplified, state]);
 
-  useEffect(fetcher, [fetcher]);
-
   useMount(() => {
+    fetcher();
     dispatch(setCleanOnUnmountTrue());
   });
 
@@ -94,11 +92,11 @@ export default function ChatsList(props) {
   );
 
   const onTableLinksClick = useCallback(
-    async (e) => {
+    (path) => async (e) => {
       e.preventDefault();
 
       await dispatch(setCleanOnUnmountFalse());
-      history.push(e.target.href);
+      history.push(path);
     },
     [dispatch, history]
   );
@@ -106,21 +104,30 @@ export default function ChatsList(props) {
   const columns = useMemo(
     () => [
       {
+        title: "ID",
+        dataIndex: "id",
+        render: (rowData) => (
+          <a href={`/chat/${rowData}`} onClick={onTableLinksClick(`/chat/${rowData}`)}>
+            #{rowData}
+          </a>
+        ),
+      },
+      {
         title: "Doctor",
-        dataIndex: "name",
-        render: (rowData, { id }) => (
-          <Link to={`/doctor/${id}`} onClick={onTableLinksClick}>
-            {rowData}
-          </Link>
+        dataIndex: "doctor",
+        render: ({ id, name }) => (
+          <a href={`/doctor/${id}`} onClick={onTableLinksClick(`/doctor/${id}`)}>
+            {name}
+          </a>
         ),
       },
       {
         title: "Client",
         dataIndex: "client",
-        render: (rowData, { id }) => (
-          <Link to={`/user/${id}`} onClick={onTableLinksClick}>
-            {rowData}
-          </Link>
+        render: ({ id, name }) => (
+          <a href={`/user/${id}`} onClick={onTableLinksClick(`/user/${id}`)}>
+            {name}
+          </a>
         ),
       },
       {
@@ -155,6 +162,7 @@ export default function ChatsList(props) {
       dataSource={chats?.data || []}
       loading={loading}
       onTabelChange={onTableChange}
+      rowClassName={(row) => row.status === "closed" && "chat-row-closed"}
       pagination={{
         position: [simplified ? "none" : "bottomRight"],
         per_page: chats?.per_page,

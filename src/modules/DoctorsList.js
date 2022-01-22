@@ -1,9 +1,8 @@
 import PropTypes from "prop-types";
-import { Alert } from "antd";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Alert, Tag } from "antd";
+import { useCallback, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { useMount, useSessionStorage, useUnmount } from "react-use";
 import { DcTable } from "../components";
 import {
@@ -12,12 +11,14 @@ import {
   setCleanOnUnmountFalse,
   setCleanOnUnmountTrue,
 } from "../store/actions/doctorsListAction";
+import { toggleSpinnerIndicator } from "../store/actions/spinnerIndicatorAction";
 import date from "../utils/date";
 
 const initialState = {
   page: 1,
   sort_column: "id",
   sort_direction: "descend",
+  loaded: false,
 };
 
 const tableStateKey = "doctors-list-state";
@@ -34,30 +35,41 @@ export default function DoctorsList(props) {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const fetcher = useCallback(async () => {
-    const { page, sort_column, sort_direction } = state;
-    const limit = simplified ? 10 : 20;
+  const fetcher = useCallback(
+    async (firstTime = false) => {
+      const { page, sort_column, sort_direction } = state;
+      const limit = simplified ? 10 : 20;
 
-    setLoading(true);
-
-    try {
-      await dispatch(getDoctorsList({ page, sort_column, sort_direction, limit }));
-    } catch (error) {
-      if (error.response.status === 500) {
-        setError({
-          status: error.response.status,
-          message: error.response.data.message,
-        });
-        sessionStorage.removeItem(tableStateKey);
+      if (firstTime) {
+        setLoading(true);
+      } else {
+        dispatch(toggleSpinnerIndicator(true));
       }
-    } finally {
-      setLoading(false);
-    }
-  }, [dispatch, simplified, state]);
 
-  useEffect(fetcher, [fetcher]);
+      try {
+        await dispatch(getDoctorsList({ page, sort_column, sort_direction, limit }));
+      } catch (error) {
+        if (error.response.status === 500) {
+          setError({
+            status: error.response.status,
+            message: error.response.data.message,
+          });
+          sessionStorage.removeItem(tableStateKey);
+        }
+      } finally {
+        setLoading(false);
+        dispatch(toggleSpinnerIndicator(false));
+
+        if (firstTime) {
+          setState((prev) => ({ ...prev, loaded: true }));
+        }
+      }
+    },
+    [dispatch, setState, simplified, state]
+  );
 
   useMount(() => {
+    fetcher(!state.loaded);
     dispatch(setCleanOnUnmountTrue());
   });
 
@@ -80,11 +92,11 @@ export default function DoctorsList(props) {
   );
 
   const onTableLinksClick = useCallback(
-    async (e) => {
+    (path) => async (e) => {
       e.preventDefault();
 
       await dispatch(setCleanOnUnmountFalse());
-      history.push(e.target.href);
+      history.push(path);
     },
     [dispatch, history]
   );
@@ -95,9 +107,9 @@ export default function DoctorsList(props) {
         title: "Nume",
         dataIndex: "name",
         render: (rowData, { id }) => (
-          <Link to={`/doctor/${id}`} onClick={onTableLinksClick}>
+          <a href={`/doctor/${id}`} onClick={onTableLinksClick(`/doctor/${id}`)}>
             {rowData}
-          </Link>
+          </a>
         ),
       },
       {
@@ -115,16 +127,20 @@ export default function DoctorsList(props) {
       {
         title: "Ultima accesare",
         dataIndex: "last_seen",
-        render: (rowData) => (rowData ? date(rowData).dynamic() : "Necunoscut"),
+        render: (rowData, row) => {
+          if (row.isOnline) {
+            return <Tag color="#06f">Online</Tag>;
+          }
+
+          return rowData ? date(rowData).dynamic() : "Necunoscut";
+        },
       },
     ],
     [onTableLinksClick]
   );
 
   if (error) {
-    return (
-      <Alert showIcon type="error" message={`Error ${error.status}`} description={error.message} />
-    );
+    return <Alert showIcon type="error" message="Error" description="A apărut o eroare!" />;
   }
 
   return (

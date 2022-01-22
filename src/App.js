@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Router from "./router";
 import routes from "./router/routes";
+import { setGlobalPrivateRequisites } from "./store/actions/bootstrapAction";
 import { getUser } from "./store/actions/userAction";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
   useEffect(() => {
     if (isAuthorized) {
       getUser()(dispatch);
+      dispatch(setGlobalPrivateRequisites());
     }
   }, [dispatch, isAuthorized]);
 

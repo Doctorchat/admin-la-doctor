@@ -115,9 +115,7 @@ export default function ReviewsList(props) {
   );
 
   if (error) {
-    return (
-      <Alert showIcon type="error" message={`Error ${error.status}`} description={error.message} />
-    );
+    return <Alert showIcon type="error" message="Error" description="A apărut o eroare!" />;
   }
 
   return (

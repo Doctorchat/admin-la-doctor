@@ -5,11 +5,14 @@ import { Button, Menu, Typography } from "antd";
 import { Link } from "react-router-dom";
 
 import "./styles/index.scss";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const menuItemsRegister = {
   "/": "dashboard",
   "/statistic": "statistic",
   "/doctors": "doctors",
+  "/doctor/": "doctors",
   "/users": "users",
   "/chats": "chats",
   "/reviews": "reviews",
@@ -20,6 +23,13 @@ const menuItemsRegister = {
 
 export default function Navigation({ closeMenu }) {
   const routeMatch = useRouteMatch();
+  const params = useParams();
+  const [currentRoute, setCurrentRoute] = useState();
+
+  useEffect(() => {
+    const replacer = new RegExp(Object.values(params).join("|"), "g");
+    setCurrentRoute(routeMatch.url.replace(replacer, ""));
+  }, [params, routeMatch.url]);
 
   return (
     <>
@@ -33,7 +43,7 @@ export default function Navigation({ closeMenu }) {
             onClick={closeMenu}
           />
         </Typography.Title>
-        <Menu mode="inline" selectedKeys={menuItemsRegister[routeMatch.url]}>
+        <Menu mode="inline" selectedKeys={menuItemsRegister[currentRoute]}>
           <Menu.Item key="dashboard">
             <Link to="/">Dashboard</Link>
           </Menu.Item>

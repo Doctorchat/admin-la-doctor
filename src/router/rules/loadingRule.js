@@ -8,8 +8,10 @@ const LoadingRule = (props) => {
   return (
     <Route
       render={() =>
-        (props.userId && NextRule && <NextRule {...rest} />) ||
-        (props.userId && <props.component {...props} />) || <FullPageLoading />
+        (props.userId && props.globalDataLoaded && NextRule && <NextRule {...rest} />) ||
+        (props.userId && props.globalDataLoaded && <props.component {...props} />) || (
+          <FullPageLoading />
+        )
       }
     />
   );
@@ -29,6 +31,7 @@ LoadingRule.propTypes = {
 
 const mapStateToProps = (store) => ({
   userId: store.user.payload.id,
+  globalDataLoaded: store.bootstrap.loaded,
 });
 
 export default connect(mapStateToProps)(LoadingRule);

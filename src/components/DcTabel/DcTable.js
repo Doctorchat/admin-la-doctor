@@ -1,32 +1,47 @@
 import PropTypes from "prop-types";
-import { Table } from "antd";
+import { Empty, Table } from "antd";
 
 import "./styles/index.scss";
 
 export default function DcTable(props) {
-  const { dataSource, dataColumns, pagination, title, onTabelChange, rowKey, loading, extra } =
-    props;
+  const {
+    dataSource,
+    dataColumns,
+    pagination,
+    title,
+    onTabelChange,
+    rowKey,
+    loading,
+    extra,
+    rowClassName,
+  } = props;
 
   return (
     <div className="dc-table">
       {title && <h3 className="dc-table-title text-center">{title}</h3>}
-      <Table
-        bordered
-        scroll={{ x: 600 }}
-        size="small"
-        rowKey={rowKey}
-        dataSource={dataSource}
-        columns={dataColumns}
-        onChange={onTabelChange}
-        loading={loading}
-        pagination={{
-          pageSize: pagination.per_page,
-          showSizeChanger: false,
-          total: pagination.total,
-          current: pagination.current_page,
-          position: pagination.position,
-        }}
-      />
+      <div className="dc-table-content position-relative">
+        <Table
+          bordered
+          scroll={{ x: 600 }}
+          size="small"
+          locale={{
+            emptyText: <Empty description="Nu-s date" />,
+          }}
+          rowKey={rowKey}
+          dataSource={dataSource}
+          columns={dataColumns}
+          onChange={onTabelChange}
+          loading={loading}
+          rowClassName={rowClassName}
+          pagination={{
+            pageSize: pagination.per_page,
+            showSizeChanger: false,
+            total: pagination.total,
+            current: pagination.current_page,
+            position: pagination.position,
+          }}
+        />
+      </div>
       {extra && extra}
     </div>
   );
@@ -46,6 +61,8 @@ DcTable.propTypes = {
   onTabelChange: PropTypes.func,
   loading: PropTypes.bool,
   extra: PropTypes.element,
+  fetching: PropTypes.bool,
+  rowClassName: PropTypes.func,
 };
 
 DcTable.defaultProps = {
