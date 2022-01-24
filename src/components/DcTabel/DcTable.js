@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { Empty, Table } from "antd";
 
 import "./styles/index.scss";
+import { useEffect, useState } from "react";
 
 export default function DcTable(props) {
   const {
@@ -14,7 +15,25 @@ export default function DcTable(props) {
     loading,
     extra,
     rowClassName,
+    expandable,
   } = props;
+  const [tableXScroll, setTableXScroll] = useState(null);
+
+  useEffect(() => {
+    const updateTableXScroll = () => {
+      if (window.innerWidth < 951) {
+        setTableXScroll(600);
+      } else {
+        setTableXScroll(null);
+      }
+    };
+
+    window.addEventListener("resize", updateTableXScroll);
+
+    updateTableXScroll();
+
+    return () => window.removeEventListener("resize", updateTableXScroll);
+  }, []);
 
   return (
     <div className="dc-table">
@@ -22,7 +41,7 @@ export default function DcTable(props) {
       <div className="dc-table-content position-relative">
         <Table
           bordered
-          scroll={{ x: 600 }}
+          scroll={{ x: tableXScroll }}
           size="small"
           locale={{
             emptyText: <Empty description="Nu-s date" />,
@@ -33,6 +52,7 @@ export default function DcTable(props) {
           onChange={onTabelChange}
           loading={loading}
           rowClassName={rowClassName}
+          expandable={expandable}
           pagination={{
             pageSize: pagination.per_page,
             showSizeChanger: false,
@@ -63,6 +83,7 @@ DcTable.propTypes = {
   extra: PropTypes.element,
   fetching: PropTypes.bool,
   rowClassName: PropTypes.func,
+  expandable: PropTypes.object,
 };
 
 DcTable.defaultProps = {
@@ -73,4 +94,5 @@ DcTable.defaultProps = {
     total: 20,
     current_page: 1,
   },
+  expandable: {},
 };

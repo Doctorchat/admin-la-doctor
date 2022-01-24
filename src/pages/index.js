@@ -5,3 +5,4 @@ export { default as ChatViewPage } from "./ChatViewPage";
 export { default as ReviewsListPage } from "./ReviewsListPage";
 export { default as DoctorsListPage } from "./DoctorsListPage";
 export { default as DoctorViewPage } from "./DoctorViewPage";
+export { default as DoctorsRequestsPage } from "./DoctorsRequestsPage";

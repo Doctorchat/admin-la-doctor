@@ -11,14 +11,12 @@ import {
   setCleanOnUnmountFalse,
   setCleanOnUnmountTrue,
 } from "../store/actions/doctorsListAction";
-import { toggleSpinnerIndicator } from "../store/actions/spinnerIndicatorAction";
 import date from "../utils/date";
 
 const initialState = {
   page: 1,
   sort_column: "id",
   sort_direction: "descend",
-  loaded: false,
 };
 
 const tableStateKey = "doctors-list-state";
@@ -35,41 +33,29 @@ export default function DoctorsList(props) {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const fetcher = useCallback(
-    async (firstTime = false) => {
-      const { page, sort_column, sort_direction } = state;
-      const limit = simplified ? 10 : 20;
+  const fetcher = useCallback(async () => {
+    const { page, sort_column, sort_direction } = state;
+    const limit = simplified ? 10 : 20;
 
-      if (firstTime) {
-        setLoading(true);
-      } else {
-        dispatch(toggleSpinnerIndicator(true));
+    setLoading(true);
+
+    try {
+      await dispatch(getDoctorsList({ page, sort_column, sort_direction, limit }));
+    } catch (error) {
+      if (error.response.status === 500) {
+        setError({
+          status: error.response.status,
+          message: error.response.data.message,
+        });
+        sessionStorage.removeItem(tableStateKey);
       }
-
-      try {
-        await dispatch(getDoctorsList({ page, sort_column, sort_direction, limit }));
-      } catch (error) {
-        if (error.response.status === 500) {
-          setError({
-            status: error.response.status,
-            message: error.response.data.message,
-          });
-          sessionStorage.removeItem(tableStateKey);
-        }
-      } finally {
-        setLoading(false);
-        dispatch(toggleSpinnerIndicator(false));
-
-        if (firstTime) {
-          setState((prev) => ({ ...prev, loaded: true }));
-        }
-      }
-    },
-    [dispatch, setState, simplified, state]
-  );
+    } finally {
+      setLoading(false);
+    }
+  }, [dispatch, simplified, state]);
 
   useMount(() => {
-    fetcher(!state.loaded);
+    fetcher();
     dispatch(setCleanOnUnmountTrue());
   });
 
@@ -123,6 +109,7 @@ export default function DoctorsList(props) {
       {
         title: "Specialitate",
         dataIndex: "speciality",
+        render: (rowData) => rowData.join(", "),
       },
       {
         title: "Ultima accesare",
@@ -150,6 +137,7 @@ export default function DoctorsList(props) {
       dataSource={doctors?.data || []}
       loading={loading}
       onTabelChange={onTableChange}
+      rowClassName={(row) => row.inVacation && "chat-row-closed"}
       pagination={{
         position: [simplified ? "none" : "bottomRight"],
         per_page: doctors?.per_page,

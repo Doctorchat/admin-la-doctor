@@ -6,6 +6,7 @@ import {
   ReviewsListPage,
   DoctorsListPage,
   DoctorViewPage,
+  DoctorsRequestsPage,
 } from "../pages/";
 
 const routes = [
@@ -48,6 +49,12 @@ const routes = [
   {
     path: "/doctor/:doc_id",
     component: DoctorViewPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/requests",
+    component: DoctorsRequestsPage,
     exact: true,
     private: true,
   },

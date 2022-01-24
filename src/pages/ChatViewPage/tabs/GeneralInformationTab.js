@@ -1,6 +1,6 @@
 import { Descriptions } from "antd";
 import { Link } from "react-router-dom";
-import { chatStatuses } from "../../../modules/ChatsList";
+import { getChatStatus, getChatType } from "../../../modules/ChatsList";
 import date from "../../../utils/date";
 import { useChatViewContext } from "../ChatViewContext";
 
@@ -16,10 +16,10 @@ export default function GeneralInformationTab() {
         <Link to={`/user/${chatInfo?.doctor?.id}`}>{chatInfo?.doctor?.name}</Link>
       </Descriptions.Item>
       <Descriptions.Item label="Status">
-        {(chatInfo?.status && chatStatuses[chatInfo.status]) || "---"}
+        {(chatInfo?.status && getChatStatus(chatInfo)) || "---"}
       </Descriptions.Item>
       <Descriptions.Item label="Tipul">
-        {(chatInfo?.type && chatStatuses[chatInfo.type]) || "---"}
+        {(chatInfo?.type && getChatType(chatInfo)) || "---"}
       </Descriptions.Item>
       <Descriptions.Item label="Actualizat">
         {(chatInfo.updated_at && date(chatInfo.updated_at).dynamic()) || "---"}

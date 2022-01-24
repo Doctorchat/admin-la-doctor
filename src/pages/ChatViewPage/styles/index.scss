@@ -32,13 +32,6 @@
   }
 }
 
-.chat-view {
-  &.closed {
-    color: var(--bs-gray-200) !important;
-    font-style: italic;
-  }
-}
-
 .chat-view-uploads {
   display: flex;
   align-items: center;

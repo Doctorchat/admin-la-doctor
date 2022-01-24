@@ -1,6 +1,7 @@
 .dc-navigation {
-  height: 100%;
   border-right: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
 
   .ant-menu {
     height: 100%;

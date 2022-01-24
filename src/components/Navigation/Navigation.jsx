@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useRouteMatch } from "react-router-dom";
 import { CloseOutlined } from "@ant-design/icons";
-import { Button, Menu, Typography } from "antd";
+import { Badge, Button, Menu, Typography } from "antd";
 import { Link } from "react-router-dom";
 
 import "./styles/index.scss";
@@ -13,6 +13,7 @@ const menuItemsRegister = {
   "/statistic": "statistic",
   "/doctors": "doctors",
   "/doctor/": "doctors",
+  "/requests": "doctors",
   "/users": "users",
   "/chats": "chats",
   "/reviews": "reviews",
@@ -47,20 +48,33 @@ export default function Navigation({ closeMenu }) {
           <Menu.Item key="dashboard">
             <Link to="/">Dashboard</Link>
           </Menu.Item>
-          <Menu.Item key="statistic">Statistică</Menu.Item>
-          <Menu.Item key="doctors">
-            <Link to="/doctors">Doctori</Link>
+          <Menu.Item key="statistic" disabled>
+            Statistică
           </Menu.Item>
-          <Menu.Item key="users">Utilizatori</Menu.Item>
+          <Menu.Item key="doctors">
+            <div className="d-flex align-items-center justify-content-between">
+              <Link to="/doctors">Doctori</Link>
+              <Badge className="ms-2" key="doctors-list-requests" count={0} />
+            </div>
+          </Menu.Item>
+          <Menu.Item key="users" disabled>
+            Utilizatori
+          </Menu.Item>
           <Menu.Item key="chats">
             <Link to="/chats">Chat-uri</Link>
           </Menu.Item>
-          <Menu.Item key="reviews">
+          <Menu.Item key="reviews" disabled>
             <Link to="/reviews">Testemoniale</Link>
           </Menu.Item>
-          <Menu.Item key="promo-codes">Promo coduri</Menu.Item>
-          <Menu.Item key="logs">Istoricul</Menu.Item>
-          <Menu.Item key="global-settings">Setări globale</Menu.Item>
+          <Menu.Item key="promo-codes" disabled>
+            Promo coduri
+          </Menu.Item>
+          <Menu.Item key="logs" disabled>
+            Istoricul
+          </Menu.Item>
+          <Menu.Item key="global-settings" disabled>
+            Setări globale
+          </Menu.Item>
         </Menu>
       </div>
     </>

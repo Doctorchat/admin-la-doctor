@@ -12,6 +12,7 @@
 
   .ant-page-header {
     padding-left: 0;
+    padding-right: 0;
   }
 }
 
@@ -86,6 +87,25 @@ html:not(.is-safari):not(.is-ios) ::-webkit-scrollbar-thumb {
 .chat-row-closed {
   font-style: italic;
   opacity: 0.7;
+}
+
+.page-view {
+  &.closed {
+    color: var(--bs-gray-200) !important;
+    font-style: italic;
+  }
+}
+
+.site-page-header {
+  .ant-page-header-heading {
+    justify-content: flex-start;
+    gap: 5px;
+  }
+  .ant-page-header-heading-extra {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 @media (max-width: 951px) {

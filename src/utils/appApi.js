@@ -15,6 +15,7 @@ const api = {
     changeDoctor: ({ doctor_id, id }) =>
       axiosInstance.put("/admin/chats/reassign", { doctor_id, id }),
     closeChat: (id) => axiosInstance.put(`/admin/chats/close/${id}`),
+    last10: (id) => axiosInstance.get(`/admin/chats/latest10/${id}`),
   },
   reviews: {
     get: (params) => axiosInstance.get("/admin/reviews/all", { params: { ...params } }),
@@ -22,6 +23,10 @@ const api = {
   doctors: {
     get: (params) => axiosInstance.get("/admin/users/doctors/", { params: { ...params } }),
     getSimplifiedList: () => axiosInstance.get("/admin/doctors/simplify"),
+    getById: (id) => axiosInstance.get(`/admin/users/doctors/${id}`),
+    getReviews: (id) => axiosInstance.get(`/admin/reviews/all/${id}`),
+    getRequests: () => axiosInstance.get("/admin/users/doctors/requests"),
+    update: (id, data) => axiosInstance.post(`/admin/users/doctors/${id}`, data),
   },
   users: {
     get: (params) => axiosInstance.get("/admin/users/clients", { params: { ...params } }),

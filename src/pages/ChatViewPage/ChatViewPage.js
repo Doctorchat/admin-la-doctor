@@ -46,7 +46,7 @@ export default function ChatViewPage() {
   );
 
   return (
-    <div className={cs("chat-view", chatInfo?.status)}>
+    <div className={cs("page-view", chatInfo?.status)}>
       <Spin spinning={loading}>
         <PageHeader className="site-page-header" onBack={history.goBack} title="Chat" />
         <ChatViewContext.Provider value={{ chatInfo, updateChatInfo }}>

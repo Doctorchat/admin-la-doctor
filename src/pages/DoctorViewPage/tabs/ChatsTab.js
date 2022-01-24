@@ -1,46 +1,51 @@
 import { useCallback, useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useMount } from "react-use";
 import { DcTable } from "../../../components";
-import { chatStatuses, chatTypes } from "../../../modules/ChatsList";
-import { getChatsList } from "../../../store/actions/chatsListAction";
+import { getChatStatus, getChatType } from "../../../modules/ChatsList";
+import api from "../../../utils/appApi";
 import date from "../../../utils/date";
-import { useDoctorViewContext } from "../DoctorViewContext";
 
 export default function ChatsTab() {
-  const { docInfo, updateDocInfo } = useDoctorViewContext();
-  const [messages, setMessages] = useState([]);
+  const { doc_id } = useParams();
+  const [chats, setChats] = useState([]);
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
 
   const fetcher = useCallback(async () => {
     setLoading(true);
 
     try {
-      await dispatch(
-        getChatsList({ page: 1, sort_column: "id", sort_direction: "descend", limit: 10 })
-      );
+      const response = await api.chats.last10(doc_id);
+      setChats(response.data);
     } finally {
       setLoading(false);
     }
-  }, [dispatch]);
+  }, [doc_id]);
+
+  useMount(fetcher);
 
   const columns = useMemo(
     () => [
       {
+        title: "ID",
+        dataIndex: "id",
+        render: (rowData) => <Link to={`/chat/${rowData}`}>#{rowData}</Link>,
+      },
+      {
         title: "Client",
         dataIndex: "client",
-        render: (rowData, { id }) => <Link to={`/user/${id}`}>{rowData}</Link>,
+        render: ({ id, name }) => <Link to={`/user/${id}`}>{name}</Link>,
       },
       {
         title: "Status",
         dataIndex: "status",
-        render: (rowData) => chatStatuses[rowData] || rowData,
+        render: (_, data) => getChatStatus(data),
       },
       {
         title: "Tipul",
         dataIndex: "type",
-        render: (rowData) => chatTypes[rowData] || rowData,
+        render: (_, data) => getChatType(data),
       },
       {
         title: "Actualizat",
@@ -54,7 +59,7 @@ export default function ChatsTab() {
   return (
     <DcTable
       dataColumns={columns}
-      dataSource={messages}
+      dataSource={chats}
       loading={loading}
       pagination={{
         position: ["none"],

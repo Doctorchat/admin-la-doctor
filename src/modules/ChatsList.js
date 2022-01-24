@@ -20,17 +20,39 @@ const initialState = {
 };
 
 export const chatStatuses = {
-  initied: <Tag color="blue">Inițializat</Tag>,
-  open: <Tag color="orange">În așteptare</Tag>,
-  closed: <Tag>Arhivat</Tag>,
-  responded: <Tag color="green">Răspuns primit</Tag>,
-  unpaid: <Tag color="red">Achitare</Tag>,
+  initied: { color: "blue", text: "Inițializat" },
+  open: { color: "orange", text: "În așteptare" },
+  closed: { color: "", text: "Arhivat" },
+  responded: { color: "green", text: "Răspuns primit" },
+  unpaid: { color: "red", text: "Achitare" },
+  overdue: { color: "#dc3545", text: "Overdue" },
 };
 
 export const chatTypes = {
   standard: <Tag>Standard</Tag>,
   consilium: <Tag color="#FFD700">Consiliu</Tag>,
   auto: <Tag>Auto</Tag>,
+  meet: <Tag color="#34a853">Meeting</Tag>,
+};
+
+export const getChatStatus = (chat) => {
+  const tags = [chat.status];
+
+  if (chat.isOverdue) tags.push("overdue");
+
+  return tags.map((status) => (
+    <Tag key={`${chat.id}-${chatStatuses[status].color}`} color={chatStatuses[status].color}>
+      {chatStatuses[status].text}
+    </Tag>
+  ));
+};
+
+export const getChatType = (chat) => {
+  if (chat.isMeet) {
+    return chatTypes.meet;
+  }
+
+  return chatTypes[chat.type];
 };
 
 const tableStateKey = "chats-list-state";
@@ -133,12 +155,12 @@ export default function ChatsList(props) {
       {
         title: "Status",
         dataIndex: "status",
-        render: (rowData) => chatStatuses[rowData] || rowData,
+        render: (_, data) => getChatStatus(data),
       },
       {
         title: "Tipul",
         dataIndex: "type",
-        render: (rowData) => chatTypes[rowData] || rowData,
+        render: (_, data) => getChatType(data),
       },
       {
         title: "Actualizat",
