@@ -173,7 +173,7 @@ export default function ChatsList(props) {
 
   if (error) {
     return (
-      <Alert showIcon type="error" message={`Error ${error.status}`} description={error.message} />
+      <Alert className="mt-5" showIcon type="error" message={`Error ${error.status}`} description={error.message} />
     );
   }
 

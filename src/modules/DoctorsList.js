@@ -127,7 +127,7 @@ export default function DoctorsList(props) {
   );
 
   if (error) {
-    return <Alert showIcon type="error" message="Error" description="A apărut o eroare!" />;
+    return <Alert className="mt-5" showIcon type="error" message="Error" description="A apărut o eroare!" />;
   }
 
   return (

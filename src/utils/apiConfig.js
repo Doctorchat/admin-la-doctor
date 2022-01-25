@@ -22,8 +22,10 @@ axiosInstance.interceptors.response.use(
     } = error;
 
     if (status === 401) {
-      store.dispatch(setUserToNotAuthorized());
-      window.location.reload();
+      if (store.getState().user.isAuthorized) {
+        store.dispatch(setUserToNotAuthorized());
+        window.location.reload();
+      }
     }
 
     return Promise.reject(error);
