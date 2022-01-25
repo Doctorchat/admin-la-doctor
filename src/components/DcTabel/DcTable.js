@@ -36,8 +36,6 @@ export default function DcTable(props) {
     return () => window.removeEventListener("resize", updateTableXScroll);
   }, []);
 
-  console.log(tableXScroll);
-
   return (
     <div className={cs("dc-table", !title && "no-title", !extra && "no-footer")}>
       <div className="dc-table-content position-relative">

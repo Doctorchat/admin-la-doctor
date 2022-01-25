@@ -111,6 +111,9 @@ export default function GeneralInformationTab() {
             <List
               size="small"
               dataSource={generateDocDisponibility()}
+              locale={{
+                emptyText: <Empty description="Nu-s date" className="p-0" />,
+              }}
               renderItem={(item) => (
                 <List.Item>
                   {item.name}: {item.value}

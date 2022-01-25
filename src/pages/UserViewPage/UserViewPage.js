@@ -8,7 +8,7 @@ import "./styles/index.scss";
 
 const { TabPane } = Tabs;
 
-export default function UserViewPage(props) {
+export default function UserViewPage() {
   const { user_id } = useParams();
   const [userInfo, setUserInfo] = useState({});
   const [loading, setLoading] = useState(false);
@@ -41,7 +41,3 @@ export default function UserViewPage(props) {
     </div>
   );
 }
-
-UserViewPage.propTypes = {};
-
-UserViewPage.defaultProps = {};

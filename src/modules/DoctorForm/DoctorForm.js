@@ -7,8 +7,16 @@ import api from "../../utils/appApi";
 import "./styles/index.scss";
 
 export default function DoctorForm(props) {
-  const { onAfterSubmit, onSubmitFailed, submitBtnText, defaultValues, visible, onClose, docId } =
-    props;
+  const {
+    onAfterSubmit,
+    onSubmitFailed,
+    submitBtnText,
+    defaultValues,
+    visible,
+    onClose,
+    docId,
+    onSubmitSuccess,
+  } = props;
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -34,7 +42,8 @@ export default function DoctorForm(props) {
           description: "Datele au fost actualizate cu succes!",
         });
 
-        if (onSubmitFailed) onAfterSubmit(response.data);
+        if (onAfterSubmit) onAfterSubmit(response.data);
+        if (onSubmitSuccess) onSubmitSuccess(response.data);
       } catch (error) {
         if (onSubmitFailed) onSubmitFailed(error);
         notification.error({ message: "Eroare", description: "A apărut o eraore" });
@@ -42,7 +51,7 @@ export default function DoctorForm(props) {
         setLoading(false);
       }
     },
-    [docId, onAfterSubmit, onSubmitFailed]
+    [docId, onAfterSubmit, onSubmitFailed, onSubmitSuccess]
   );
 
   const initialValues = useMemo(() => {
@@ -50,7 +59,7 @@ export default function DoctorForm(props) {
       const docFormObject = {
         email: defaultValues.email,
         phone: defaultValues.phone,
-        professionalTitle: defaultValues.card?.title,
+        title: defaultValues.card?.title,
         specialization_ro: defaultValues.card?.specialization_ro,
         name: defaultValues.name,
         experience: defaultValues.card?.experience,
@@ -62,7 +71,7 @@ export default function DoctorForm(props) {
           value: spec.id,
           label: spec.name_ro,
         })),
-        work: defaultValues.card?.workplace,
+        workplace: defaultValues.card?.workplace,
         studies: defaultValues.card?.studies.map((std) => ({ value: std })),
         bio_ro: defaultValues.card?.bio_ro,
         status: defaultValues.card?.status ? Boolean(defaultValues.card.status) : false,
@@ -112,7 +121,7 @@ export default function DoctorForm(props) {
           <div className="d-sm-flex gap-2">
             <Form.Item
               className="w-100"
-              name="professionalTitle"
+              name="title"
               label="Titlu Profesional"
               rules={[{ required: true }]}
             >
@@ -170,7 +179,7 @@ export default function DoctorForm(props) {
           <Form.Item name="speciality" label="Specialitate" rules={[{ required: true }]}>
             <Select mode="multiple" options={[]} />
           </Form.Item>
-          <Form.Item name="work" label="Locul de muncă" rules={[{ required: true }]}>
+          <Form.Item name="workplace" label="Locul de muncă" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
           <Form.List name="studies" rules={[{ required: true }]}>
@@ -242,6 +251,7 @@ DoctorForm.propTypes = {
   onSubmitFailed: PropTypes.func,
   visible: PropTypes.bool,
   onClose: PropTypes.func,
+  onSubmitSuccess: PropTypes.func,
   docId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 

@@ -45,6 +45,10 @@ export default function DoctorsRequestsPage() {
     dispatch(updateRequestsCount());
   }, [dispatch]);
 
+  const onAcceptDocHanlder = useCallback((docData) => {
+    setRequests((prev) => prev.filter((req) => req.id !== docData?.user_id));
+  }, []);
+
   const acceptHandler = useCallback(
     (docId) => async () => {
       setPrepareAcceptLoading(docId);
@@ -130,6 +134,7 @@ export default function DoctorsRequestsPage() {
       <DoctorForm
         onClose={closeAcceptDrawer}
         onAfterSubmit={closeAcceptDrawer}
+        onSubmitSuccess={onAcceptDocHanlder}
         submitBtnText="Acceptă"
         visible={acceptVisible}
         defaultValues={selectedDoctorData}
