@@ -18,7 +18,7 @@ const routes = [
     path: "/login",
     component: LoginPage,
     exact: true,
-    private: false,
+    public: true,
   },
   {
     path: "/",
