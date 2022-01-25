@@ -1,9 +1,8 @@
 import PropTypes from "prop-types";
-import { Alert } from "antd";
+import { Alert, Button, Drawer, Form, Input, Select } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { useMount, useSessionStorage, useUnmount } from "react-use";
 import { DcTable } from "../components";
 import {
@@ -13,11 +12,18 @@ import {
   setCleanOnUnmountTrue,
 } from "../store/actions/reviewsListAction";
 import date from "../utils/date";
+import { DislikeOutlined, LikeOutlined } from "@ant-design/icons";
 
 const initialState = {
   page: 1,
   sort_column: "id",
   sort_direction: "descend",
+};
+
+export const reviewStatuses = {
+  0: "Vizibil pentru doctor",
+  1: "Vizibil pentru doctor și home page",
+  2: "Ascuns pentru toți",
 };
 
 const tableStateKey = "reviews-list-state";
@@ -27,10 +33,12 @@ export default function ReviewsList(props) {
   const [state, setState] = useSessionStorage(tableStateKey, initialState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [activeReview, setActiveReview] = useState(null);
   const { reviews, cleanOnUnmount } = useSelector((store) => ({
     reviews: store.reviewsList.payload,
     cleanOnUnmount: store.reviewsList.cleanOnUnmount,
   }));
+  const [form] = Form.useForm();
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -80,24 +88,55 @@ export default function ReviewsList(props) {
   );
 
   const onTableLinksClick = useCallback(
-    async (e) => {
+    (path) => async (e) => {
       e.preventDefault();
 
       await dispatch(setCleanOnUnmountFalse());
-      history.push(e.target.href);
+      history.push(path);
     },
     [dispatch, history]
   );
+
+  const onViewReview = useCallback(
+    (review) => () => {
+      setActiveReview(review);
+    },
+    []
+  );
+
+  const onCloseReview = useCallback(() => {
+    setActiveReview(null);
+  }, []);
+
+  useEffect(() => {
+    if (activeReview && Object.keys(activeReview).length) {
+      form.setFields([
+        { name: "content", value: activeReview.content },
+        { name: "status", value: activeReview.status },
+      ]);
+    } else {
+      form.resetFields();
+    }
+  }, [activeReview, form]);
 
   const columns = useMemo(
     () => [
       {
         title: "Client",
-        dataIndex: "client",
-        render: (rowData, { id }) => (
-          <Link to={`/user/${id}`} onClick={onTableLinksClick}>
-            {rowData}
-          </Link>
+        dataIndex: "user",
+        render: ({ name, id }) => (
+          <a href={`/user/${id}`} onClick={onTableLinksClick(`/user/${id}`)}>
+            {name}
+          </a>
+        ),
+      },
+      {
+        title: "Doctor",
+        dataIndex: "doctor",
+        render: ({ name, id }) => (
+          <a href={`/doctor/${id}`} onClick={onTableLinksClick(`/user/${id}`)}>
+            {name}
+          </a>
         ),
       },
       {
@@ -106,12 +145,25 @@ export default function ReviewsList(props) {
         render: (rowData) => date(rowData).dynamic(),
       },
       {
-        title: "Conținut",
-        dataIndex: "content",
-        ellipsis: true,
+        title: "Acțiune",
+        dataIndex: "action",
+        render: (rowData) => (rowData ? <LikeOutlined /> : <DislikeOutlined />),
+      },
+      {
+        title: "Status",
+        dataIndex: "status",
+        render: (rowData) => reviewStatuses[rowData],
+      },
+      {
+        title: "Vizualizare",
+        render: (_, row) => (
+          <Button type="primary" size="small" onClick={onViewReview(row)}>
+            Deschide
+          </Button>
+        ),
       },
     ],
-    [onTableLinksClick]
+    [onTableLinksClick, onViewReview]
   );
 
   if (error) {
@@ -119,20 +171,60 @@ export default function ReviewsList(props) {
   }
 
   return (
-    <DcTable
-      title={title}
-      dataColumns={columns}
-      dataSource={reviews?.data || []}
-      loading={loading}
-      onTabelChange={onTableChange}
-      pagination={{
-        position: [simplified ? "none" : "bottomRight"],
-        per_page: reviews?.per_page,
-        total: reviews?.total,
-        current_page: reviews?.current_page,
-      }}
-      extra={extra}
-    />
+    <>
+      <Drawer visible={!!activeReview} onClose={onCloseReview} title="Editare recenzie">
+        <Form layout="vertical" form={form}>
+          <Form.Item label="Conținut" name="content">
+            <Input.TextArea autoSize />
+          </Form.Item>
+          <Form.Item label="Status" name="status">
+            <Select
+              options={[
+                { value: 0, label: "Vizibil pentru doctor" },
+                { value: 1, label: "Vizibil pentru doctor și home page" },
+                { value: 2, label: "Ascuns pentru toți" },
+              ]}
+            />
+          </Form.Item>
+          <Button type="primary" htmlType="submit">
+            Salveză
+          </Button>
+        </Form>
+      </Drawer>
+      <DcTable
+        title={title}
+        dataColumns={columns}
+        dataSource={
+          reviews?.data || [
+            {
+              id: 1,
+              user: {
+                name: "Novac Denis",
+                id: "3",
+              },
+              doctor: {
+                name: "Ceva Nume",
+                id: 1,
+              },
+              created_at: "2022-05-13",
+              action: true,
+              status: 1,
+              content:
+                "ut also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets contai",
+            },
+          ]
+        }
+        loading={loading}
+        onTabelChange={onTableChange}
+        pagination={{
+          position: [simplified ? "none" : "bottomRight"],
+          per_page: reviews?.per_page,
+          total: reviews?.total,
+          current_page: reviews?.current_page,
+        }}
+        extra={extra}
+      />
+    </>
   );
 }
 

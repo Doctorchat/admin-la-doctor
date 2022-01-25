@@ -7,6 +7,10 @@ import {
   DoctorsListPage,
   DoctorViewPage,
   DoctorsRequestsPage,
+  UsersListPage,
+  UserViewPage,
+  GlobalSettingsPage,
+  StatsPage,
 } from "../pages/";
 
 const routes = [
@@ -55,6 +59,30 @@ const routes = [
   {
     path: "/requests",
     component: DoctorsRequestsPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/users",
+    component: UsersListPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/user/:user_id",
+    component: UserViewPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/global-settings",
+    component: GlobalSettingsPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/statistics",
+    component: StatsPage,
     exact: true,
     private: true,
   },

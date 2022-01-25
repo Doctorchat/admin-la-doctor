@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 import { Empty, Table } from "antd";
 
 import "./styles/index.scss";
-import { useEffect, useState } from "react";
+import cs from "../../utils/classNames";
 
 export default function DcTable(props) {
   const {
@@ -35,11 +36,14 @@ export default function DcTable(props) {
     return () => window.removeEventListener("resize", updateTableXScroll);
   }, []);
 
+  console.log(tableXScroll);
+
   return (
-    <div className="dc-table">
-      {title && <h3 className="dc-table-title text-center">{title}</h3>}
+    <div className={cs("dc-table", !title && "no-title", !extra && "no-footer")}>
       <div className="dc-table-content position-relative">
         <Table
+          title={() => (title && <h3 className="dc-table-title m-0">{title}</h3>) || null}
+          footer={() => extra && extra}
           bordered
           scroll={{ x: tableXScroll }}
           size="small"
@@ -62,7 +66,6 @@ export default function DcTable(props) {
           }}
         />
       </div>
-      {extra && extra}
     </div>
   );
 }

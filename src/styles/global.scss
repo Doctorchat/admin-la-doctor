@@ -40,6 +40,7 @@
 
 .dc-layout-sidebar {
   min-width: 283px;
+  border: 1px solid #f0f0f0;
 }
 
 .dc-layout-content {
@@ -94,6 +95,10 @@ html:not(.is-safari):not(.is-ios) ::-webkit-scrollbar-thumb {
     color: var(--bs-gray-200) !important;
     font-style: italic;
   }
+}
+
+.ant-input-number {
+  width: 100%;
 }
 
 .site-page-header {

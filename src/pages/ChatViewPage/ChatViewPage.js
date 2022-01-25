@@ -5,12 +5,12 @@ import { ChatViewContext } from "./ChatViewContext";
 import GeneralInformationTab from "./tabs/GeneralInformationTab";
 import MessageTab from "./tabs/MessagesTab";
 import SettingsTab from "./tabs/SettingsTab";
-
-import "./styles/index.scss";
 import { useMount } from "react-use";
 import api from "../../utils/appApi";
 import { useHistory } from "react-router-dom";
 import cs from "../../utils/classNames";
+
+import "./styles/index.scss";
 
 const { TabPane } = Tabs;
 
@@ -50,7 +50,7 @@ export default function ChatViewPage() {
       <Spin spinning={loading}>
         <PageHeader className="site-page-header" onBack={history.goBack} title="Chat" />
         <ChatViewContext.Provider value={{ chatInfo, updateChatInfo }}>
-          <Tabs defaultActiveKey="1">
+          <Tabs>
             <TabPane tab="Informație generală" key="general-information">
               <GeneralInformationTab />
             </TabPane>

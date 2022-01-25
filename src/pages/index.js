@@ -6,3 +6,7 @@ export { default as ReviewsListPage } from "./ReviewsListPage";
 export { default as DoctorsListPage } from "./DoctorsListPage";
 export { default as DoctorViewPage } from "./DoctorViewPage";
 export { default as DoctorsRequestsPage } from "./DoctorsRequestsPage";
+export { default as UsersListPage } from "./UsersListPage";
+export { default as UserViewPage } from "./UserViewPage";
+export { default as GlobalSettingsPage } from "./GlobalSettingsPage";
+export { default as StatsPage } from "./StatsPage";

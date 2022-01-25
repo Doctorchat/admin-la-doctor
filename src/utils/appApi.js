@@ -22,14 +22,19 @@ const api = {
   },
   doctors: {
     get: (params) => axiosInstance.get("/admin/users/doctors/", { params: { ...params } }),
-    getSimplifiedList: () => axiosInstance.get("/admin/doctors/simplify"),
+    getSimplifiedList: () => axiosInstance.get("/admin/users/doctors/simplify"),
     getById: (id) => axiosInstance.get(`/admin/users/doctors/${id}`),
     getReviews: (id) => axiosInstance.get(`/admin/reviews/all/${id}`),
     getRequests: () => axiosInstance.get("/admin/users/doctors/requests"),
-    update: (id, data) => axiosInstance.post(`/admin/users/doctors/${id}`, data),
+    update: (data) => axiosInstance.put(`/admin/users/doctors/update`, data),
+    requestsCount: () => axiosInstance.get("/admin/users/doctors/requests-count"),
   },
   users: {
     get: (params) => axiosInstance.get("/admin/users/clients", { params: { ...params } }),
+    getById: (id) => axiosInstance.get(`/admin/users/clients/${id}`),
+  },
+  settings: {
+    get: () => axiosInstance.get("/admin/settings/edit"),
   },
 };
 

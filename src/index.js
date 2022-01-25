@@ -5,6 +5,7 @@ import store from "./store";
 import { setUserToAuthorized } from "./store/actions/userAction";
 import { Router } from "react-router-dom";
 import history from "./utils/history";
+import { ConfigProvider } from "antd";
 
 import App from "./App";
 
@@ -16,7 +17,9 @@ if (localStorage.getItem("isAuthorized") === "true") store.dispatch(setUserToAut
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <App />
+      <ConfigProvider form={{ validateMessages: { required: "Acest câmp este obligatoriu" } }}>
+        <App />
+      </ConfigProvider>
     </Router>
   </Provider>,
   document.getElementById("root")

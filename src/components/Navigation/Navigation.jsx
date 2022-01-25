@@ -1,20 +1,20 @@
 import PropTypes from "prop-types";
-import { useRouteMatch } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useRouteMatch, useParams, Link } from "react-router-dom";
 import { CloseOutlined } from "@ant-design/icons";
 import { Badge, Button, Menu, Typography } from "antd";
-import { Link } from "react-router-dom";
 
 import "./styles/index.scss";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 
 const menuItemsRegister = {
   "/": "dashboard",
-  "/statistic": "statistic",
+  "/statistics": "statistics",
   "/doctors": "doctors",
   "/doctor/": "doctors",
   "/requests": "doctors",
   "/users": "users",
+  "/user/": "users",
   "/chats": "chats",
   "/reviews": "reviews",
   "/promo-codes": "promo-codes",
@@ -23,9 +23,10 @@ const menuItemsRegister = {
 };
 
 export default function Navigation({ closeMenu }) {
+  const requestsCount = useSelector((store) => store.requestsCount);
+  const [currentRoute, setCurrentRoute] = useState();
   const routeMatch = useRouteMatch();
   const params = useParams();
-  const [currentRoute, setCurrentRoute] = useState();
 
   useEffect(() => {
     const replacer = new RegExp(Object.values(params).join("|"), "g");
@@ -48,22 +49,22 @@ export default function Navigation({ closeMenu }) {
           <Menu.Item key="dashboard">
             <Link to="/">Dashboard</Link>
           </Menu.Item>
-          <Menu.Item key="statistic" disabled>
-            Statistică
+          <Menu.Item key="statistics">
+            <Link to="/statistics">Statistică</Link>
           </Menu.Item>
           <Menu.Item key="doctors">
             <div className="d-flex align-items-center justify-content-between">
               <Link to="/doctors">Doctori</Link>
-              <Badge className="ms-2" key="doctors-list-requests" count={0} />
+              <Badge className="ms-2" key="doctors-list-requests" count={requestsCount.count} />
             </div>
           </Menu.Item>
-          <Menu.Item key="users" disabled>
-            Utilizatori
+          <Menu.Item key="users">
+            <Link to="/users">Utilizatori</Link>
           </Menu.Item>
           <Menu.Item key="chats">
             <Link to="/chats">Chat-uri</Link>
           </Menu.Item>
-          <Menu.Item key="reviews" disabled>
+          <Menu.Item key="reviews">
             <Link to="/reviews">Testemoniale</Link>
           </Menu.Item>
           <Menu.Item key="promo-codes" disabled>
@@ -72,8 +73,8 @@ export default function Navigation({ closeMenu }) {
           <Menu.Item key="logs" disabled>
             Istoricul
           </Menu.Item>
-          <Menu.Item key="global-settings" disabled>
-            Setări globale
+          <Menu.Item key="global-settings">
+            <Link to="/global-settings"> Setări globale</Link>
           </Menu.Item>
         </Menu>
       </div>

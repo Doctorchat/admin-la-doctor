@@ -5,6 +5,16 @@
     align-items: center;
     justify-content: center;
   }
+  &.no-title {
+    .ant-table-title {
+      display: none;
+    }
+  }
+  &.no-footer {
+    .ant-table-footer {
+      display: none;
+    }
+  }
 }
 
 .dc-table-title {

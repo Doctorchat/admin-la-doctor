@@ -1,5 +1,6 @@
 import { Button, PageHeader, Spin, Tabs } from "antd";
 import { useCallback, useState } from "react";
+import { useMount } from "react-use";
 import { useParams } from "react-router-dom";
 import { DoctorViewContext } from "./DoctorViewContext";
 import GeneralInformationTab from "./tabs/GeneralInformationTab";
@@ -7,10 +8,9 @@ import { useHistory } from "react-router-dom";
 import ChatsTab from "./tabs/ChatsTab";
 import cs from "../../utils/classNames";
 import api from "../../utils/appApi";
-import { useMount } from "react-use";
+import { DoctorForm } from "../../modules";
 
 import "./styles/index.scss";
-import { DoctorForm } from "../../modules";
 
 const { TabPane } = Tabs;
 
@@ -47,7 +47,7 @@ export default function DoctorViewPage() {
   );
 
   return (
-    <div className={cs("chat-view", docInfo?.inVacation && "closed")}>
+    <div className={cs("page-view", docInfo?.inVacation && "closed")}>
       <Spin spinning={loading}>
         <PageHeader
           className="site-page-header"
@@ -71,7 +71,7 @@ export default function DoctorViewPage() {
           defaultValues={docInfo}
         />
         <DoctorViewContext.Provider value={{ docInfo, updateDocInfo }}>
-          <Tabs defaultActiveKey="general-information">
+          <Tabs>
             <TabPane tab="Informație generală" key="general-information">
               <GeneralInformationTab />
             </TabPane>

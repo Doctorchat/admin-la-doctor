@@ -1,9 +1,11 @@
 import { Alert, Button, notification, PageHeader } from "antd";
 import { useCallback, useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { useMount } from "react-use";
 import { DcTable } from "../components";
 import { DoctorForm } from "../modules";
+import { updateRequestsCount } from "../store/actions/requestsCountAction";
 import api from "../utils/appApi";
 
 export default function DoctorsRequestsPage() {
@@ -15,6 +17,7 @@ export default function DoctorsRequestsPage() {
   const [selectedDoctorData, setSelectedDoctorData] = useState(null);
   const [prepareAcceptLoading, setPrepareAcceptLoading] = useState(null);
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const fetcher = useCallback(async () => {
     setLoading(true);
@@ -39,7 +42,8 @@ export default function DoctorsRequestsPage() {
   const closeAcceptDrawer = useCallback(() => {
     setAcceptVisible(false);
     setSelectedDoctorData(null);
-  }, []);
+    dispatch(updateRequestsCount());
+  }, [dispatch]);
 
   const acceptHandler = useCallback(
     (docId) => async () => {
@@ -129,6 +133,7 @@ export default function DoctorsRequestsPage() {
         submitBtnText="Acceptă"
         visible={acceptVisible}
         defaultValues={selectedDoctorData}
+        docId={selectedDoctorData?.id}
       />
     </>
   );

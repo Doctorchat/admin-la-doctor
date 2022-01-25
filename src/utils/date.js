@@ -13,8 +13,11 @@ const formats = {
 
 /**
  * @typedef {Object} Tranformers
- * @property {Function} chatItem
+ * @property {Function} dynamic
  * @property {String} default
+ * @property {String} time
+ * @property {String} full
+ * @property {String} relative
  */
 
 /**

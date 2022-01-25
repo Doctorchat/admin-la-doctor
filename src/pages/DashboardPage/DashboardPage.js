@@ -12,20 +12,25 @@ export default function DashboardPage() {
         title="Mesaje Recente"
         simplified
         extra={
-          <div className="w-100 mt-1 d-flex justify-content-end">
+          <div className="w-100 d-flex justify-content-end">
             <Link to="/chats">
-              <Button type="link">Vezi toata lista</Button>
+              <Button type="link" className="py-0">
+                Vezi toata lista
+              </Button>
             </Link>
           </div>
         }
       />
+      <div className="my-5" />
       <ReviewsList
         title="Testemoniale Recente"
         simplified
         extra={
-          <div className="w-100 mt-1 d-flex justify-content-end">
+          <div className="w-100 d-flex justify-content-end">
             <Link to="/reviews">
-              <Button type="link">Vezi toata lista</Button>
+              <Button type="link" className="py-0">
+                Vezi toata lista
+              </Button>
             </Link>
           </div>
         }

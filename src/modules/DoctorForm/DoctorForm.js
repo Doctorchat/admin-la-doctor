@@ -2,12 +2,13 @@ import PropTypes from "prop-types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button, Drawer, Form, Input, InputNumber, notification, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-
-import "./styles/index.scss";
 import api from "../../utils/appApi";
 
+import "./styles/index.scss";
+
 export default function DoctorForm(props) {
-  const { onAfterSubmit, onSubmitFailed, submitBtnText, defaultValues, visible, onClose } = props;
+  const { onAfterSubmit, onSubmitFailed, submitBtnText, defaultValues, visible, onClose, docId } =
+    props;
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -19,13 +20,14 @@ export default function DoctorForm(props) {
     async (values) => {
       const data = { ...values };
 
-      data.category = data.category.map((cat) => cat.value);
-      data.education = data.education.map((edc) => edc.value);
+      data.id = docId;
+      data.speciality = data.speciality.map((cat) => cat.value);
+      data.studies = data.studies.map((edc) => edc.value);
 
       setLoading(true);
 
       try {
-        const response = await api.doctors.update(values);
+        const response = await api.doctors.update(data);
 
         notification.success({
           message: "Succes",
@@ -34,13 +36,13 @@ export default function DoctorForm(props) {
 
         if (onSubmitFailed) onAfterSubmit(response.data);
       } catch (error) {
-        onSubmitFailed(error);
+        if (onSubmitFailed) onSubmitFailed(error);
         notification.error({ message: "Eroare", description: "A apărut o eraore" });
       } finally {
         setLoading(false);
       }
     },
-    [onAfterSubmit, onSubmitFailed]
+    [docId, onAfterSubmit, onSubmitFailed]
   );
 
   const initialValues = useMemo(() => {
@@ -56,12 +58,12 @@ export default function DoctorForm(props) {
         private_price: defaultValues.card?.private_price,
         meet_price: defaultValues.card?.meet_price,
         meet_price_private: defaultValues.card?.meet_price_private,
-        category: defaultValues.card?.speciality.map((spec) => ({
+        speciality: defaultValues.card?.speciality.map((spec) => ({
           value: spec.id,
           label: spec.name_ro,
         })),
         work: defaultValues.card?.workplace,
-        education: defaultValues.card?.studies.map((std) => ({ value: std })),
+        studies: defaultValues.card?.studies.map((std) => ({ value: std })),
         bio_ro: defaultValues.card?.bio_ro,
         status: defaultValues.card?.status ? Boolean(defaultValues.card.status) : false,
       };
@@ -70,10 +72,10 @@ export default function DoctorForm(props) {
         return docFormObject;
       }
 
-      return { ...docFormObject, education: [{ value: "" }] };
+      return { ...docFormObject, studies: [{ value: "" }] };
     }
 
-    return { education: [{ value: "" }] };
+    return { studies: [{ value: "" }] };
   }, [defaultValues]);
 
   useEffect(() => {
@@ -95,7 +97,12 @@ export default function DoctorForm(props) {
       <div className="doctor-form">
         <Form initialValues={initialValues} form={form} onFinish={onSubmit} layout="vertical">
           <div className="d-sm-flex gap-2">
-            <Form.Item className="w-100" label="Email" name="email">
+            <Form.Item
+              className="w-100"
+              label="Email"
+              name="email"
+              rules={[{ required: true }, { type: "email", message: "Acest email nu este valid" }]}
+            >
               <Input />
             </Form.Item>
             <Form.Item className="w-100" label="Telefon" name="phone">
@@ -103,7 +110,12 @@ export default function DoctorForm(props) {
             </Form.Item>
           </div>
           <div className="d-sm-flex gap-2">
-            <Form.Item className="w-100" name="professionalTitle" label="Titlu Profesional">
+            <Form.Item
+              className="w-100"
+              name="professionalTitle"
+              label="Titlu Profesional"
+              rules={[{ required: true }]}
+            >
               <Input />
             </Form.Item>
             <Form.Item className="w-100" name="specialization_ro" label="Specializare">
@@ -111,37 +123,57 @@ export default function DoctorForm(props) {
             </Form.Item>
           </div>
           <div className="d-sm-flex gap-2">
-            <Form.Item className="w-100" label="Nume" name="name">
+            <Form.Item className="w-100" label="Nume" name="name" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
-            <Form.Item name="experience" label="Experiență">
+            <Form.Item name="experience" label="Experiență" rules={[{ required: true }]}>
               <InputNumber addonBefore="ANI" />
             </Form.Item>
           </div>
           <div className="d-sm-flex gap-2">
-            <Form.Item className="w-100" name="public_price" label="Preț mesaj">
+            <Form.Item
+              className="w-100"
+              name="public_price"
+              label="Preț mesaj"
+              rules={[{ required: true }]}
+            >
               <InputNumber addonBefore="LEI" />
             </Form.Item>
 
-            <Form.Item className="w-100" name="private_price" label="Preț mesaj (privat)">
+            <Form.Item
+              className="w-100"
+              name="private_price"
+              label="Preț mesaj (privat)"
+              rules={[{ required: true }]}
+            >
               <InputNumber addonBefore="LEI" />
             </Form.Item>
           </div>
           <div className="d-sm-flex gap-2">
-            <Form.Item className="w-100" name="meet_price" label="Preț meeting">
+            <Form.Item
+              className="w-100"
+              name="meet_price"
+              label="Preț meeting"
+              rules={[{ required: true }]}
+            >
               <InputNumber addonBefore="LEI" />
             </Form.Item>
-            <Form.Item className="w-100" name="meet_price_private" label="Preț meeting (privat)">
+            <Form.Item
+              className="w-100"
+              name="meet_price_private"
+              label="Preț meeting (privat)"
+              rules={[{ required: true }]}
+            >
               <InputNumber addonBefore="LEI" />
             </Form.Item>
           </div>
-          <Form.Item name="category" label="Specialitate">
+          <Form.Item name="speciality" label="Specialitate" rules={[{ required: true }]}>
             <Select mode="multiple" options={[]} />
           </Form.Item>
-          <Form.Item name="work" label="Locul de muncă">
+          <Form.Item name="work" label="Locul de muncă" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.List name="education">
+          <Form.List name="studies" rules={[{ required: true }]}>
             {(fields, { add, remove }) => (
               <>
                 {fields.map((field) => (
@@ -184,7 +216,7 @@ export default function DoctorForm(props) {
           <Form.Item name="bio_ro" label="Despre">
             <Input.TextArea autoSize />
           </Form.Item>
-          <Form.Item name="status" label="Statusul">
+          <Form.Item name="status" label="Statusul" rules={[{ required: true }]}>
             <Select
               options={[
                 { value: true, label: "Visibil" },
@@ -210,6 +242,7 @@ DoctorForm.propTypes = {
   onSubmitFailed: PropTypes.func,
   visible: PropTypes.bool,
   onClose: PropTypes.func,
+  docId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 DoctorForm.defaultProps = {

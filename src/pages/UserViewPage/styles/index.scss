@@ -1,0 +1,31 @@
+.ant-tabs-left.user-view-left-tabs {
+  .ant-tabs-tab {
+    padding-left: 0 !important;
+  }
+}
+
+.investigations-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 4px;
+}
+
+.investigation-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  border: 1px solid #f0f0f0;
+  &__block {
+    display: flex;
+    gap: 0 8px;
+  }
+  &__property {
+    padding: 8px;
+  }
+}
+
+.property {
+  &__description {
+    font-weight: 500;
+  }
+}

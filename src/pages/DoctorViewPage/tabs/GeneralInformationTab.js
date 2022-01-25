@@ -1,5 +1,5 @@
 import { Alert, Badge, Avatar, Descriptions, Empty, List, Tabs, Tag, Typography } from "antd";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useMount } from "react-use";
@@ -24,6 +24,7 @@ export default function GeneralInformationTab() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [tabsPosition, setTabsPosition] = useState("left");
 
   const fetchDocReviews = useCallback(async () => {
     try {
@@ -37,6 +38,22 @@ export default function GeneralInformationTab() {
   }, [doc_id]);
 
   useMount(fetchDocReviews);
+
+  useEffect(() => {
+    const updateTabsPosition = () => {
+      if (window.innerWidth < 721) {
+        setTabsPosition("top");
+      } else {
+        setTabsPosition("left");
+      }
+    };
+
+    window.addEventListener("resize", updateTabsPosition);
+
+    updateTabsPosition();
+
+    return () => window.removeEventListener("resize", updateTabsPosition);
+  }, []);
 
   const getLastSeen = () => {
     if (docInfo.isOnline) {
@@ -67,12 +84,12 @@ export default function GeneralInformationTab() {
   generateDocDisponibility();
 
   return (
-    <Tabs defaultActiveKey="doc-info-main-data" tabPosition="left" className="doc-view-left-tabs">
+    <Tabs tabPosition={tabsPosition} className="doc-view-left-tabs">
       <TabPane tab="Date principale" key="doc-info-main-data">
         <Descriptions
           bordered
           size="small"
-          layout="horizontal"
+          layout={tabsPosition === "top" ? "vertical" : "horizontal"}
           column={1}
           labelStyle={{ width: 180 }}
         >
@@ -108,7 +125,7 @@ export default function GeneralInformationTab() {
         <Descriptions
           bordered
           size="small"
-          layout="horizontal"
+          layout={tabsPosition === "top" ? "vertical" : "horizontal"}
           column={1}
           labelStyle={{ width: 180 }}
         >
@@ -131,7 +148,7 @@ export default function GeneralInformationTab() {
         <Descriptions
           bordered
           size="small"
-          layout="horizontal"
+          layout={tabsPosition === "top" ? "vertical" : "horizontal"}
           column={1}
           labelStyle={{ width: 180 }}
         >
