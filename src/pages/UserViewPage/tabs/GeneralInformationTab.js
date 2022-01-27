@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { Descriptions, Tabs, Tag } from "antd";
+import { Descriptions, Empty, Tabs, Tag } from "antd";
 import date from "../../../utils/date";
 import { useEffect, useState } from "react";
 import InvestigationCard from "../../../components/InvestigationCard";
@@ -55,10 +55,13 @@ export default function GeneralInformationTab(props) {
       </TabPane>
       <TabPane tab="Învestigări" key="user-info-investigations">
         <div className="investigations-container">
-          {userInfo?.investigations &&
+          {userInfo?.investigations?.length ? (
             userInfo.investigations.map((invg) => (
               <InvestigationCard key={invg.id} investigation={invg} />
-            ))}
+            ))
+          ) : (
+            <Empty description="Nu-s date" />
+          )}
         </div>
       </TabPane>
     </Tabs>
