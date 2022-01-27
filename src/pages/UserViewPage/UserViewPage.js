@@ -1,7 +1,9 @@
 import { PageHeader, Spin, Tabs } from "antd";
 import { useCallback, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useMount } from "react-use";
+import { useParams, useHistory } from "react-router-dom";
 import GeneralInformationTab from "./tabs/GeneralInformationTab";
+import ChatsTab from "./tabs/ChatsTab";
 import api from "../../utils/appApi";
 
 import "./styles/index.scss";
@@ -12,6 +14,7 @@ export default function UserViewPage() {
   const { user_id } = useParams();
   const [userInfo, setUserInfo] = useState({});
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   const fetchChatInfo = useCallback(async () => {
     try {
@@ -23,7 +26,9 @@ export default function UserViewPage() {
     } finally {
       setLoading(false);
     }
-  }, [user_id]);
+  }, [history, user_id]);
+
+  useMount(fetchChatInfo);
 
   return (
     <div className="page-view">
@@ -34,7 +39,7 @@ export default function UserViewPage() {
             <GeneralInformationTab userInfo={userInfo} />
           </TabPane>
           <TabPane tab="Chat-uri" key="chats">
-            {/* <ChatsTab /> */}
+            <ChatsTab />
           </TabPane>
         </Tabs>
       </Spin>
