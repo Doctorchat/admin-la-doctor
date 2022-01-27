@@ -22,7 +22,6 @@ const api = {
   },
   doctors: {
     get: (params) => axiosInstance.get("/admin/users/doctors/", { params: { ...params } }),
-    getSimplifiedList: () => axiosInstance.get("/admin/users/doctors/simplify"),
     getById: (id) => axiosInstance.get(`/admin/users/doctors/${id}`),
     getReviews: (id) => axiosInstance.get(`/admin/reviews/all/${id}`),
     getRequests: () => axiosInstance.get("/admin/users/doctors/requests"),
@@ -35,6 +34,10 @@ const api = {
   },
   settings: {
     get: () => axiosInstance.get("/admin/settings/edit"),
+  },
+  bootstrap: {
+    simplifiedDoctors: () => axiosInstance.get("/admin/users/doctors/simplify"),
+    categories: () => axiosInstance.get("/specialities"),
   },
 };
 

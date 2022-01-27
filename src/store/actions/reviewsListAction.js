@@ -12,6 +12,8 @@ export const getReviewsList =
     try {
       const response = await api.reviews.get(params);
 
+      console.log(response.data, "response");
+
       dispatch({ type: REVIEWS_LIST_GET, payload: response.data });
 
       return Promise.resolve(response.data);

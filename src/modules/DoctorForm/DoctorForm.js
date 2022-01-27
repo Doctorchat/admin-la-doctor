@@ -5,6 +5,8 @@ import { PlusOutlined } from "@ant-design/icons";
 import api from "../../utils/appApi";
 
 import "./styles/index.scss";
+import { useSelector } from "react-redux";
+import { selectCategoriesOptions } from "../../store/selectors/bootstrapSelectors";
 
 export default function DoctorForm(props) {
   const {
@@ -17,6 +19,7 @@ export default function DoctorForm(props) {
     docId,
     onSubmitSuccess,
   } = props;
+  const { categories } = useSelector((store) => ({ categories: selectCategoriesOptions(store) }));
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -177,7 +180,7 @@ export default function DoctorForm(props) {
             </Form.Item>
           </div>
           <Form.Item name="speciality" label="Specialitate" rules={[{ required: true }]}>
-            <Select mode="multiple" options={[]} />
+            <Select mode="multiple" options={categories} />
           </Form.Item>
           <Form.Item name="workplace" label="Locul de muncă" rules={[{ required: true }]}>
             <Input />

@@ -123,10 +123,10 @@ export default function ReviewsList(props) {
     () => [
       {
         title: "Client",
-        dataIndex: "user",
-        render: ({ name, id }) => (
-          <a href={`/user/${id}`} onClick={onTableLinksClick(`/user/${id}`)}>
-            {name}
+        dataIndex: "client",
+        render: (rowData) => (
+          <a href={`/user/${rowData.id}`} onClick={onTableLinksClick(`/user/${rowData.id}`)}>
+            {rowData.name}
           </a>
         ),
       },
@@ -194,26 +194,7 @@ export default function ReviewsList(props) {
       <DcTable
         title={title}
         dataColumns={columns}
-        dataSource={
-          reviews?.data || [
-            {
-              id: 1,
-              user: {
-                name: "Novac Denis",
-                id: "3",
-              },
-              doctor: {
-                name: "Ceva Nume",
-                id: 1,
-              },
-              created_at: "2022-05-13",
-              action: true,
-              status: 1,
-              content:
-                "ut also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets contai",
-            },
-          ]
-        }
+        dataSource={reviews?.data || []}
         loading={loading}
         onTabelChange={onTableChange}
         pagination={{
