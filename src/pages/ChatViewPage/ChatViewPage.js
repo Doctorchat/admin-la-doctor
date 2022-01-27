@@ -47,10 +47,13 @@ export default function ChatViewPage() {
 
   const getSettingsTabStatus = useCallback(() => {
     if (chatInfo.id) {
-      if (chatInfo.doctor.id === 1) {
+      const checks = [chatInfo.doctor.id === 1, chatInfo.isOverdue];
+
+      if (checks.some((check) => !check)) {
         return "error";
       }
     }
+
     return "success";
   }, [chatInfo]);
 

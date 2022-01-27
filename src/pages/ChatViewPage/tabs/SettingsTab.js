@@ -1,4 +1,4 @@
-import { Button, Divider, Select, Typography, Form, notification } from "antd";
+import { Button, Divider, Select, Typography, Form, notification, Alert } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -11,9 +11,24 @@ export default function SettingsTab() {
   const { updateChatInfo, chatInfo } = useChatViewContext();
   const doctors = useSelector((store) => selectDoctorsOptions(store));
   const [loadingBtns, setLoadingBtns] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [form] = Form.useForm();
   const { chat_id } = useParams();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (chatInfo.id) {
+      if (chatInfo.doctor.id === 1) {
+        return setErrorMessage("Această conversație nu are un medic asignat");
+      }
+
+      if (chatInfo.isOverdue) {
+        return setErrorMessage("Această conversație este în așteptare mai mult de 12 ore");
+      }
+
+      return setErrorMessage(null);
+    }
+  }, [chatInfo]);
 
   useEffect(() => {
     if (chatInfo.doctor) {
@@ -66,6 +81,9 @@ export default function SettingsTab() {
   return (
     <div className="chat-settings-tab">
       <Typography.Title level={5}>Schimă doctor-ul</Typography.Title>
+      {errorMessage && (
+        <Alert message={errorMessage} className="mb-2" type="error" showIcon closable />
+      )}
       <Form form={form} layout="vertical" onFinish={changeDoctorHanlder}>
         <Form.Item name="doctor_id" label="Doctor Asignat">
           <Select
