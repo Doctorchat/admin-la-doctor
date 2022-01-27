@@ -1,4 +1,4 @@
-import { PageHeader, Spin, Tabs } from "antd";
+import { Badge, PageHeader, Spin, Tabs } from "antd";
 import { useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ChatViewContext } from "./ChatViewContext";
@@ -45,6 +45,15 @@ export default function ChatViewPage() {
     [chatInfo]
   );
 
+  const getSettingsTabStatus = useCallback(() => {
+    if (chatInfo.id) {
+      if (chatInfo.doctor.id === 1) {
+        return "error";
+      }
+    }
+    return "success";
+  }, [chatInfo]);
+
   return (
     <div className={cs("page-view", chatInfo?.status)}>
       <Spin spinning={loading}>
@@ -57,7 +66,7 @@ export default function ChatViewPage() {
             <TabPane tab="Mesaje" key="messages">
               <MessageTab />
             </TabPane>
-            <TabPane tab="Setări" key="settings">
+            <TabPane tab={<Badge status={getSettingsTabStatus()} text="Setări" />} key="settings">
               <SettingsTab />
             </TabPane>
           </Tabs>

@@ -52,6 +52,10 @@ export const getChatType = (chat) => {
     return chatTypes.meet;
   }
 
+  if (chat.type === 'auto' && chat.doctor.id === 1) {
+    return <Tag color="#ff4d4f">Auto</Tag>
+  }
+
   return chatTypes[chat.type];
 };
 

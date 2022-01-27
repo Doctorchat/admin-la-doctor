@@ -17,7 +17,9 @@ export default function SettingsTab() {
 
   useEffect(() => {
     if (chatInfo.doctor) {
-      form.setFields([{ name: "doctor_id", value: chatInfo.doctor.id }]);
+      form.setFields([
+        { name: "doctor_id", value: chatInfo.doctor.id === 1 ? null : chatInfo.doctor.id },
+      ]);
     }
   }, [chatInfo.doctor, form]);
 
@@ -66,7 +68,11 @@ export default function SettingsTab() {
       <Typography.Title level={5}>Schimă doctor-ul</Typography.Title>
       <Form form={form} layout="vertical" onFinish={changeDoctorHanlder}>
         <Form.Item name="doctor_id" label="Doctor Asignat">
-          <Select disabled={chatInfo.status === "closed"} options={doctors || []} placeholder="Selecteză doctor" />
+          <Select
+            disabled={chatInfo.status === "closed"}
+            options={doctors || []}
+            placeholder="Selecteză doctor"
+          />
         </Form.Item>
         <Button
           htmlType="submit"

@@ -11,7 +11,7 @@ const initialState = {
   cleanOnUnmount: true,
 };
 
-const reviewsList = (state = initialState, action = {}) => {
+const chatsList = (state = initialState, action = {}) => {
   switch (action.type) {
     case CHATS_LIST_GET: {
       return { ...state, payload: action.payload };
@@ -43,4 +43,4 @@ const reviewsList = (state = initialState, action = {}) => {
   }
 };
 
-export default reviewsList;
+export default chatsList;
