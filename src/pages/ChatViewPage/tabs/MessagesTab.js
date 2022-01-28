@@ -60,7 +60,7 @@ export default function MessageTab() {
           }
           content={<p>{msg.content}</p>}
           datetime={
-            <Tooltip title={date(msg.updated_at).dynamic()}>
+            <Tooltip title={date(msg.updated_at).full}>
               <span className="chat-view-comment-date">{moment(msg.updated_at).fromNow()}</span>
             </Tooltip>
           }

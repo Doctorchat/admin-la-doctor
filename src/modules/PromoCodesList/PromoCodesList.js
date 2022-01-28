@@ -167,7 +167,7 @@ export default function PromoCodesList() {
       {
         title: "Creat",
         dataIndex: "created_at",
-        render: (rowData) => date(rowData).dynamic(),
+        render: (rowData) => date(rowData).full,
       },
       {
         title: "Acțiuni",

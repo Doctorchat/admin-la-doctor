@@ -119,7 +119,7 @@ export default function DoctorsList(props) {
             return <Tag color="#06f">Online</Tag>;
           }
 
-          return rowData ? date(rowData).dynamic() : "Necunoscut";
+          return rowData ? date(rowData).full : "Necunoscut";
         },
       },
     ],

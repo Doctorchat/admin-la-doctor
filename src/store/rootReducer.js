@@ -10,6 +10,7 @@ import chatsList from "./reducers/chatsListReducer";
 import reviewsList from "./reducers/reviewsListReducer";
 import stats from "./reducers/statsReducer";
 import promocodesList from "./reducers/promocodesReducer";
+import logsList from "./reducers/logsReducer";
 
 const rootReducer = combineReducers({
   user,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   transactionsList,
   stats,
   promocodesList,
+  logsList,
 });
 
 export default rootReducer;

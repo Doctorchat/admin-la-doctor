@@ -169,7 +169,7 @@ export default function ChatsList(props) {
       {
         title: "Actualizat",
         dataIndex: "updated_at",
-        render: (rowData) => date(rowData).dynamic(),
+        render: (rowData) => date(rowData).full,
       },
     ],
     [onTableLinksClick]

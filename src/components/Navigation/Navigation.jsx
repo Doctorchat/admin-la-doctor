@@ -70,8 +70,8 @@ export default function Navigation({ closeMenu }) {
           <Menu.Item key="promo-codes">
             <Link to="/promo-codes">Promo coduri</Link>
           </Menu.Item>
-          <Menu.Item key="logs" disabled>
-            Istoricul
+          <Menu.Item key="logs">
+            <Link to="/logs">Istoricul</Link>
           </Menu.Item>
           <Menu.Item key="global-settings">
             <Link to="/global-settings"> Setări globale</Link>

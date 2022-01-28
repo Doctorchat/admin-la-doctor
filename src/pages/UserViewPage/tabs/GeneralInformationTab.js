@@ -15,7 +15,7 @@ export default function GeneralInformationTab(props) {
       return <Tag color="#06f">Online</Tag>;
     }
 
-    return userInfo?.last_seen ? date(userInfo.last_seen).dynamic() : "Necunoscut";
+    return userInfo?.last_seen ? date(userInfo.last_seen).full : "Necunoscut";
   };
 
   useEffect(() => {

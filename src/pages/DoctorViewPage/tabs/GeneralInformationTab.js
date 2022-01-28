@@ -60,7 +60,7 @@ export default function GeneralInformationTab() {
       return <Tag color="#06f">Online</Tag>;
     }
 
-    return docInfo?.last_seen ? date(docInfo.last_seen).dynamic() : "Necunoscut";
+    return docInfo?.last_seen ? date(docInfo.last_seen).full : "Necunoscut";
   };
 
   const generateDocDisponibility = () => {

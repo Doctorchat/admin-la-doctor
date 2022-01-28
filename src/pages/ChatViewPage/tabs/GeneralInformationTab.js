@@ -22,7 +22,7 @@ export default function GeneralInformationTab() {
         {(chatInfo?.type && getChatType(chatInfo)) || "---"}
       </Descriptions.Item>
       <Descriptions.Item label="Actualizat">
-        {(chatInfo.updated_at && date(chatInfo.updated_at).dynamic()) || "---"}
+        {(chatInfo.updated_at && date(chatInfo.updated_at).full) || "---"}
       </Descriptions.Item>
       <Descriptions.Item label="Suma">{chatInfo?.price} Lei</Descriptions.Item>
     </Descriptions>

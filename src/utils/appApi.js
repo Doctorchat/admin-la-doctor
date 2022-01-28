@@ -48,6 +48,9 @@ const api = {
     update: (data) => axiosInstance.put("/promocodes/", data),
     delete: (id) => axiosInstance.delete(`/promocodes/${id}`),
   },
+  logs: {
+    get: () => axiosInstance.get(""),
+  },
 };
 
 export default api;

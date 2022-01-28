@@ -151,7 +151,7 @@ export default function ReviewsList(props) {
       {
         title: "Data",
         dataIndex: "created_at",
-        render: (rowData) => date(rowData).dynamic(),
+        render: (rowData) => date(rowData).full,
       },
       {
         title: "Acțiune",

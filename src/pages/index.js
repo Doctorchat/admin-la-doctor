@@ -11,3 +11,4 @@ export { default as UserViewPage } from "./UserViewPage";
 export { default as GlobalSettingsPage } from "./GlobalSettingsPage";
 export { default as StatsPage } from "./StatsPage";
 export { default as PromocodesPage } from "./PromocodesPage";
+export { default as LogsListPage } from "./LogsListPage";

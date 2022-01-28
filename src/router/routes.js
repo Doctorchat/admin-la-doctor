@@ -12,6 +12,7 @@ import {
   GlobalSettingsPage,
   StatsPage,
   PromocodesPage,
+  LogsListPage,
 } from "../pages/";
 
 const routes = [
@@ -90,6 +91,12 @@ const routes = [
   {
     path: "/promo-codes",
     component: PromocodesPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/logs",
+    component: LogsListPage,
     exact: true,
     private: true,
   },
