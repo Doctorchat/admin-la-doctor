@@ -1,4 +1,4 @@
-import { Alert, Button, notification, PageHeader } from "antd";
+import { Alert, Button, notification, PageHeader, Popconfirm } from "antd";
 import { useCallback, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
@@ -16,6 +16,7 @@ export default function DoctorsRequestsPage() {
   const [acceptVisible, setAcceptVisible] = useState(false);
   const [selectedDoctorData, setSelectedDoctorData] = useState(null);
   const [prepareAcceptLoading, setPrepareAcceptLoading] = useState(null);
+  const [removeReqLoading, setRemoveReqLoading] = useState(null);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -67,6 +68,23 @@ export default function DoctorsRequestsPage() {
     []
   );
 
+  const removeHandler = useCallback(
+    (docId) => async () => {
+      setRemoveReqLoading(docId);
+
+      try {
+        // await
+
+        setRequests((prev) => prev.filter((req) => req.id !== docId));
+      } catch (error) {
+        notification.error({ message: "Eroare", description: "A apărut o eraore" });
+      } finally {
+        setPrepareAcceptLoading(null);
+      }
+    },
+    []
+  );
+
   const onTableChange = useCallback((pagination) => {
     setCurrentPage(pagination.current);
   }, []);
@@ -94,22 +112,44 @@ export default function DoctorsRequestsPage() {
       {
         title: "Acțiuni",
         render: (_, row) => (
-          <Button
-            type="primary"
-            size="small"
-            onClick={acceptHandler(row.id)}
-            loading={prepareAcceptLoading === row.id}
-          >
-            Acceptă
-          </Button>
+          <>
+            <Button
+              type="primary"
+              size="small"
+              className="me-2"
+              onClick={acceptHandler(row.id)}
+              loading={prepareAcceptLoading === row.id}
+            >
+              Acceptă
+            </Button>
+            <Popconfirm
+              title="Ești sigur ca vreai sa ștergi acestă cerere?"
+              placement="left"
+              onConfirm={removeHandler(row.id)}
+              okText="Accept"
+              cancelText="Anulează"
+            >
+              <Button type="primary" size="small" danger loading={removeReqLoading === row.id}>
+                Șterge
+              </Button>
+            </Popconfirm>
+          </>
         ),
       },
     ],
-    [acceptHandler, prepareAcceptLoading]
+    [acceptHandler, prepareAcceptLoading, removeHandler, removeReqLoading]
   );
 
   if (error) {
-    return <Alert className="mt-5" showIcon type="error" message="Error" description="A apărut o eroare!" />;
+    return (
+      <Alert
+        className="mt-5"
+        showIcon
+        type="error"
+        message="Error"
+        description="A apărut o eroare!"
+      />
+    );
   }
 
   return (

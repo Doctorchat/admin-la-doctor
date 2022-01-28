@@ -8,6 +8,8 @@ import requestsCount from "./reducers/requestsCountReducer";
 import transactionsList from "./reducers/transactionsListReducer";
 import chatsList from "./reducers/chatsListReducer";
 import reviewsList from "./reducers/reviewsListReducer";
+import stats from "./reducers/statsReducer";
+import promocodesList from "./reducers/promocodesReducer";
 
 const rootReducer = combineReducers({
   user,
@@ -19,6 +21,8 @@ const rootReducer = combineReducers({
   usersList,
   requestsCount,
   transactionsList,
+  stats,
+  promocodesList,
 });
 
 export default rootReducer;

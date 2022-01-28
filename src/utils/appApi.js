@@ -39,6 +39,15 @@ const api = {
     simplifiedDoctors: () => axiosInstance.get("/admin/users/doctors/simplify"),
     categories: () => axiosInstance.get("/specialities"),
   },
+  stats: {
+    getCharts: () => axiosInstance.get("/admin/statistics"),
+  },
+  promocodes: {
+    get: () => axiosInstance.get("/promocodes"),
+    create: (data) => axiosInstance.post("/promocodes/", data),
+    update: (data) => axiosInstance.put("/promocodes/", data),
+    delete: (id) => axiosInstance.delete(`/promocodes/${id}`),
+  },
 };
 
 export default api;

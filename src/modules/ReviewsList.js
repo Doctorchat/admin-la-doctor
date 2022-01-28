@@ -125,8 +125,8 @@ export default function ReviewsList(props) {
         title: "Client",
         dataIndex: "client",
         render: (rowData) => (
-          <a href={`/user/${rowData.id}`} onClick={onTableLinksClick(`/user/${rowData.id}`)}>
-            {rowData.name}
+          <a href={`/user/${rowData?.id}`} onClick={onTableLinksClick(`/user/${rowData?.id}`)}>
+            {rowData?.name}
           </a>
         ),
       },
@@ -136,6 +136,15 @@ export default function ReviewsList(props) {
         render: ({ name, id }) => (
           <a href={`/doctor/${id}`} onClick={onTableLinksClick(`/user/${id}`)}>
             {name}
+          </a>
+        ),
+      },
+      {
+        title: "ID Conversație",
+        dataIndex: "chat_id",
+        render: (rowData) => (
+          <a href={`/chat/${rowData}`} onClick={onTableLinksClick(`/chat/${rowData}`)}>
+            #{rowData}
           </a>
         ),
       },

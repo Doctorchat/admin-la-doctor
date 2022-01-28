@@ -49,7 +49,7 @@ export default function ChatViewPage() {
     if (chatInfo.id) {
       const checks = [chatInfo.doctor.id === 1, chatInfo.isOverdue];
 
-      if (checks.some((check) => !check)) {
+      if (checks.some(Boolean)) {
         return "error";
       }
     }

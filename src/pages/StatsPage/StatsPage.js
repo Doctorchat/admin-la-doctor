@@ -1,6 +1,11 @@
 import { PageHeader } from "antd";
+import moment from "moment";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useMount } from "react-use";
 import ChartLine from "../../components/Chart/ChartLine";
 import { TransactionsList } from "../../modules";
+import { getStatsCharts } from "../../store/actions/statsAction";
 
 const labelsLong = {
   Ian: "Ianuarie",
@@ -34,40 +39,79 @@ const options = {
   },
 };
 
-const messagesData = {
-  labels: labelsShort,
-  datasets: [
-    {
-      backgroundColor: "#06f",
-      borderColor: "#06f",
-      label: "Mesaje",
-      data: [3, 10, 5, 2, 20, 30, 20, 50, 40, 10, 1],
-    },
-  ],
-};
-
-const incomingData = {
-  labels: labelsShort,
-  datasets: [
-    {
-      backgroundColor: "#198754",
-      borderColor: "#198754",
-      label: "Venit",
-      data: [30, 100, 50, 20, 200, 300, 200, 500, 400, 100, 10],
-    },
-  ],
-};
-
 export default function StatsPage() {
+  const { charts } = useSelector((store) => ({
+    charts: store.stats.charts,
+  }));
+  const [chartsData, setChartsData] = useState({ messages: [], revenue: [] });
+  const [chartsLoading, setChartsLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const messagesData = [];
+    const revenueData = [];
+
+    const currentYear = moment().year();
+
+    if (charts && charts[currentYear]) {
+      const chartForYear = Object.values(charts[currentYear]).map((monthData) =>
+        Object.values(monthData)
+      );
+
+      for (let i = 0; i < chartForYear.length; i++) {
+        revenueData.push(chartForYear[i][0]);
+        messagesData.push(chartForYear[i][1]);
+      }
+    }
+
+    setChartsData({ messages: messagesData, revenue: revenueData });
+  }, [charts]);
+
+  useMount(async () => {
+    setChartsLoading(true);
+    await dispatch(getStatsCharts());
+    setChartsLoading(false);
+  });
+
+  const messagesDataset = useMemo(
+    () => ({
+      labels: labelsShort,
+      datasets: [
+        {
+          backgroundColor: "#06f",
+          borderColor: "#06f",
+          label: "Mesaje",
+          data: chartsData.messages,
+        },
+      ],
+    }),
+    [chartsData.messages]
+  );
+
+  const revenueDataset = useMemo(
+    () => ({
+      labels: labelsShort,
+      datasets: [
+        {
+          backgroundColor: "#198754",
+          borderColor: "#198754",
+          label: "Venit",
+          data: chartsData.revenue,
+        },
+      ],
+    }),
+    [chartsData.revenue]
+  );
+
   return (
     <div className="stats-page">
       <PageHeader className="site-page-header" title="Statistică" />
       <ChartLine
         title="Mesaje"
         labels={labelsShort}
-        data={messagesData}
+        data={messagesDataset}
         options={options}
-        loading={false}
+        loading={chartsLoading}
       />
 
       <div className="my-4" />
@@ -75,9 +119,9 @@ export default function StatsPage() {
       <ChartLine
         title="Venit"
         labels={labelsShort}
-        data={incomingData}
+        data={revenueDataset}
         options={options}
-        loading={false}
+        loading={chartsLoading}
       />
 
       <div className="my-5" />

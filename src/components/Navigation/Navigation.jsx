@@ -67,8 +67,8 @@ export default function Navigation({ closeMenu }) {
           <Menu.Item key="reviews">
             <Link to="/reviews">Testemoniale</Link>
           </Menu.Item>
-          <Menu.Item key="promo-codes" disabled>
-            Promo coduri
+          <Menu.Item key="promo-codes">
+            <Link to="/promo-codes">Promo coduri</Link>
           </Menu.Item>
           <Menu.Item key="logs" disabled>
             Istoricul
