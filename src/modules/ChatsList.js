@@ -1,4 +1,4 @@
-import { Alert, Tag } from "antd";
+import { Alert, Button, Tag } from "antd";
 import PropTypes from "prop-types";
 import { useCallback, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,8 +52,8 @@ export const getChatType = (chat) => {
     return chatTypes.meet;
   }
 
-  if (chat.type === 'auto' && chat.doctor.id === 1) {
-    return <Tag color="#ff4d4f">Auto</Tag>
+  if (chat.type === "auto" && chat.doctor.id === 1) {
+    return <Tag color="#ff4d4f">Auto</Tag>;
   }
 
   return chatTypes[chat.type];
@@ -130,15 +130,6 @@ export default function ChatsList(props) {
   const columns = useMemo(
     () => [
       {
-        title: "ID",
-        dataIndex: "id",
-        render: (rowData) => (
-          <a href={`/chat/${rowData}`} onClick={onTableLinksClick(`/chat/${rowData}`)}>
-            #{rowData}
-          </a>
-        ),
-      },
-      {
         title: "Doctor",
         dataIndex: "doctor",
         render: ({ id, name }) => (
@@ -171,13 +162,29 @@ export default function ChatsList(props) {
         dataIndex: "updated_at",
         render: (rowData) => date(rowData).full,
       },
+      {
+        title: "Acțiuni",
+        render: (_, row) => (
+          <>
+            <Button type="primary" size="small" onClick={onTableLinksClick(`/chat/${row.id}`)}>
+              Vezi chat-ul
+            </Button>
+          </>
+        ),
+      },
     ],
     [onTableLinksClick]
   );
 
   if (error) {
     return (
-      <Alert className="mt-5" showIcon type="error" message={`Error ${error.status}`} description={error.message} />
+      <Alert
+        className="mt-5"
+        showIcon
+        type="error"
+        message={`Error ${error.status}`}
+        description={error.message}
+      />
     );
   }
 

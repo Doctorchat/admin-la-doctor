@@ -10,7 +10,7 @@ export const getTransactionsList =
   (params = {}) =>
   async (dispatch) => {
     try {
-      const response = await api.reviews.get(params);
+      const response = await api.stats.getTransactions(params);
 
       dispatch({ type: TRANSACTIONS_LIST_GET, payload: response.data });
 

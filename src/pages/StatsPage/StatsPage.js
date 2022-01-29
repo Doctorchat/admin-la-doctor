@@ -3,7 +3,7 @@ import moment from "moment";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMount } from "react-use";
-import ChartLine from "../../components/Chart/ChartLine";
+import ChartBar from "../../components/Chart/ChartBar";
 import { TransactionsList } from "../../modules";
 import { getStatsCharts } from "../../store/actions/statsAction";
 
@@ -33,9 +33,9 @@ const options = {
         title: (ctx) => labelsLong[ctx[0].label],
       },
     },
-    legend: {
-      display: false,
-    },
+    // legend: {
+    //   display: false,
+    // },
   },
 };
 
@@ -58,7 +58,9 @@ export default function StatsPage() {
         Object.values(monthData)
       );
 
-      for (let i = 0; i < chartForYear.length; i++) {
+      const monthsOffset = moment().month();
+
+      for (let i = 0; i <= monthsOffset; i++) {
         revenueData.push(chartForYear[i][0]);
         messagesData.push(chartForYear[i][1]);
       }
@@ -83,15 +85,6 @@ export default function StatsPage() {
           label: "Mesaje",
           data: chartsData.messages,
         },
-      ],
-    }),
-    [chartsData.messages]
-  );
-
-  const revenueDataset = useMemo(
-    () => ({
-      labels: labelsShort,
-      datasets: [
         {
           backgroundColor: "#198754",
           borderColor: "#198754",
@@ -100,26 +93,16 @@ export default function StatsPage() {
         },
       ],
     }),
-    [chartsData.revenue]
+    [chartsData.messages, chartsData.revenue]
   );
 
   return (
     <div className="stats-page">
       <PageHeader className="site-page-header" title="Statistică" />
-      <ChartLine
-        title="Mesaje"
+      <ChartBar
+        title="Doctorchat Statistică"
         labels={labelsShort}
         data={messagesDataset}
-        options={options}
-        loading={chartsLoading}
-      />
-
-      <div className="my-4" />
-
-      <ChartLine
-        title="Venit"
-        labels={labelsShort}
-        data={revenueDataset}
         options={options}
         loading={chartsLoading}
       />

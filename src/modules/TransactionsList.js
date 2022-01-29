@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { Alert, Tag } from "antd";
+import { Alert, Button, Tag } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMount, useSessionStorage, useUnmount } from "react-use";
@@ -8,13 +8,19 @@ import {
   cleanTransactionsList,
   getTransactionsList,
   setCleanOnUnmountTrue,
+  setCleanOnUnmountFalse,
 } from "../store/actions/transactionsListAction";
 import date from "../utils/date";
+import { useHistory } from "react-router-dom";
 
 const initialState = {
   page: 1,
   sort_column: "id",
   sort_direction: "descend",
+};
+
+export const transactionsStatuses = {
+  confirmed: <Tag color="green">Confirmat</Tag>,
 };
 
 const tableStateKey = "transactions-list-state";
@@ -29,6 +35,7 @@ export default function TransactionsList(props) {
     cleanOnUnmount: store.transactionsList.cleanOnUnmount,
   }));
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const fetcher = useCallback(async () => {
     const { page, sort_column, sort_direction } = state;
@@ -75,30 +82,59 @@ export default function TransactionsList(props) {
     [setState, state]
   );
 
+  const onTableLinksClick = useCallback(
+    (path) => async () => {
+      await dispatch(setCleanOnUnmountFalse());
+      history.push(path);
+    },
+    [dispatch, history]
+  );
+
   const columns = useMemo(
     () => [
-      {
-        title: "ID",
-        dataIndex: "id",
-        render: (rowData) => `#${rowData}`,
-      },
       {
         title: "Data",
         dataIndex: "created_at",
         render: (rowData) => date(rowData).full,
       },
-
+      {
+        title: "Suma",
+        dataIndex: "amount",
+        render: (rowData) => `${rowData} Lei`,
+      },
+      {
+        title: "Card",
+        dataIndex: "card",
+      },
       {
         title: "Status",
         dataIndex: "status",
-        render: (rowData) => <Tag>{rowData}</Tag>,
+        render: (rowData) => transactionsStatuses[rowData],
+      },
+      {
+        title: "Acțiuni",
+        render: (_, row) => (
+          <>
+            <Button type="primary" size="small" onClick={onTableLinksClick(`/chat/${row.id}`)}>
+              Vezi chat-ul
+            </Button>
+          </>
+        ),
       },
     ],
-    []
+    [onTableLinksClick]
   );
 
   if (error) {
-    return <Alert className="mt-5" showIcon type="error" message="Error" description="A apărut o eroare!" />;
+    return (
+      <Alert
+        className="mt-5"
+        showIcon
+        type="error"
+        message="Error"
+        description="A apărut o eroare!"
+      />
+    );
   }
 
   return (

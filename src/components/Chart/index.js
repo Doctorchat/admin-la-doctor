@@ -1,5 +1,5 @@
-import ChartLine from "./Chart";
+import ChartBar from "./ChartBar";
 
 export default {
-  ChartLine,
+  ChartBar,
 };

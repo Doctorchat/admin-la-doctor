@@ -41,6 +41,7 @@ const api = {
   },
   stats: {
     getCharts: () => axiosInstance.get("/admin/statistics"),
+    getTransactions: () => axiosInstance.get("/admin/transactions"),
   },
   promocodes: {
     get: () => axiosInstance.get("/promocodes"),
