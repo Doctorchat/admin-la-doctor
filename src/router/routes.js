@@ -13,6 +13,8 @@ import {
   StatsPage,
   PromocodesPage,
   LogsListPage,
+  SupportListPage,
+  SupportViewPage,
 } from "../pages/";
 
 const routes = [
@@ -97,6 +99,18 @@ const routes = [
   {
     path: "/logs",
     component: LogsListPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/support",
+    component: SupportListPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/support/:chat_id",
+    component: SupportViewPage,
     exact: true,
     private: true,
   },

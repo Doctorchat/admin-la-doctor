@@ -6,3 +6,4 @@ export { default as UsersList } from "./UsersList";
 export { default as TransactionsList } from "./TransactionsList";
 export { default as PromoCodesList } from "./PromoCodesList";
 export { default as LogsList } from "./LogsList";
+export { default as SupportList } from "./SupportList";

@@ -16,7 +16,7 @@ export default function UserViewPage() {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
-  const fetchChatInfo = useCallback(async () => {
+  const fetchUserInfo = useCallback(async () => {
     try {
       const response = await api.users.getById(user_id);
       setUserInfo(response.data);
@@ -28,7 +28,7 @@ export default function UserViewPage() {
     }
   }, [history, user_id]);
 
-  useMount(fetchChatInfo);
+  useMount(fetchUserInfo);
 
   return (
     <div className="page-view">

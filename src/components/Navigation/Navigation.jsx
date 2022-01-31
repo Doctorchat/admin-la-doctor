@@ -10,6 +10,7 @@ import "./styles/index.scss";
 const menuItemsRegister = {
   "/": "dashboard",
   "/statistics": "statistics",
+  "/support": "support",
   "/doctors": "doctors",
   "/doctor/": "doctors",
   "/requests": "doctors",
@@ -23,7 +24,10 @@ const menuItemsRegister = {
 };
 
 export default function Navigation({ closeMenu }) {
-  const requestsCount = useSelector((store) => store.requestsCount);
+  const { requestsCount, supportCount } = useSelector((store) => ({
+    requestsCount: store.requestsCount,
+    supportCount: store.supportList.count,
+  }));
   const [currentRoute, setCurrentRoute] = useState();
   const routeMatch = useRouteMatch();
   const params = useParams();
@@ -51,6 +55,12 @@ export default function Navigation({ closeMenu }) {
           </Menu.Item>
           <Menu.Item key="statistics">
             <Link to="/statistics">Statistică</Link>
+          </Menu.Item>
+          <Menu.Item key="support">
+            <div className="d-flex align-items-center justify-content-between">
+              <Link to="/support">Support</Link>
+              <Badge className="ms-2" key="doctors-list-requests" count={supportCount} />
+            </div>
           </Menu.Item>
           <Menu.Item key="doctors">
             <div className="d-flex align-items-center justify-content-between">

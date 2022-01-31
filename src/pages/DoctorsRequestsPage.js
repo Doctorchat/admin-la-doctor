@@ -97,14 +97,6 @@ export default function DoctorsRequestsPage() {
         render: (rowData, { id }) => <Link to={`/doctor/${id}`}>{rowData}</Link>,
       },
       {
-        title: "Email",
-        dataIndex: "email",
-      },
-      {
-        title: "Telefon",
-        dataIndex: "phone",
-      },
-      {
         title: "Specialitate",
         dataIndex: "category",
         render: (rowData) => rowData.map((cat) => cat.name_ro).join(", "),

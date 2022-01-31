@@ -50,6 +50,10 @@ const api = {
     update: (data) => axiosInstance.put("/promocodes/", data),
     delete: (id) => axiosInstance.delete(`/promocodes/${id}`),
   },
+  support: {
+    get: () => axiosInstance.get("/admin/chats/support"),
+    count: () => axiosInstance.get("/admin/chats/support/count"),
+  },
   logs: {
     get: () => axiosInstance.get(""),
   },

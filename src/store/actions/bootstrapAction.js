@@ -2,7 +2,10 @@ import { BOOTSTRAP_PUSH } from "../actionTypes";
 import api from "../../utils/appApi";
 
 export const setGlobalPrivateRequisites = () => (dispatch) =>
-  Promise.allSettled([api.bootstrap.simplifiedDoctors(), api.bootstrap.categories()])
+  Promise.allSettled([
+    api.bootstrap.simplifiedDoctors(),
+    api.bootstrap.categories(),
+  ])
     .then((settledPromises) => {
       const [doctors, categories] = settledPromises;
 

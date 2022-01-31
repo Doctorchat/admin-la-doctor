@@ -21,7 +21,7 @@ export default function DoctorViewPage() {
   const [editVisible, setEditVisible] = useState(false);
   const history = useHistory();
 
-  const fetchChatInfo = useCallback(async () => {
+  const fetchDoctorInfo = useCallback(async () => {
     try {
       const response = await api.doctors.getById(doc_id);
       setDocInfo(response.data);
@@ -33,7 +33,7 @@ export default function DoctorViewPage() {
     }
   }, [doc_id, history]);
 
-  useMount(fetchChatInfo);
+  useMount(fetchDoctorInfo);
 
   const updateDocInfo = useCallback(
     (key, value) => {
@@ -69,6 +69,7 @@ export default function DoctorViewPage() {
           submitBtnText="Trimite"
           visible={editVisible}
           defaultValues={docInfo}
+          docId={doc_id}
         />
         <DoctorViewContext.Provider value={{ docInfo, updateDocInfo }}>
           <Tabs>
