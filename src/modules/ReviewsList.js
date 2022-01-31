@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { Alert, Button, Drawer, Form, Input, Select } from "antd";
+import { Alert, Button, Drawer, Form, Input, notification, Select } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -10,9 +10,10 @@ import {
   getReviewsList,
   setCleanOnUnmountFalse,
   setCleanOnUnmountTrue,
+  updateReivew,
 } from "../store/actions/reviewsListAction";
 import date from "../utils/date";
-import { DislikeOutlined, LikeOutlined } from "@ant-design/icons";
+import api from "../utils/appApi";
 
 const initialState = {
   page: 1,
@@ -112,18 +113,35 @@ export default function ReviewsList(props) {
     if (activeReview && Object.keys(activeReview).length) {
       form.setFields([
         { name: "content", value: activeReview.content },
-        { name: "status", value: activeReview.status },
+        { name: "visibility", value: activeReview.visibility },
       ]);
     } else {
       form.resetFields();
     }
   }, [activeReview, form]);
 
+  const onReviewEdit = useCallback(
+    async (values) => {
+      const data = { ...values };
+
+      data.id = activeReview.id;
+
+      try {
+        const res = await api.reviews.update(data);
+        dispatch(updateReivew(res.data));
+        onCloseReview();
+      } catch (error) {
+        notification.error({ message: "Eroare", description: "A apărut o eroare" });
+      }
+    },
+    [activeReview, dispatch, onCloseReview]
+  );
+
   const columns = useMemo(
     () => [
       {
         title: "Client",
-        dataIndex: "client",
+        dataIndex: "user",
         render: (rowData) => (
           <a href={`/user/${rowData?.id}`} onClick={onTableLinksClick(`/user/${rowData?.id}`)}>
             {rowData?.name}
@@ -153,15 +171,15 @@ export default function ReviewsList(props) {
         dataIndex: "created_at",
         render: (rowData) => date(rowData).full,
       },
+      // {
+      //   title: "Acțiune",
+      //   dataIndex: "like",
+      //   render: (rowData) => (rowData ? <LikeOutlined /> : <DislikeOutlined />),
+      // },
       {
-        title: "Acțiune",
-        dataIndex: "action",
-        render: (rowData) => (rowData ? <LikeOutlined /> : <DislikeOutlined />),
-      },
-      {
-        title: "Status",
-        dataIndex: "status",
-        render: (rowData) => reviewStatuses[rowData],
+        title: "Conținut",
+        dataIndex: "content",
+        ellipsis: true,
       },
       {
         title: "Vizualizare",
@@ -182,16 +200,16 @@ export default function ReviewsList(props) {
   return (
     <>
       <Drawer visible={!!activeReview} onClose={onCloseReview} title="Editare recenzie">
-        <Form layout="vertical" form={form}>
+        <Form layout="vertical" form={form} onFinish={onReviewEdit}>
           <Form.Item label="Conținut" name="content">
             <Input.TextArea autoSize />
           </Form.Item>
-          <Form.Item label="Status" name="status">
+          <Form.Item label="Status" name="visibility">
             <Select
               options={[
                 { value: 0, label: "Vizibil pentru doctor" },
-                { value: 1, label: "Vizibil pentru doctor și home page" },
-                { value: 2, label: "Ascuns pentru toți" },
+                { value: 1, label: "Vizibil in chat pentru clienți" },
+                { value: 2, label: "Visibil peste tot" },
               ]}
             />
           </Form.Item>
@@ -206,6 +224,7 @@ export default function ReviewsList(props) {
         dataSource={reviews?.data || []}
         loading={loading}
         onTabelChange={onTableChange}
+        rowClassName={(row) => (row.like ? "review-like" : "review-dislike")}
         pagination={{
           position: [simplified ? "none" : "bottomRight"],
           per_page: reviews?.per_page,

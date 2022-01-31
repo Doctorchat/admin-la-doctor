@@ -3,6 +3,7 @@ import {
   CLEAN_ON_UNMOUNT_TRUE,
   CLEAN_ON_UNMOUNT_FALSE,
   REVIEWS_LIST_CLEAN,
+  UPDATE_REVIEW,
 } from "../actionTypes";
 
 const initialState = {
@@ -14,6 +15,17 @@ const reviewsList = (state = initialState, action = {}) => {
   switch (action.type) {
     case REVIEWS_LIST_GET: {
       return { ...state, payload: action.payload };
+    }
+    case UPDATE_REVIEW: {
+      const newState = { ...state };
+      const updatedReview = action.payload;
+      const updatedReviewIndex = state.payload.data.findIndex((r) => r.id === updatedReview.id);
+
+      if (updatedReviewIndex !== -1) {
+        newState.payload.data[updatedReviewIndex] = updatedReview;
+      }
+
+      return newState;
     }
     case REVIEWS_LIST_CLEAN:
       return initialState;

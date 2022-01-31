@@ -109,6 +109,7 @@ export default function DoctorsList(props) {
       {
         title: "Specialitate",
         dataIndex: "speciality",
+        ellipsis: true,
         render: (rowData) => rowData.join(", "),
       },
       {

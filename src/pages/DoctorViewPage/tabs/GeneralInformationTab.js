@@ -158,7 +158,7 @@ export default function GeneralInformationTab() {
           <Descriptions.Item label="Ani experientă">{docInfo?.card?.experience}</Descriptions.Item>
           <Descriptions.Item label="Titlul Profesional">{docInfo?.card?.title}</Descriptions.Item>
           <Descriptions.Item label="Specializare">
-            {docInfo?.card?.specialization}
+            {docInfo?.card?.specialization.ro}
           </Descriptions.Item>
           <Descriptions.Item label="Specialitate">
             <List
@@ -169,7 +169,7 @@ export default function GeneralInformationTab() {
           </Descriptions.Item>
           <Descriptions.Item label="Despre">
             <Typography.Paragraph ellipsis={{ rows: 3, expandable: true, symbol: "Vezi mai mult" }}>
-              {docInfo?.card?.bio_ro}
+              {docInfo?.card?.bio.ro}
             </Typography.Paragraph>
           </Descriptions.Item>
         </Descriptions>

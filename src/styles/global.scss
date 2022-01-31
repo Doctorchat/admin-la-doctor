@@ -126,6 +126,15 @@ html:not(.is-safari):not(.is-ios) ::-webkit-scrollbar-thumb {
   }
 }
 
+.ant-table-row {
+  &.review-like {
+    background-color: rgba(#198754, 0.1);
+  }
+  &.review-dislike {
+    background-color: rgba(#dc3545, 0.1);
+  }
+}
+
 @media (max-width: 951px) {
   .dc-layout-content {
     padding: 0px 20px 10px;

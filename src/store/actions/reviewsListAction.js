@@ -3,6 +3,7 @@ import {
   CLEAN_ON_UNMOUNT_TRUE,
   REVIEWS_LIST_CLEAN,
   REVIEWS_LIST_GET,
+  UPDATE_REVIEW,
 } from "../actionTypes";
 import api from "../../utils/appApi";
 
@@ -19,6 +20,10 @@ export const getReviewsList =
       return Promise.reject(error);
     }
   };
+
+export const updateReivew = (review) => (dispatch) => {
+  dispatch({ type: UPDATE_REVIEW, payload: review });
+};
 
 export const cleanReviewsList = () => (dispatch) =>
   dispatch({

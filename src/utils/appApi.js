@@ -19,6 +19,7 @@ const api = {
   },
   reviews: {
     get: (params) => axiosInstance.get("/admin/reviews/all", { params: { ...params } }),
+    update: (data) => axiosInstance.put("/admin/reviews/update", data),
   },
   doctors: {
     get: (params) => axiosInstance.get("/admin/users/doctors/", { params: { ...params } }),

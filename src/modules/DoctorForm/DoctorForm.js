@@ -63,7 +63,7 @@ export default function DoctorForm(props) {
         email: defaultValues.email,
         phone: defaultValues.phone,
         title: defaultValues.card?.title,
-        specialization_ro: defaultValues.card?.specialization_ro,
+        specialization_ro: defaultValues.card?.specialization?.ro,
         name: defaultValues.name,
         experience: defaultValues.card?.experience,
         public_price: defaultValues.card?.public_price,
@@ -76,7 +76,7 @@ export default function DoctorForm(props) {
         })),
         workplace: defaultValues.card?.workplace,
         studies: defaultValues.card?.studies.map((std) => ({ value: std })),
-        bio_ro: defaultValues.card?.bio_ro,
+        bio_ro: defaultValues.card?.bio?.ro,
         status: defaultValues.card?.status ? Boolean(defaultValues.card.status) : false,
       };
 
@@ -115,7 +115,7 @@ export default function DoctorForm(props) {
               name="email"
               rules={[{ required: true }, { type: "email", message: "Acest email nu este valid" }]}
             >
-              <Input />
+              <Input disabled />
             </Form.Item>
             <Form.Item className="w-100" label="Telefon" name="phone">
               <Input />
