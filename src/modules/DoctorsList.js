@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Alert, Tag } from "antd";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useMount, useSessionStorage, useUnmount } from "react-use";
@@ -33,29 +33,28 @@ export default function DoctorsList(props) {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const fetcher = useCallback(async () => {
+  useEffect(() => {
     const { page, sort_column, sort_direction } = state;
     const limit = simplified ? 10 : 20;
 
     setLoading(true);
 
-    try {
-      await dispatch(getDoctorsList({ page, sort_column, sort_direction, limit }));
-    } catch (error) {
-      if (error.response.status === 500) {
-        setError({
-          status: error.response.status,
-          message: error.response.data.message,
-        });
-        sessionStorage.removeItem(tableStateKey);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [dispatch, simplified, state]);
+    dispatch(getDoctorsList({ page, sort_column, sort_direction, limit }))
+      .catch(() => {
+        if (error.response.status === 500) {
+          setError({
+            status: error.response.status,
+            message: error.response.data.message,
+          });
+          sessionStorage.removeItem(tableStateKey);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [dispatch, error, simplified, state]);
 
   useMount(() => {
-    fetcher();
     dispatch(setCleanOnUnmountTrue());
   });
 
@@ -128,7 +127,15 @@ export default function DoctorsList(props) {
   );
 
   if (error) {
-    return <Alert className="mt-5" showIcon type="error" message="Error" description="A apărut o eroare!" />;
+    return (
+      <Alert
+        className="mt-5"
+        showIcon
+        type="error"
+        message="Error"
+        description="A apărut o eroare!"
+      />
+    );
   }
 
   return (
@@ -143,7 +150,6 @@ export default function DoctorsList(props) {
         position: [simplified ? "none" : "bottomRight"],
         per_page: doctors?.per_page,
         total: doctors?.total,
-        current_page: doctors?.current_page,
       }}
       extra={extra}
     />

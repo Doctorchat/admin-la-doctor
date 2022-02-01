@@ -30,27 +30,25 @@ export default function SupportList() {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const fetcher = useCallback(async () => {
+  useEffect(() => {
     const { page, sort_column, sort_direction } = state;
 
     setLoading(true);
 
-    try {
-      await dispatch(getSupportList({ page, sort_column, sort_direction }));
-    } catch (error) {
-      if (error.response.status === 500) {
-        setError({
-          status: error.response.status,
-          message: error.response.data.message,
-        });
-        sessionStorage.removeItem(tableStateKey);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [dispatch, state]);
-
-  useEffect(fetcher, [fetcher]);
+    dispatch(getSupportList({ page, sort_column, sort_direction }))
+      .catch(() => {
+        if (error.response.status === 500) {
+          setError({
+            status: error.response.status,
+            message: error.response.data.message,
+          });
+          sessionStorage.removeItem(tableStateKey);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [dispatch, error, state]);
 
   useMount(() => {
     dispatch(setCleanOnUnmountTrue());
@@ -99,7 +97,9 @@ export default function SupportList() {
         title: "Conținut",
         dataIndex: "content",
         render: (rowData) => (
-          <Typography.Paragraph className="mb-0" ellipsis={{ rows: 2 }}>{rowData}</Typography.Paragraph>
+          <Typography.Paragraph className="mb-0" ellipsis={{ rows: 2 }}>
+            {rowData}
+          </Typography.Paragraph>
         ),
       },
       {

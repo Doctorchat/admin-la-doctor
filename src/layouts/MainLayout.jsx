@@ -41,11 +41,11 @@ export default function MainLayout({ children }) {
       <Button
         className="dc-navigation-toggler"
         type="primary"
-        shape="circle"
         icon={<MenuOutlined />}
         onClick={() => setIsMenuActive(true)}
-        size="large"
-      />
+      >
+        Meniu
+      </Button>
       {spinnerIndicator.active && (
         <div className="dc-layout-loading" data-active={spinnerIndicator.active}>
           <Spin indicator={antIcon} />

@@ -1,6 +1,6 @@
 import { Alert, Button, Tag } from "antd";
 import PropTypes from "prop-types";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useMount, useSessionStorage, useUnmount } from "react-use";
@@ -73,29 +73,28 @@ export default function ChatsList(props) {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const fetcher = useCallback(async () => {
+  useEffect(() => {
     const { page, sort_column, sort_direction } = state;
     const limit = simplified ? 10 : 20;
 
     setLoading(true);
 
-    try {
-      await dispatch(getChatsList({ page, sort_column, sort_direction, limit }));
-    } catch (error) {
-      if (error.response.status === 500) {
-        setError({
-          status: error.response.status,
-          message: error.response.data.message,
-        });
-        sessionStorage.removeItem(tableStateKey);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [dispatch, simplified, state]);
+    dispatch(getChatsList({ page, sort_column, sort_direction, limit }))
+      .catch(() => {
+        if (error.response.status === 500) {
+          setError({
+            status: error.response.status,
+            message: error.response.data.message,
+          });
+          sessionStorage.removeItem(tableStateKey);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [dispatch, error, simplified, state]);
 
   useMount(() => {
-    fetcher();
     dispatch(setCleanOnUnmountTrue());
   });
 

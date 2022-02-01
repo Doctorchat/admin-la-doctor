@@ -37,28 +37,26 @@ export default function TransactionsList(props) {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const fetcher = useCallback(async () => {
+  useEffect(() => {
     const { page, sort_column, sort_direction } = state;
     const limit = simplified ? 10 : 20;
 
     setLoading(true);
 
-    try {
-      await dispatch(getTransactionsList({ page, sort_column, sort_direction, limit }));
-    } catch (error) {
-      if (error.response.status === 500) {
-        setError({
-          status: error.response.status,
-          message: error.response.data.message,
-        });
-        sessionStorage.removeItem(tableStateKey);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [dispatch, simplified, state]);
-
-  useEffect(fetcher, [fetcher]);
+    dispatch(getTransactionsList({ page, sort_column, sort_direction, limit }))
+      .catch(() => {
+        if (error.response.status === 500) {
+          setError({
+            status: error.response.status,
+            message: error.response.data.message,
+          });
+          sessionStorage.removeItem(tableStateKey);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [dispatch, error, simplified, state]);
 
   useMount(() => {
     dispatch(setCleanOnUnmountTrue());

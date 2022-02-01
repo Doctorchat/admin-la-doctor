@@ -43,28 +43,26 @@ export default function ReviewsList(props) {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const fetcher = useCallback(async () => {
+  useEffect(() => {
     const { page, sort_column, sort_direction } = state;
     const limit = simplified ? 10 : 20;
 
     setLoading(true);
 
-    try {
-      await dispatch(getReviewsList({ page, sort_column, sort_direction, limit }));
-    } catch (error) {
-      if (error.response.status === 500) {
-        setError({
-          status: error.response.status,
-          message: error.response.data.message,
-        });
-        sessionStorage.removeItem(tableStateKey);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [dispatch, simplified, state]);
-
-  useEffect(fetcher, [fetcher]);
+    dispatch(getReviewsList({ page, sort_column, sort_direction, limit }))
+      .catch(() => {
+        if (error.response.status === 500) {
+          setError({
+            status: error.response.status,
+            message: error.response.data.message,
+          });
+          sessionStorage.removeItem(tableStateKey);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [dispatch, error, simplified, state]);
 
   useMount(() => {
     dispatch(setCleanOnUnmountTrue());

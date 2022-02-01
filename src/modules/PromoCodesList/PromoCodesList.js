@@ -56,27 +56,25 @@ export default function PromoCodesList() {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
-  const fetcher = useCallback(async () => {
+  useEffect(() => {
     const { page, sort_column, sort_direction } = state;
 
     setLoading(true);
 
-    try {
-      await dispatch(getPromocodesList({ page, sort_column, sort_direction }));
-    } catch (error) {
-      if (error.response.status === 500) {
-        setError({
-          status: error.response.status,
-          message: error.response.data.message,
-        });
-        sessionStorage.removeItem(tableStateKey);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [dispatch, state]);
-
-  useEffect(fetcher, [fetcher]);
+    dispatch(getPromocodesList({ page, sort_column, sort_direction }))
+      .catch(() => {
+        if (error.response.status === 500) {
+          setError({
+            status: error.response.status,
+            message: error.response.data.message,
+          });
+          sessionStorage.removeItem(tableStateKey);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [dispatch, error, state]);
 
   useMount(() => {
     dispatch(setCleanOnUnmountTrue());
