@@ -51,19 +51,17 @@ export const updatePromocode =
     }
   };
 
-export const deletePomocode =
-  (id) =>
-  async (dispatch) => {
-    try {
-      await api.promocodes.delete(id);
+export const deletePomocode = (id) => async (dispatch) => {
+  try {
+    await api.promocodes.delete(id);
 
-      dispatch({ type: DELETE_RPMOCODE, payload: id });
+    dispatch({ type: DELETE_RPMOCODE, payload: id });
 
-      return Promise.resolve();
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
+    return Promise.resolve();
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
 
 export const cleanPromocodesList = () => (dispatch) =>
   dispatch({

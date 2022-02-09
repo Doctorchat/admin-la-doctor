@@ -30,7 +30,7 @@ const api = {
     getRequests: () => axiosInstance.get("/admin/users/doctors/requests"),
     update: (data) => axiosInstance.put(`/admin/users/doctors/update`, data),
     requestsCount: () => axiosInstance.get("/admin/users/doctors/requests-count"),
-    removeRequest: (id) => axiosInstance.delete(`/admin/users/doctors/${id}`),
+    removeRequest: (id) => axiosInstance.delete(`/admin/users/doctors/`, { data: { id } }),
   },
   users: {
     get: (params) => axiosInstance.get("/admin/users/clients", { params: { ...params } }),
@@ -51,7 +51,7 @@ const api = {
     get: () => axiosInstance.get("/promocodes"),
     create: (data) => axiosInstance.post("/promocodes/", data),
     update: (data) => axiosInstance.put("/promocodes/", data),
-    delete: (id) => axiosInstance.delete(`/promocodes/${id}`),
+    delete: (id) => axiosInstance.delete(`/promocodes`, { data: { id } }),
   },
   support: {
     get: () => axiosInstance.get("/admin/chats/support"),
