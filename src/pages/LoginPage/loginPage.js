@@ -18,8 +18,8 @@ const LoginPage = () => {
     (values) => {
       setLoading(true);
       login(values)(dispatch).catch((err) => {
-        setLoading(false);
         setApiErrorsToAntdForm(err);
+        setLoading(false);
       });
     },
     [dispatch, setApiErrorsToAntdForm]

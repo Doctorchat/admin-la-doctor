@@ -28,6 +28,10 @@ export const login = (data) => (dispatch) =>
   api.user
     .login(data)
     .then((res) => {
+      if (res.data.user.role !== 1) {
+        throw new Error("You do not have permission!");
+      }
+
       localStorage.setItem("isAuthorized", "true");
       localStorage.setItem("token", res.data.token);
       axiosInstance.defaults.headers.Authorization = `Bearer ${res.data.token}`;

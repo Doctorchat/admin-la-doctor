@@ -73,8 +73,7 @@ export default function DoctorsRequestsPage() {
       setRemoveReqLoading(docId);
 
       try {
-        // await
-
+        await api.doctors.removeRequest(docId);
         setRequests((prev) => prev.filter((req) => req.id !== docId));
       } catch (error) {
         notification.error({ message: "Eroare", description: "A apărut o eraore" });

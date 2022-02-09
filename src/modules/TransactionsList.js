@@ -113,7 +113,7 @@ export default function TransactionsList(props) {
         title: "Acțiuni",
         render: (_, row) => (
           <>
-            <Button type="primary" size="small" onClick={onTableLinksClick(`/chat/${row.id}`)}>
+            <Button type="primary" size="small" onClick={onTableLinksClick(`/chat/${row.chat}`)}>
               Vezi chat-ul
             </Button>
           </>

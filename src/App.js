@@ -17,13 +17,10 @@ function App() {
     if (isAuthorized) {
       getUser()(dispatch);
       dispatch(setGlobalPrivateRequisites());
+      dispatch(updateRequestsCount());
+      dispatch(updateSupportCount());
     }
   }, [dispatch, isAuthorized]);
-
-  useEffect(() => {
-    dispatch(updateRequestsCount());
-    dispatch(updateSupportCount());
-  }, [dispatch]);
 
   return <Router routes={routes} />;
 }
