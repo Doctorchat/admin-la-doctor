@@ -56,6 +56,7 @@ const api = {
   support: {
     get: () => axiosInstance.get("/admin/chats/support"),
     count: () => axiosInstance.get("/admin/chats/support/count"),
+    sendGlobalMsg: (data) => axiosInstance.post("/chat/mass-mail", data),
   },
   logs: {
     get: () => axiosInstance.get(""),
