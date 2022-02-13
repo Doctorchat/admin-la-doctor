@@ -38,6 +38,7 @@ const api = {
   },
   settings: {
     get: () => axiosInstance.get("/admin/settings/edit"),
+    update: (data) => axiosInstance.put("/admin/settings/edit", data),
   },
   bootstrap: {
     simplifiedDoctors: () => axiosInstance.get("/admin/users/doctors/simplify"),

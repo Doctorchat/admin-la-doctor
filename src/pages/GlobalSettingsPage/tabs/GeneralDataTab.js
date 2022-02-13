@@ -1,8 +1,13 @@
 import { Button, Form, InputNumber, Select } from "antd";
+import { useGlobalSettingsContext } from "../GlobalSettingsContext";
 
 export default function GeneralDataTab() {
+  const { general, onSubmit } = useGlobalSettingsContext();
+
+  if (!general && !Object.keys(general).length) return null;
+
   return (
-    <Form layout="vertical">
+    <Form layout="vertical" onFinish={onSubmit({ id: 1 })} initialValues={{ ...general }}>
       <div className="d-sm-flex gap-2">
         <Form.Item className="w-100" name="z2" label="Coeficient zona 2">
           <InputNumber step={0.1} />
