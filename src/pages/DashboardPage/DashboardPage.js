@@ -24,6 +24,7 @@ export default function DashboardPage() {
       try {
         await api.support.sendGlobalMsg(values);
         form.resetFields();
+        setFormSubmitDisabled(true);
       } catch (error) {
         notification.error({ message: "Error", description: getApiErrorMessages(error) });
       } finally {
