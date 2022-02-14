@@ -58,8 +58,8 @@ export default function DashboardPage() {
             <Select
               placeholder="Selectează grupa"
               options={[
-                { value: 1, label: "Doctori" },
-                { value: 2, label: "Clienți" },
+                { value: 1, label: "Clienți" },
+                { value: 2, label: "Doctori" },
                 { value: 3, label: "Global" },
               ]}
             />
