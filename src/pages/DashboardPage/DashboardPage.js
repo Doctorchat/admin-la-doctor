@@ -27,7 +27,7 @@ export default function DashboardPage() {
       } catch (error) {
         notification.error({ message: "Error", description: getApiErrorMessages(error) });
       } finally {
-        setLoading(true);
+        setLoading(false);
       }
     },
     [form]
@@ -63,7 +63,12 @@ export default function DashboardPage() {
               ]}
             />
           </Form.Item>
-          <Button type="primary" disabled={formSubmitDisabled} loading={loading}>
+          <Button
+            type="primary"
+            onClick={form.submit}
+            disabled={formSubmitDisabled}
+            loading={loading}
+          >
             Trimite
           </Button>
         </Form>
