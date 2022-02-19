@@ -92,7 +92,7 @@ export default function TransactionsList(props) {
     () => [
       {
         title: "Data",
-        dataIndex: "created_at",
+        dataIndex: "date",
         render: (rowData) => date(rowData).full,
       },
       {
