@@ -47,8 +47,6 @@ export default function DoctorViewPage() {
     [docInfo]
   );
 
-  console.log(docInfo);
-
   return (
     <div className={cs("page-view", docInfo?.inVacation && "closed")}>
       <Spin spinning={loading}>
