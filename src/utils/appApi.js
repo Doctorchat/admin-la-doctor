@@ -31,6 +31,7 @@ const api = {
     update: (data) => axiosInstance.put(`/admin/users/doctors/update`, data),
     requestsCount: () => axiosInstance.get("/admin/users/doctors/requests-count"),
     removeRequest: (id) => axiosInstance.delete(`/admin/users/doctors/delete`, { data: { id } }),
+    search: (keyword) => axiosInstance.get(`/admin/users/doctors/search/${keyword}`),
   },
   users: {
     get: (params) => axiosInstance.get("/admin/users/clients", { params: { ...params } }),

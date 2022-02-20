@@ -22,16 +22,25 @@ const initialState = {
 const tableStateKey = "doctors-list-state";
 
 export default function DoctorsList(props) {
-  const { simplified, title, extra } = props;
+  const { simplified, title, extra, searchedList } = props;
   const [state, setState] = useSessionStorage(tableStateKey, initialState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [activeList, setActiveList] = useState([]);
   const { doctors, cleanOnUnmount } = useSelector((store) => ({
     doctors: store.doctorsList.payload,
     cleanOnUnmount: store.doctorsList.cleanOnUnmount,
   }));
   const history = useHistory();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (searchedList) {
+      setActiveList(searchedList);
+    } else {
+      setActiveList(doctors?.data);
+    }
+  }, [doctors?.data, searchedList]);
 
   useEffect(() => {
     const { page, sort_column, sort_direction } = state;
@@ -142,7 +151,7 @@ export default function DoctorsList(props) {
     <DcTable
       title={title}
       dataColumns={columns}
-      dataSource={doctors?.data || []}
+      dataSource={activeList || []}
       loading={loading}
       onTabelChange={onTableChange}
       rowClassName={(row) => row.inVacation && "chat-row-closed"}
@@ -160,4 +169,5 @@ DoctorsList.propTypes = {
   simplified: PropTypes.bool,
   title: PropTypes.string,
   extra: PropTypes.element,
+  searchedList: PropTypes.array,
 };

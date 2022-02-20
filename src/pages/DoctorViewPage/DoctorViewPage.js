@@ -9,6 +9,7 @@ import ChatsTab from "./tabs/ChatsTab";
 import cs from "../../utils/classNames";
 import api from "../../utils/appApi";
 import { DoctorForm } from "../../modules";
+import { ReactComponent as ExLink } from "../../asstets/icons/ex-link.svg";
 
 import "./styles/index.scss";
 
@@ -46,6 +47,8 @@ export default function DoctorViewPage() {
     [docInfo]
   );
 
+  console.log(docInfo);
+
   return (
     <div className={cs("page-view", docInfo?.inVacation && "closed")}>
       <Spin spinning={loading}>
@@ -79,6 +82,32 @@ export default function DoctorViewPage() {
             <TabPane tab="Chat-uri" key="chats">
               <ChatsTab />
             </TabPane>
+            {docInfo?.support_chat && (
+              <TabPane
+                tab={
+                  <>
+                    <div
+                      role="tab"
+                      aria-selected="false"
+                      className="ant-tabs-tab-btn"
+                      tabIndex="0"
+                      id="rc-tabs-1-tab-support"
+                      aria-controls="rc-tabs-1-panel-support"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        window.open(`/support/${docInfo.support_chat}`, "_blank").focus();
+                      }}
+                    >
+                      <ExLink width={16} height={16} className="me-1" />
+                      Support Chat
+                    </div>
+                  </>
+                }
+                key="support"
+              />
+            )}
           </Tabs>
         </DoctorViewContext.Provider>
       </Spin>

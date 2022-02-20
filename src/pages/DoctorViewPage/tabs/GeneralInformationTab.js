@@ -101,6 +101,9 @@ export default function GeneralInformationTab() {
           <Descriptions.Item label="Nume">{docInfo?.name}</Descriptions.Item>
           <Descriptions.Item label="Email">{docInfo?.email}</Descriptions.Item>
           <Descriptions.Item label="Telefon">{docInfo?.phone || "---"}</Descriptions.Item>
+          <Descriptions.Item label="Sold curent">
+            {docInfo?.card?.balance ? <b>{docInfo?.card?.balance} Lei</b> : "---"}
+          </Descriptions.Item>
           <Descriptions.Item label="Preț conferintă">
             {docInfo?.card?.meet_price} Lei
           </Descriptions.Item>
