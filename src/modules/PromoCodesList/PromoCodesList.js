@@ -163,6 +163,10 @@ export default function PromoCodesList() {
         render: (rowData) => promocodeStatuses.find((status) => status.value === rowData)?.label,
       },
       {
+        title: "Aplicat",
+        dataIndex: "used",
+      },
+      {
         title: "Creat",
         dataIndex: "created_at",
         render: (rowData) => date(rowData).full,

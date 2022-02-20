@@ -32,8 +32,14 @@ export default function DoctorForm(props) {
       const data = { ...values };
 
       data.id = docId;
-      data.speciality = data.speciality.map((cat) => cat.value);
       data.studies = data.studies.map((edc) => edc.value);
+      data.speciality = data.speciality.map((cat) => {
+        if (typeof cat === "number") {
+          return cat;
+        }
+
+        return cat.value;
+      });
 
       setLoading(true);
 

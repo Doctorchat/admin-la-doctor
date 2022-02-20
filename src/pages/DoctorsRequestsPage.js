@@ -98,7 +98,11 @@ export default function DoctorsRequestsPage() {
       {
         title: "Specialitate",
         dataIndex: "category",
-        render: (rowData) => rowData.map((cat) => cat.name_ro).join(", "),
+        render: (rowData) =>
+          rowData
+            .filter(Boolean)
+            .map((cat) => cat.name_ro)
+            .join(", "),
       },
       {
         title: "Acțiuni",
@@ -147,7 +151,7 @@ export default function DoctorsRequestsPage() {
     <>
       <PageHeader
         className="site-page-header"
-        title="Сereri de la docotri"
+        title="Cereri de la docotri"
         onBack={history.goBack}
       />
       <DcTable

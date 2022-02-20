@@ -21,6 +21,7 @@ const initialState = {
 
 export const transactionsStatuses = {
   confirmed: <Tag color="green">Confirmat</Tag>,
+  initied: <Tag>Inițializat</Tag>,
 };
 
 const tableStateKey = "transactions-list-state";
@@ -103,6 +104,7 @@ export default function TransactionsList(props) {
       {
         title: "Card",
         dataIndex: "card",
+        render: (rowData) => rowData || "---",
       },
       {
         title: "Status",
