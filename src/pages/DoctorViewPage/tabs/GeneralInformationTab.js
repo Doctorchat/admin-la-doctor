@@ -1,5 +1,5 @@
 import { Alert, Badge, Avatar, Descriptions, Empty, List, Tabs, Tag, Typography } from "antd";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useMount } from "react-use";
@@ -8,12 +8,13 @@ import date from "../../../utils/date";
 import { useDoctorViewContext } from "../DoctorViewContext";
 
 const daysNaming = {
-  mon: "Luni",
-  tue: "Marți",
-  wed: "Miercuri",
-  thu: "Joi",
-  sat: "Sâmbătă",
-  sun: "Duminică",
+  mon: { name: "Luni", ord: 1 },
+  tue: { name: "Marți", ord: 2 },
+  wed: { name: "Miercuri", ord: 3 },
+  thu: { name: "Joi", ord: 4 },
+  fri: { name: "Vineri", ord: 5 },
+  sat: { name: "Sâmbătă", ord: 6 },
+  sun: { name: "Duminică", ord: 7 },
 };
 
 const { TabPane } = Tabs;
@@ -63,7 +64,7 @@ export default function GeneralInformationTab() {
     return docInfo?.last_seen ? date(docInfo.last_seen).full : "Necunoscut";
   };
 
-  const generateDocDisponibility = () => {
+  const DocDisponibility = useMemo(() => {
     const disponibility = [];
 
     if (docInfo?.card?.disponibility) {
@@ -73,15 +74,18 @@ export default function GeneralInformationTab() {
 
       Object.entries(docInfo.card.disponibility).forEach(([day, range]) => {
         if (range.every(Boolean)) {
-          disponibility.push({ name: daysNaming[day], value: range.join(" - ") });
+          const dayConfig = daysNaming[day];
+          disponibility.push({
+            name: dayConfig.name,
+            value: range.join(" - "),
+            ord: dayConfig.ord,
+          });
         }
       });
 
-      return disponibility;
+      return disponibility.sort((a, b) => a.ord - b.ord);
     }
-  };
-
-  generateDocDisponibility();
+  }, [docInfo?.card?.disponibility]);
 
   return (
     <Tabs tabPosition={tabsPosition} className="doc-view-left-tabs">
@@ -113,7 +117,7 @@ export default function GeneralInformationTab() {
           <Descriptions.Item label="Disponibilitate">
             <List
               size="small"
-              dataSource={generateDocDisponibility()}
+              dataSource={DocDisponibility}
               locale={{
                 emptyText: <Empty description="Nu-s date" className="p-0" />,
               }}
