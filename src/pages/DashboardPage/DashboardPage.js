@@ -1,7 +1,7 @@
 import { Button, Form, Input, Select, PageHeader, notification } from "antd";
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import { ChatsList, ReviewsList } from "../../modules/";
+import { ChatsList, ReviewsList, WithdrawalList } from "../../modules/";
 import api from "../../utils/appApi";
 import getApiErrorMessages from "../../utils/getApiErrorMessages";
 
@@ -74,6 +74,20 @@ export default function DashboardPage() {
           </Button>
         </Form>
       </div>
+      <div className="my-5" />
+      <WithdrawalList
+        title="Cereri de retragere recente"
+        simplified
+        extra={
+          <div className="w-100 d-flex justify-content-end">
+            <Link to="/withdrawal">
+              <Button type="link" className="py-0">
+                Vezi toata lista
+              </Button>
+            </Link>
+          </div>
+        }
+      />
       <div className="my-5" />
       <ChatsList
         title="Mesaje Recente"

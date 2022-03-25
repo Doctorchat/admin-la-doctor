@@ -50,18 +50,24 @@ const api = {
     getTransactions: () => axiosInstance.get("/admin/transactions"),
   },
   promocodes: {
-    get: () => axiosInstance.get("/promocodes"),
+    get: (params) => axiosInstance.get("/promocodes", { params: { ...params } }),
     create: (data) => axiosInstance.post("/promocodes", data),
     update: (data) => axiosInstance.put("/promocodes", data),
     delete: (id) => axiosInstance.delete(`/promocodes`, { data: { id } }),
   },
   support: {
-    get: () => axiosInstance.get("/admin/chats/support"),
+    get: (params) => axiosInstance.get("/admin/chats/support", { params: { ...params } }),
     count: () => axiosInstance.get("/admin/chats/support/count"),
     sendGlobalMsg: (data) => axiosInstance.post("/chat/mass-mail", data),
   },
   logs: {
     get: () => axiosInstance.get(""),
+  },
+  withdrawal: {
+    count: () => axiosInstance.get("/admin/withdraw/count"),
+    get: (params) => axiosInstance.get("/admin/withdraw/new", { params: { ...params } }),
+    approve: (id) => axiosInstance.post(`/admin/withdraw/approve/${id}`),
+    approved: (params) => axiosInstance.get("/admin/withdraw/approved", { params: { ...params } }),
   },
 };
 

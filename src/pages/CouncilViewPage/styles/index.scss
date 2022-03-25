@@ -1,0 +1,21 @@
+.council-view {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.council-doctors {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.council-doctors .ant-form {
+  flex-wrap: nowrap;
+  &.ant-form-inline .ant-form-item {
+    margin-right: 8px;
+  }
+  .ant-select.ant-select-multiple.ant-select-show-search {
+    max-width: 168px;
+  }
+}

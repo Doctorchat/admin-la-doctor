@@ -12,6 +12,7 @@ import stats from "./reducers/statsReducer";
 import promocodesList from "./reducers/promocodesReducer";
 import logsList from "./reducers/logsReducer";
 import supportList from "./reducers/supportListReducer";
+import withdrawal from "./reducers/withdrawalReducer";
 
 const rootReducer = combineReducers({
   user,
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   promocodesList,
   logsList,
   supportList,
+  withdrawal,
 });
 
 export default rootReducer;
