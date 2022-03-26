@@ -43,6 +43,7 @@ export default function WithdrawalApprovedList() {
 
   const columns = useMemo(
     () => [
+      { title: "ID", dataIndex: "id" },
       {
         title: "Doctor",
         dataIndex: "user",

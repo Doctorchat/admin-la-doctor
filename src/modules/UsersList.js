@@ -88,6 +88,7 @@ export default function UsersList(props) {
 
   const columns = useMemo(
     () => [
+      { title: "ID", dataIndex: "id" },
       {
         title: "Nume",
         dataIndex: "name",

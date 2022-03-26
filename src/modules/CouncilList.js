@@ -1,4 +1,4 @@
-import { Alert, Tag, Button } from "antd";
+import { Alert, Tag, Button, PageHeader } from "antd";
 import { useCallback, useMemo } from "react";
 import { useMount, useSessionStorage } from "react-use";
 import { DcTable } from "../components";
@@ -49,6 +49,7 @@ export default function CouncilList() {
 
   const columns = useMemo(
     () => [
+      { title: "ID", dataIndex: "id" },
       {
         title: "Client",
         dataIndex: "client",
@@ -95,6 +96,10 @@ export default function CouncilList() {
 
   return (
     <>
+      <PageHeader
+        className="site-page-header"
+        title={`Lista de consilii (${withdrawalList?.total || 0})`}
+      />
       <DcTable
         dataColumns={columns}
         dataSource={withdrawalList?.data || []}

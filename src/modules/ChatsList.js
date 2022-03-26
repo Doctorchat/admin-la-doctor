@@ -128,6 +128,7 @@ export default function ChatsList(props) {
 
   const columns = useMemo(
     () => [
+      { title: "ID", dataIndex: "id" },
       {
         title: "Doctor",
         dataIndex: "doctor",

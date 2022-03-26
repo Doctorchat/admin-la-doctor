@@ -137,6 +137,7 @@ export default function ReviewsList(props) {
 
   const columns = useMemo(
     () => [
+      { title: "ID", dataIndex: "id" },
       {
         title: "Client",
         dataIndex: "user",

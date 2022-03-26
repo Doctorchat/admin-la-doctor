@@ -114,6 +114,7 @@ export default function WithdrawalList(props) {
 
   const columns = useMemo(
     () => [
+      { title: "ID", dataIndex: "id" },
       {
         title: "Doctor",
         dataIndex: "user",

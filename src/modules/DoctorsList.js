@@ -97,6 +97,7 @@ export default function DoctorsList(props) {
 
   const columns = useMemo(
     () => [
+      { title: "ID", dataIndex: "id" },
       {
         title: "Nume",
         dataIndex: "name",

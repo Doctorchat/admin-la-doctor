@@ -149,6 +149,7 @@ export default function PromoCodesList() {
 
   const columns = useMemo(
     () => [
+      { title: "ID", dataIndex: "id" },
       {
         title: "Cod",
         dataIndex: "name",

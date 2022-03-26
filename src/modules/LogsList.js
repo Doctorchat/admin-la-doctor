@@ -74,6 +74,7 @@ export default function LogsList() {
 
   const columns = useMemo(
     () => [
+      { title: "ID", dataIndex: "id" },
       {
         title: "Utilizator",
         dataIndex: "user",

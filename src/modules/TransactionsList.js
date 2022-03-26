@@ -91,6 +91,7 @@ export default function TransactionsList(props) {
 
   const columns = useMemo(
     () => [
+      { title: "ID", dataIndex: "id" },
       {
         title: "Data",
         dataIndex: "date",
