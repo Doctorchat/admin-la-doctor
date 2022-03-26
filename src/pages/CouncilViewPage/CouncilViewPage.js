@@ -13,6 +13,8 @@ import {
   Spin,
   Tooltip,
   Modal,
+  Dropdown,
+  Menu,
 } from "antd";
 import moment from "moment";
 import React from "react";
@@ -33,6 +35,7 @@ export default function CouncilViewPage() {
   const [addDocLoading, setAddDocLoading] = React.useState(false);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [sending, setSending] = React.useState(false);
+  const [messageType, setMessageType] = React.useState("hidden");
   const queryClient = useQueryClient();
   const history = useHistory();
   const [closeChatForm] = Form.useForm();
@@ -53,8 +56,14 @@ export default function CouncilViewPage() {
     async ({ message }) => {
       setSending(true);
 
+      let extra = {};
+
+      if (messageType === "hidden") {
+        extra.type = "hidden";
+      }
+
       try {
-        const response = await api.chats.sendMessage(chat_id, message);
+        const response = await api.chats.sendMessage(chat_id, message, extra);
         const newChatInfo = { ...chatInfo };
 
         sendMessageForm.resetFields();
@@ -74,7 +83,7 @@ export default function CouncilViewPage() {
         setSending(false);
       }
     },
-    [chatInfo, chat_id, sendMessageForm]
+    [chatInfo, chat_id, messageType, sendMessageForm]
   );
 
   const mutationMessages = useMutation(sendMessageHander, {
@@ -146,6 +155,24 @@ export default function CouncilViewPage() {
     [chatInfo?.doctors]
   );
 
+  const toggleMessageType = React.useCallback(
+    (type) => () => {
+      setMessageType(type);
+      sendMessageForm.submit();
+    },
+    [sendMessageForm]
+  );
+
+  const menu = (
+    <Menu>
+      <Menu.Item key="send-to-docs" onClick={toggleMessageType("hidden")}>
+        Către doctori
+      </Menu.Item>
+      <Menu.Item key="send-to-client" onClick={toggleMessageType("")}>
+        Către client
+      </Menu.Item>
+    </Menu>
+  );
   return (
     <>
       <PageHeader className="site-page-header" onBack={history.goBack} title="Consiliu" />
@@ -210,9 +237,11 @@ export default function CouncilViewPage() {
                 <Form.Item name="message" className="m-0 flex-grow-1">
                   <Input.TextArea autoSize placeholder="Mesajul...." />
                 </Form.Item>
-                <Button type="primary" htmlType="submit" className="ms-3" loading={sending}>
-                  Trimite
-                </Button>
+                <Dropdown overlay={menu} placement="topCenter" trigger="click">
+                  <Button type="primary" className="ms-3" loading={sending}>
+                    Trimite
+                  </Button>
+                </Dropdown>
               </Form>
             </div>
           )}
