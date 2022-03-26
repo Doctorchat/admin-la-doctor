@@ -69,6 +69,13 @@ const api = {
     approve: (id) => axiosInstance.post(`/admin/withdraw/approve/${id}`),
     approved: (params) => axiosInstance.get("/admin/withdraw/approved", { params: { ...params } }),
   },
+  council: {
+    get: (params) => axiosInstance.get("/admin/chats/consilium/all", { params: { ...params } }),
+    count: () => axiosInstance.get("/admin/chats/consilium/count"),
+    single: (id) => axiosInstance.get(`/admin/chats/consilium/${id}`),
+    addMember: (data) => axiosInstance.put("/admin/chats/consilium/assign", data),
+    close: (data) => axiosInstance.post("/admin/chats/consilium/close", data),
+  },
 };
 
 export default api;

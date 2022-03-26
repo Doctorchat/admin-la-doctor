@@ -83,7 +83,7 @@ DcTable.propTypes = {
   loading: PropTypes.bool,
   extra: PropTypes.element,
   fetching: PropTypes.bool,
-  rowClassName: PropTypes.func,
+  rowClassName: PropTypes.any,
   expandable: PropTypes.object,
 };
 

@@ -130,7 +130,7 @@ const routes = [
     private: true,
   },
   {
-    path: "/council-view/:chat_id",
+    path: "/council/:chat_id",
     component: CouncilViewPage,
     exact: true,
     private: true,

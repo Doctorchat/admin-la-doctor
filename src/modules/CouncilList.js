@@ -1,11 +1,15 @@
-import { Alert, Tag } from "antd";
+import { Alert, Tag, Button } from "antd";
 import { useCallback, useMemo } from "react";
-import { useSessionStorage } from "react-use";
+import { useMount, useSessionStorage } from "react-use";
 import { DcTable } from "../components";
 import { useQuery } from "react-query";
 import date from "../utils/date";
 import api from "../utils/appApi";
 import fetcher from "../utils/fetcher";
+import { useDispatch } from "react-redux";
+import { updateCouncilCount } from "../store/actions/supportListAction";
+import { Link } from "react-router-dom";
+import { getChatStatus } from "./ChatsList";
 
 const initialState = {
   page: 1,
@@ -22,12 +26,15 @@ const tableStateKey = "council-list-state";
 
 export default function CouncilList() {
   const [state, setState] = useSessionStorage(tableStateKey, initialState);
+  const dispatch = useDispatch();
 
   const {
     data: withdrawalList,
     isLoading,
     error,
-  } = useQuery([tableStateKey, state], fetcher(api.support.get));
+  } = useQuery([tableStateKey, state], fetcher(api.council.get));
+
+  useMount(() => dispatch(updateCouncilCount()));
 
   const onTableChange = useCallback(
     (pagination) => {
@@ -43,12 +50,32 @@ export default function CouncilList() {
   const columns = useMemo(
     () => [
       {
-        title: "id",
-        dataIndex: "id",
+        title: "Client",
+        dataIndex: "client",
+        render: ({ id, name }) => <Link to={`/user/${id}`}>{name}</Link>,
       },
       {
-        title: "content",
-        dataIndex: "content",
+        title: "Status",
+        dataIndex: "status",
+        render: (_, data) => getChatStatus(data),
+      },
+      { title: "Doctori asignați", dataIndex: "doctors" },
+      {
+        title: "Actualizat",
+        dataIndex: "updated_at",
+        render: (rowData) => date(rowData).full,
+      },
+      {
+        title: "Acțiuni",
+        render: (_, row) => (
+          <>
+            <Link to={`/council/${row.id}`}>
+              <Button type="primary" size="small">
+                Vezi chat-ul
+              </Button>
+            </Link>
+          </>
+        ),
       },
     ],
     []

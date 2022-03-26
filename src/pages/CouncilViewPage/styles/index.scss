@@ -4,10 +4,24 @@
   gap: 10px;
 }
 
-.council-doctors {
+.council-user {
+  margin-bottom: 10px;
+  .ant-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.council-section {
   padding: 10px;
   border-radius: 4px;
   border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.council-doctors {
+  margin-bottom: 10px;
+  min-width: 280px;
 }
 
 .council-doctors .ant-form {
@@ -17,5 +31,29 @@
   }
   .ant-select.ant-select-multiple.ant-select-show-search {
     max-width: 168px;
+  }
+}
+
+.council-doctor {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 4px;
+  .doctor-caption {
+    margin-left: 10px;
+  }
+  .doctor-name {
+    margin-bottom: 0;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 840px) {
+  .council-view {
+    flex-direction: column-reverse;
+    & > div {
+      width: 100%;
+    }
   }
 }

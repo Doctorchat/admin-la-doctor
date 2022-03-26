@@ -26,9 +26,10 @@ const menuItemsRegister = {
 };
 
 export default function Navigation({ closeMenu }) {
-  const { requestsCount, supportCount, withdrawalCount } = useSelector((store) => ({
+  const { requestsCount, supportCount, withdrawalCount, councilCount } = useSelector((store) => ({
     requestsCount: store.requestsCount,
     supportCount: store.supportList.count,
+    councilCount: store.supportList.councilCount,
     withdrawalCount: store.withdrawal.count,
   }));
   const [currentRoute, setCurrentRoute] = useState();
@@ -59,7 +60,7 @@ export default function Navigation({ closeMenu }) {
           <Menu.Item key="council-list">
             <div className="d-flex align-items-center justify-content-between">
               <Link to="/council-list">Consilii</Link>
-              <Badge className="ms-2" key="council-list-requests" count={1} />
+              <Badge className="ms-2" key="council-list-requests" count={councilCount} />
             </div>
           </Menu.Item>
           <Menu.Item key="withdrawal">
