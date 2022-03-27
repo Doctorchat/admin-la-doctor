@@ -61,7 +61,7 @@ const api = {
     sendGlobalMsg: (data) => axiosInstance.post("/chat/mass-mail", data),
   },
   logs: {
-    get: () => axiosInstance.get(""),
+    get: (params) => axiosInstance.get("/admin/logs", { params: { ...params } }),
   },
   withdrawal: {
     count: () => axiosInstance.get("/admin/withdraw/count"),
