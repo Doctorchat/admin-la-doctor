@@ -74,27 +74,26 @@ export default function LogsList() {
     () => [
       { title: "ID", dataIndex: "id" },
       {
-        title: "Utilizator",
-        dataIndex: "user",
-        render: (rowData) =>
-          rowData?.name && (
-            <Link
-              to={
-                userRoles.get("doctor") === rowData?.role
-                  ? `/doctor/${rowData.id}`
-                  : `/user/${rowData.id}`
-              }
-              className="chat-view-comment-user"
-            >
-              {rowData.name}
-            </Link>
-          ),
+        title: "IP",
+        dataIndex: "ip",
       },
-      {
-        title: "Data",
-        dataIndex: "created_at",
-        render: (rowData) => date(rowData).full,
-      },
+      // {
+      //   title: "Utilizator",
+      //   dataIndex: "user",
+      //   render: (rowData) =>
+      //     rowData?.name && (
+      //       <Link
+      //         to={
+      //           userRoles.get("doctor") === rowData?.role
+      //             ? `/doctor/${rowData.id}`
+      //             : `/user/${rowData.id}`
+      //         }
+      //         className="chat-view-comment-user"
+      //       >
+      //         {rowData.name}
+      //       </Link>
+      //     ),
+      // },
       {
         title: "Acțiune",
         dataIndex: "action",
@@ -112,8 +111,9 @@ export default function LogsList() {
         ),
       },
       {
-        title: "IP",
-        dataIndex: "ip",
+        title: "Data",
+        dataIndex: "created_at",
+        render: (rowData) => date(rowData).full,
       },
     ],
     []
