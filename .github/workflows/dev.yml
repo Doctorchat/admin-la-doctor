@@ -1,0 +1,29 @@
+name: Doctochat Admin Dev CI/CD
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: CI=false npm run build:staging
+      - name: SSH Server Deploy
+        uses: kostya-ten/ssh-server-deploy@v4
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          password: ${{ secrets.SSH_PASS }}
+          private_key: ${{ secrets.SERVER_SSH_KEY }}
+          scp_source: "build/"
+          scp_target: ${{ secrets.TARGET_DEV }}

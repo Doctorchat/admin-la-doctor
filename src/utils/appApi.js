@@ -16,8 +16,8 @@ const api = {
       axiosInstance.put("/admin/chats/reassign", { doctor_id, id }),
     closeChat: (id) => axiosInstance.put(`/admin/chats/close/${id}`),
     last10: (id) => axiosInstance.get(`/admin/chats/latest10/${id}`),
-    sendMessage: (chatId, message) =>
-      axiosInstance.post("/chat/send", { chat_id: chatId, content: message }),
+    sendMessage: (chatId, message, extra = {}) =>
+      axiosInstance.post("/chat/send", { chat_id: chatId, content: message, ...extra }),
   },
   reviews: {
     get: (params) => axiosInstance.get("/admin/reviews/all", { params: { ...params } }),
@@ -50,18 +50,31 @@ const api = {
     getTransactions: () => axiosInstance.get("/admin/transactions"),
   },
   promocodes: {
-    get: () => axiosInstance.get("/promocodes"),
+    get: (params) => axiosInstance.get("/promocodes", { params: { ...params } }),
     create: (data) => axiosInstance.post("/promocodes", data),
     update: (data) => axiosInstance.put("/promocodes", data),
     delete: (id) => axiosInstance.delete(`/promocodes`, { data: { id } }),
   },
   support: {
-    get: () => axiosInstance.get("/admin/chats/support"),
+    get: (params) => axiosInstance.get("/admin/chats/support", { params: { ...params } }),
     count: () => axiosInstance.get("/admin/chats/support/count"),
     sendGlobalMsg: (data) => axiosInstance.post("/chat/mass-mail", data),
   },
   logs: {
-    get: () => axiosInstance.get(""),
+    get: (params) => axiosInstance.get("/admin/logs", { params: { ...params } }),
+  },
+  withdrawal: {
+    count: () => axiosInstance.get("/admin/withdraw/count"),
+    get: (params) => axiosInstance.get("/admin/withdraw/new", { params: { ...params } }),
+    approve: (id) => axiosInstance.post(`/admin/withdraw/approve/${id}`),
+    approved: (params) => axiosInstance.get("/admin/withdraw/approved", { params: { ...params } }),
+  },
+  council: {
+    get: (params) => axiosInstance.get("/admin/chats/consilium/all", { params: { ...params } }),
+    count: () => axiosInstance.get("/admin/chats/consilium/count"),
+    single: (id) => axiosInstance.get(`/admin/chats/consilium/${id}`),
+    addMember: (data) => axiosInstance.put("/admin/chats/consilium/assign", data),
+    close: (data) => axiosInstance.post("/admin/chats/consilium/close", data),
   },
 };
 

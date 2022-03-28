@@ -1,17 +1,20 @@
 import PropTypes from "prop-types";
-import { Alert, Button, Tag } from "antd";
+import { Alert, Button, notification, Popconfirm, Tag } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMount, useSessionStorage, useUnmount } from "react-use";
 import { DcTable } from "../components";
 import {
-  cleanTransactionsList,
-  getTransactionsList,
+  cleanWithdrawalList,
+  getWithdrawalList,
   setCleanOnUnmountTrue,
   setCleanOnUnmountFalse,
-} from "../store/actions/transactionsListAction";
+  onWithdrawalApproveSuccess,
+  updateWithdrawalCount,
+} from "../store/actions/withdrawalAction";
 import date from "../utils/date";
 import { useHistory } from "react-router-dom";
+import api from "../utils/appApi";
 
 const initialState = {
   page: 1,
@@ -20,20 +23,20 @@ const initialState = {
 };
 
 export const transactionsStatuses = {
-  confirmed: <Tag color="green">Confirmat</Tag>,
-  initied: <Tag>Inițializat</Tag>,
+  success: <Tag color="green">Confirmat</Tag>,
+  pending: <Tag>Inițializat</Tag>,
 };
 
-const tableStateKey = "transactions-list-state";
+const tableStateKey = "withdrawal-list-state";
 
-export default function TransactionsList(props) {
+export default function WithdrawalList(props) {
   const { simplified, title, extra } = props;
   const [state, setState] = useSessionStorage(tableStateKey, initialState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { transactions, cleanOnUnmount } = useSelector((store) => ({
-    transactions: store.transactionsList.payload,
-    cleanOnUnmount: store.transactionsList.cleanOnUnmount,
+  const { withdrawalList, cleanOnUnmount } = useSelector((store) => ({
+    withdrawalList: store.withdrawal.payload,
+    cleanOnUnmount: store.withdrawal.cleanOnUnmount,
   }));
   const dispatch = useDispatch();
   const history = useHistory();
@@ -44,7 +47,7 @@ export default function TransactionsList(props) {
 
     setLoading(true);
 
-    dispatch(getTransactionsList({ page, sort_column, sort_direction, limit }))
+    dispatch(getWithdrawalList({ page, sort_column, sort_direction, limit }))
       .catch(() => {
         if (error.response.status === 500) {
           setError({
@@ -61,12 +64,13 @@ export default function TransactionsList(props) {
 
   useMount(() => {
     dispatch(setCleanOnUnmountTrue());
+    dispatch(updateWithdrawalCount());
   });
 
   useUnmount(() => {
     if (cleanOnUnmount) {
       sessionStorage.removeItem(tableStateKey);
-      dispatch(cleanTransactionsList());
+      dispatch(cleanWithdrawalList());
     }
   });
 
@@ -89,12 +93,40 @@ export default function TransactionsList(props) {
     [dispatch, history]
   );
 
+  const confirmHandler = useCallback(
+    (id) => async () => {
+      try {
+        await api.withdrawal.approve(id);
+
+        dispatch(onWithdrawalApproveSuccess(id));
+        dispatch(updateWithdrawalCount());
+
+        notification.success({
+          message: "Succes",
+          description: "Cererea a fost aprobată cu succes",
+        });
+      } catch (error) {
+        notification.error({ message: "Eroare", description: "A apărut o eroare" });
+      }
+    },
+    [dispatch]
+  );
+
   const columns = useMemo(
     () => [
       { title: "ID", dataIndex: "id" },
       {
+        title: "Doctor",
+        dataIndex: "user",
+        render: ({ name, id }) => (
+          <a href={`/doctor/${id}`} onClick={onTableLinksClick(`/doctor/${id}`)}>
+            {name}
+          </a>
+        ),
+      },
+      {
         title: "Data",
-        dataIndex: "date",
+        dataIndex: "created_at",
         render: (rowData) => date(rowData).full,
       },
       {
@@ -102,28 +134,27 @@ export default function TransactionsList(props) {
         dataIndex: "amount",
         render: (rowData) => `${rowData} Lei`,
       },
-      {
-        title: "Card",
-        dataIndex: "card",
-        render: (rowData) => rowData || "---",
-      },
-      {
-        title: "Status",
-        dataIndex: "status",
-        render: (rowData) => transactionsStatuses[rowData],
-      },
+      { title: "Status", dataIndex: "status", render: (rowData) => transactionsStatuses[rowData] },
       {
         title: "Acțiuni",
         render: (_, row) => (
           <>
-            <Button type="primary" size="small" onClick={onTableLinksClick(`/chat/${row.chat}`)}>
-              Vezi chat-ul
-            </Button>
+            <Popconfirm
+              okText="Confirmă"
+              cancelText="Anulează"
+              title="Ești sigur că vreai să accepți această cerere?"
+              onConfirm={confirmHandler(row.id)}
+              placement="left"
+            >
+              <Button type="primary" size="small" className="me-2">
+                Acceptă
+              </Button>
+            </Popconfirm>
           </>
         ),
       },
     ],
-    [onTableLinksClick]
+    [confirmHandler, onTableLinksClick]
   );
 
   if (error) {
@@ -143,14 +174,14 @@ export default function TransactionsList(props) {
       <DcTable
         title={title}
         dataColumns={columns}
-        dataSource={transactions?.data || []}
+        dataSource={withdrawalList?.data || []}
         loading={loading}
         onTabelChange={onTableChange}
         pagination={{
           position: [simplified ? "none" : "bottomRight"],
-          per_page: transactions?.per_page,
-          total: transactions?.total,
-          current_page: transactions?.current_page,
+          per_page: withdrawalList?.per_page,
+          total: withdrawalList?.total,
+          current_page: withdrawalList?.current_page,
         }}
         extra={extra}
       />
@@ -158,7 +189,7 @@ export default function TransactionsList(props) {
   );
 }
 
-TransactionsList.propTypes = {
+WithdrawalList.propTypes = {
   simplified: PropTypes.bool,
   title: PropTypes.string,
   extra: PropTypes.element,

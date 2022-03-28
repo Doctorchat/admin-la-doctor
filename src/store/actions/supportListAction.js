@@ -2,6 +2,7 @@ import {
   CLEAN_ON_UNMOUNT_FALSE,
   CLEAN_ON_UNMOUNT_TRUE,
   SUPPORT_LIST_GET,
+  UPDATE_COUNCIL_COUNT,
   UPDATE_SUPPORT_COUNT,
 } from "../actionTypes";
 import api from "../../utils/appApi";
@@ -23,6 +24,17 @@ export const updateSupportCount = () => async (dispatch) => {
 
   dispatch({
     type: UPDATE_SUPPORT_COUNT,
+    payload: response.data,
+  });
+
+  return Promise.resolve();
+};
+
+export const updateCouncilCount = () => async (dispatch) => {
+  const response = await api.council.count();
+
+  dispatch({
+    type: UPDATE_COUNCIL_COUNT,
     payload: response.data,
   });
 

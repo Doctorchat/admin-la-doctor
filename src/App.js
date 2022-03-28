@@ -4,7 +4,8 @@ import Router from "./router";
 import routes from "./router/routes";
 import { setGlobalPrivateRequisites } from "./store/actions/bootstrapAction";
 import { updateRequestsCount } from "./store/actions/requestsCountAction";
-import { updateSupportCount } from "./store/actions/supportListAction";
+import { updateCouncilCount, updateSupportCount } from "./store/actions/supportListAction";
+import { updateWithdrawalCount } from "./store/actions/withdrawalAction";
 import { getUser } from "./store/actions/userAction";
 
 function App() {
@@ -19,6 +20,8 @@ function App() {
       dispatch(setGlobalPrivateRequisites());
       dispatch(updateRequestsCount());
       dispatch(updateSupportCount());
+      dispatch(updateWithdrawalCount());
+      dispatch(updateCouncilCount());
     }
   }, [dispatch, isAuthorized]);
 

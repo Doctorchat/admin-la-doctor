@@ -128,6 +128,7 @@ export default function ChatsList(props) {
 
   const columns = useMemo(
     () => [
+      { title: "ID", dataIndex: "id" },
       {
         title: "Doctor",
         dataIndex: "doctor",
@@ -165,9 +166,15 @@ export default function ChatsList(props) {
         title: "Acțiuni",
         render: (_, row) => (
           <>
-            <Button type="primary" size="small" onClick={onTableLinksClick(`/chat/${row.id}`)}>
-              Vezi chat-ul
-            </Button>
+            {row.type === "consilium" ? (
+              <Button type="primary" size="small" onClick={onTableLinksClick(`/council/${row.id}`)}>
+                Vezi chat-ul
+              </Button>
+            ) : (
+              <Button type="primary" size="small" onClick={onTableLinksClick(`/chat/${row.id}`)}>
+                Vezi chat-ul
+              </Button>
+            )}
           </>
         ),
       },

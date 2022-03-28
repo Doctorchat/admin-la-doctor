@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { Alert, Tag } from "antd";
+import { Alert, PageHeader, Tag } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -88,6 +88,7 @@ export default function UsersList(props) {
 
   const columns = useMemo(
     () => [
+      { title: "ID", dataIndex: "id" },
       {
         title: "Nume",
         dataIndex: "name",
@@ -129,20 +130,23 @@ export default function UsersList(props) {
   }
 
   return (
-    <DcTable
-      title={title}
-      dataColumns={columns}
-      dataSource={users?.data || []}
-      loading={loading}
-      onTabelChange={onTableChange}
-      pagination={{
-        position: [simplified ? "none" : "bottomRight"],
-        per_page: users?.per_page,
-        total: users?.total,
-        current_page: users?.current_page,
-      }}
-      extra={extra}
-    />
+    <>
+      <PageHeader className="site-page-header" title={`Utilizatori (${users?.total || ""})`} />
+      <DcTable
+        title={title}
+        dataColumns={columns}
+        dataSource={users?.data || []}
+        loading={loading}
+        onTabelChange={onTableChange}
+        pagination={{
+          position: [simplified ? "none" : "bottomRight"],
+          per_page: users?.per_page,
+          total: users?.total,
+          current_page: users?.current_page,
+        }}
+        extra={extra}
+      />
+    </>
   );
 }
 

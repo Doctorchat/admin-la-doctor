@@ -137,6 +137,7 @@ export default function ReviewsList(props) {
 
   const columns = useMemo(
     () => [
+      { title: "ID", dataIndex: "id" },
       {
         title: "Client",
         dataIndex: "user",
@@ -150,7 +151,7 @@ export default function ReviewsList(props) {
         title: "Doctor",
         dataIndex: "doctor",
         render: ({ name, id }) => (
-          <a href={`/doctor/${id}`} onClick={onTableLinksClick(`/user/${id}`)}>
+          <a href={`/doctor/${id}`} onClick={onTableLinksClick(`/doctor/${id}`)}>
             {name}
           </a>
         ),
@@ -169,11 +170,6 @@ export default function ReviewsList(props) {
         dataIndex: "created_at",
         render: (rowData) => date(rowData).full,
       },
-      // {
-      //   title: "Acțiune",
-      //   dataIndex: "like",
-      //   render: (rowData) => (rowData ? <LikeOutlined /> : <DislikeOutlined />),
-      // },
       {
         title: "Conținut",
         dataIndex: "content",

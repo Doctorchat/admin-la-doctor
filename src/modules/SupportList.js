@@ -84,6 +84,7 @@ export default function SupportList() {
 
   const columns = useMemo(
     () => [
+      { title: "ID", dataIndex: "id" },
       {
         title: "Utlizator",
         dataIndex: "user",

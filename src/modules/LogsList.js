@@ -1,13 +1,11 @@
 import { Alert, Typography } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { useMount, useSessionStorage, useUnmount } from "react-use";
 import { DcTable } from "../components";
-import {
-  cleanReviewsList,
-  getReviewsList,
-  setCleanOnUnmountTrue,
-} from "../store/actions/reviewsListAction";
+import { userRoles } from "../context/constants";
+import { getLogsList, setCleanOnUnmountTrue, cleanLogsList } from "../store/actions/logsAction";
 import date from "../utils/date";
 
 const initialState = {
@@ -34,7 +32,7 @@ export default function LogsList() {
     setLoading(true);
 
     try {
-      await dispatch(getReviewsList({ page, sort_column, sort_direction }));
+      await dispatch(getLogsList({ page, sort_column, sort_direction }));
     } catch (error) {
       if (error.response.status === 500) {
         setError({
@@ -48,7 +46,7 @@ export default function LogsList() {
     }
   }, [dispatch, state]);
 
-  // useEffect(fetcher, [fetcher]);
+  useEffect(fetcher, [fetcher]);
 
   useMount(() => {
     dispatch(setCleanOnUnmountTrue());
@@ -57,7 +55,7 @@ export default function LogsList() {
   useUnmount(() => {
     if (cleanOnUnmount) {
       sessionStorage.removeItem(tableStateKey);
-      dispatch(cleanReviewsList());
+      dispatch(cleanLogsList());
     }
   });
 
@@ -75,14 +73,30 @@ export default function LogsList() {
   const columns = useMemo(
     () => [
       {
-        title: "Utilizator",
-        dataIndex: "user",
+        title: "ID",
+        dataIndex: "id",
       },
       {
-        title: "Data",
-        dataIndex: "created_at",
-        render: (rowData) => date(rowData).full,
+        title: "IP",
+        dataIndex: "ip",
       },
+      // {
+      //   title: "Utilizator",
+      //   dataIndex: "user",
+      //   render: (rowData) =>
+      //     rowData?.name && (
+      //       <Link
+      //         to={
+      //           userRoles.get("doctor") === rowData?.role
+      //             ? `/doctor/${rowData.id}`
+      //             : `/user/${rowData.id}`
+      //         }
+      //         className="chat-view-comment-user"
+      //       >
+      //         {rowData.name}
+      //       </Link>
+      //     ),
+      // },
       {
         title: "Acțiune",
         dataIndex: "action",
@@ -91,14 +105,18 @@ export default function LogsList() {
         title: "Agent",
         dataIndex: "agent",
         render: (rowData) => (
-          <Typography.Paragraph ellipsis={{ rows: 1, expandable: true, symbol: "Vezi mai mult" }}>
+          <Typography.Paragraph
+            className="mb-0"
+            ellipsis={{ rows: 1, expandable: true, symbol: "Vezi mai mult" }}
+          >
             {rowData}
           </Typography.Paragraph>
         ),
       },
       {
-        title: "IP",
-        dataIndex: "ip",
+        title: "Data",
+        dataIndex: "created_at",
+        render: (rowData) => date(rowData).full,
       },
     ],
     []

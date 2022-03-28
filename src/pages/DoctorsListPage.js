@@ -10,7 +10,10 @@ import api from "../utils/appApi";
 import getApiErrorMessages from "../utils/getApiErrorMessages";
 
 export default function DoctorsListPage() {
-  const requestsCount = useSelector((store) => store.requestsCount);
+  const { requestsCount, doctors } = useSelector((store) => ({
+    requestsCount: store.requestsCount,
+    doctors: store.doctorsList.payload,
+  }));
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchedList, setSearchedList] = useState(null);
   const [searchBtnDisabled, setSearchBtnDisabled] = useState(true);
@@ -60,7 +63,7 @@ export default function DoctorsListPage() {
     <>
       <PageHeader
         className="site-page-header"
-        title="Doctori"
+        title={`Doctori (${doctors?.total || 0})`}
         extra={[
           <Badge key="doctors-list-requests" count={requestsCount.count} showZero>
             <Link to="/requests" onClick={handleOutsideLinkClick("/requests")}>

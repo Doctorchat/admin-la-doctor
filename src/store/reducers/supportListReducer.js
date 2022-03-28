@@ -4,11 +4,13 @@ import {
   CHATS_LIST_CLEAN,
   UPDATE_SUPPORT_COUNT,
   SUPPORT_LIST_GET,
+  UPDATE_COUNCIL_COUNT,
 } from "../actionTypes";
 
 const initialState = {
   payload: {},
   count: 0,
+  councilCount: 0,
   cleanOnUnmount: true,
 };
 
@@ -20,6 +22,11 @@ const supportList = (state = initialState, action = {}) => {
       return {
         ...state,
         count: action.payload,
+      };
+    case UPDATE_COUNCIL_COUNT:
+      return {
+        ...state,
+        councilCount: action.payload,
       };
     case CHATS_LIST_CLEAN:
       return initialState;

@@ -14,3 +14,6 @@ export { default as PromocodesPage } from "./PromocodesPage";
 export { default as LogsListPage } from "./LogsListPage";
 export { default as SupportListPage } from "./SupportListPage";
 export { default as SupportViewPage } from "./SupportViewPage";
+export { default as WithdrawalPage } from "./WithdrawalPage";
+export { default as CouncilListPage } from "./CouncilListPage";
+export { default as CouncilViewPage } from "./CouncilViewPage";
