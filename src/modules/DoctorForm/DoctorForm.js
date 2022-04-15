@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Button, Drawer, Form, Input, InputNumber, notification, Select } from "antd";
+import { Button, Drawer, Form, Input, InputNumber, notification, Select, Switch } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import api from "../../utils/appApi";
 
@@ -84,6 +84,7 @@ export default function DoctorForm(props) {
         studies: defaultValues.card?.studies.map((std) => ({ value: std })),
         bio_ro: defaultValues.card?.bio?.ro,
         status: defaultValues.card?.status ? Boolean(defaultValues.card.status) : false,
+        hidden: defaultValues.card?.hidden,
       };
 
       if (defaultValues.card?.studies && defaultValues.card.studies?.length) {
@@ -241,6 +242,9 @@ export default function DoctorForm(props) {
                 { value: false, label: "Ascuns" },
               ]}
             />
+          </Form.Item>
+          <Form.Item valuePropName="checked" name="hidden" label="Categorie ascunsă">
+            <Switch />
           </Form.Item>
           <div className="form-bottom justify-content-end mt-0">
             <Button htmlType="submit" type="primary" className="mt-1" loading={loading}>

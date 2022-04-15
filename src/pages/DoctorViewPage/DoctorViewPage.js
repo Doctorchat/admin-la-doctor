@@ -67,7 +67,7 @@ export default function DoctorViewPage() {
         />
         <DoctorForm
           onClose={() => setEditVisible(false)}
-          submitBtnText="Trimite"
+          submitBtnText="Salvează"
           visible={editVisible}
           defaultValues={docInfo}
           docId={doc_id}

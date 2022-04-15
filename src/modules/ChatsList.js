@@ -1,4 +1,4 @@
-import { Alert, Button, Tag } from "antd";
+import { Alert, Button, PageHeader, Tag } from "antd";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -76,10 +76,14 @@ export default function ChatsList(props) {
   useEffect(() => {
     const { page, sort_column, sort_direction } = state;
     const limit = simplified ? 10 : 20;
+    const params = new URLSearchParams(window.location.search);
+
+    const internal = {};
+    if (params.has("internal")) internal.internal = true;
 
     setLoading(true);
 
-    dispatch(getChatsList({ page, sort_column, sort_direction, limit }))
+    dispatch(getChatsList({ page, sort_column, sort_direction, limit, ...internal }))
       .catch(() => {
         if (error.response.status === 500) {
           setError({
@@ -195,21 +199,24 @@ export default function ChatsList(props) {
   }
 
   return (
-    <DcTable
-      title={title}
-      dataColumns={columns}
-      dataSource={chats?.data || []}
-      loading={loading}
-      onTabelChange={onTableChange}
-      rowClassName={(row) => row.status === "closed" && "chat-row-closed"}
-      pagination={{
-        position: [simplified ? "none" : "bottomRight"],
-        per_page: chats?.per_page,
-        total: chats?.total,
-        current_page: chats?.current_page,
-      }}
-      extra={extra}
-    />
+    <>
+      <PageHeader className="site-page-header" title={`Chat-uri (${chats?.total || 0})`} />
+      <DcTable
+        title={title}
+        dataColumns={columns}
+        dataSource={chats?.data || []}
+        loading={loading}
+        onTabelChange={onTableChange}
+        rowClassName={(row) => row.status === "closed" && "chat-row-closed"}
+        pagination={{
+          position: [simplified ? "none" : "bottomRight"],
+          per_page: chats?.per_page,
+          total: chats?.total,
+          current_page: chats?.current_page,
+        }}
+        extra={extra}
+      />
+    </>
   );
 }
 

@@ -45,10 +45,14 @@ export default function DoctorsList(props) {
   useEffect(() => {
     const { page, sort_column, sort_direction } = state;
     const limit = simplified ? 10 : 20;
+    const params = new URLSearchParams(window.location.search);
+
+    const hidden = {};
+    if (params.has("hidden")) hidden.hidden = true;
 
     setLoading(true);
 
-    dispatch(getDoctorsList({ page, sort_column, sort_direction, limit }))
+    dispatch(getDoctorsList({ page, sort_column, sort_direction, limit, ...hidden }))
       .catch(() => {
         if (error.response.status === 500) {
           setError({

@@ -1,10 +1,8 @@
 import { Alert, Typography } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { useMount, useSessionStorage, useUnmount } from "react-use";
 import { DcTable } from "../components";
-import { userRoles } from "../context/constants";
 import { getLogsList, setCleanOnUnmountTrue, cleanLogsList } from "../store/actions/logsAction";
 import date from "../utils/date";
 
@@ -80,23 +78,6 @@ export default function LogsList() {
         title: "IP",
         dataIndex: "ip",
       },
-      // {
-      //   title: "Utilizator",
-      //   dataIndex: "user",
-      //   render: (rowData) =>
-      //     rowData?.name && (
-      //       <Link
-      //         to={
-      //           userRoles.get("doctor") === rowData?.role
-      //             ? `/doctor/${rowData.id}`
-      //             : `/user/${rowData.id}`
-      //         }
-      //         className="chat-view-comment-user"
-      //       >
-      //         {rowData.name}
-      //       </Link>
-      //     ),
-      // },
       {
         title: "Acțiune",
         dataIndex: "action",

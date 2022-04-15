@@ -5,18 +5,22 @@ import { useRouteMatch, useParams, Link } from "react-router-dom";
 import { CloseOutlined } from "@ant-design/icons";
 import { Badge, Button, Menu, Typography } from "antd";
 
+const { SubMenu } = Menu;
+
 import "./styles/index.scss";
 
 const menuItemsRegister = {
   "/": "dashboard",
   "/statistics": "statistics",
   "/support": "support",
+  "/doctors?hidden": "doctors-hidden",
   "/doctors": "doctors",
   "/doctor/": "doctors",
   "/requests": "doctors",
   "/users": "users",
   "/user/": "users",
   "/chats": "chats",
+  "/chats?internal": "chats-internal",
   "/reviews": "reviews",
   "/promo-codes": "promo-codes",
   "/logs": "logs",
@@ -38,7 +42,7 @@ export default function Navigation({ closeMenu }) {
 
   useEffect(() => {
     const replacer = new RegExp(Object.values(params).join("|"), "g");
-    setCurrentRoute(routeMatch.url.replace(replacer, ""));
+    setCurrentRoute(routeMatch.url.replace(replacer, "") + window.location.search);
   }, [params, routeMatch.url]);
 
   return (
@@ -78,18 +82,28 @@ export default function Navigation({ closeMenu }) {
               <Badge className="ms-2" key="support-list-requests" count={supportCount} />
             </div>
           </Menu.Item>
-          <Menu.Item key="doctors">
-            <div className="d-flex align-items-center justify-content-between">
-              <Link to="/doctors">Doctori</Link>
-              <Badge className="ms-2" key="doctors-list-requests" count={requestsCount.count} />
-            </div>
-          </Menu.Item>
+          <SubMenu key="sub-doctors" title="Lista de doctori">
+            <Menu.Item key="doctors">
+              <div className="d-flex align-items-center justify-content-between">
+                <Link to="/doctors">Doctori</Link>
+                <Badge className="ms-2" key="doctors-list-requests" count={requestsCount.count} />
+              </div>
+            </Menu.Item>
+            <Menu.Item key="doctors-hidden">
+              <Link to="/doctors?hidden">Doctori Ascunși</Link>
+            </Menu.Item>
+          </SubMenu>
           <Menu.Item key="users">
             <Link to="/users">Utilizatori</Link>
           </Menu.Item>
-          <Menu.Item key="chats">
-            <Link to="/chats">Chat-uri</Link>
-          </Menu.Item>
+          <SubMenu key="sub-chats" title="Lista de chat-uri">
+            <Menu.Item key="chats">
+              <Link to="/chats">Chat-uri cu clienți</Link>
+            </Menu.Item>
+            <Menu.Item key="chats-internal">
+              <Link to="/chats?internal">Chat-uri între doctori</Link>
+            </Menu.Item>
+          </SubMenu>
           <Menu.Item key="reviews">
             <Link to="/reviews">Testemoniale</Link>
           </Menu.Item>
