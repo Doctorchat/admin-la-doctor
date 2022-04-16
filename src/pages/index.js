@@ -17,3 +17,4 @@ export { default as SupportViewPage } from "./SupportViewPage";
 export { default as WithdrawalPage } from "./WithdrawalPage";
 export { default as CouncilListPage } from "./CouncilListPage";
 export { default as CouncilViewPage } from "./CouncilViewPage";
+export { default as InternalChatsListPage } from "./InternalChatsListPage";

@@ -20,7 +20,7 @@ const menuItemsRegister = {
   "/users": "users",
   "/user/": "users",
   "/chats": "chats",
-  "/chats?internal": "chats-internal",
+  "/internals": "chats-internal",
   "/reviews": "reviews",
   "/promo-codes": "promo-codes",
   "/logs": "logs",
@@ -101,7 +101,7 @@ export default function Navigation({ closeMenu }) {
               <Link to="/chats">Chat-uri cu clienți</Link>
             </Menu.Item>
             <Menu.Item key="chats-internal">
-              <Link to="/chats?internal">Chat-uri între doctori</Link>
+              <Link to="/internals">Chat-uri între doctori</Link>
             </Menu.Item>
           </SubMenu>
           <Menu.Item key="reviews">

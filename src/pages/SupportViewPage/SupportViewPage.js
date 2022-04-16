@@ -11,7 +11,7 @@ import {
   Tooltip,
 } from "antd";
 import moment from "moment";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useMount } from "react-use";
@@ -71,11 +71,19 @@ export default function SupportViewPage() {
     }
   }, [chat_id, message]);
 
+  const Title = useMemo(() => {
+    if (window.location.href.includes("internal")) {
+      return "Chat intern";
+    }
+
+    return "Support chat";
+  }, []);
+
   useMount(fetchChatInfo);
 
   return (
     <>
-      <PageHeader className="site-page-header" onBack={history.goBack} title="Support chat" />
+      <PageHeader className="site-page-header" onBack={history.goBack} title={Title} />
 
       <div className="support-view-wrapper">
         <div className="support-view-container">

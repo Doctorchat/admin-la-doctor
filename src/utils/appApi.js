@@ -76,6 +76,9 @@ const api = {
     addMember: (data) => axiosInstance.put("/admin/chats/consilium/assign", data),
     close: (data) => axiosInstance.post("/admin/chats/consilium/close", data),
   },
+  internal: {
+    get: (params) => axiosInstance.get("/admin/chats/internal", { params: { ...params } }),
+  },
 };
 
 export default api;

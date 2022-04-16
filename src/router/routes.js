@@ -18,6 +18,7 @@ import {
   WithdrawalPage,
   CouncilListPage,
   CouncilViewPage,
+  InternalChatsListPage,
 } from "../pages/";
 
 const routes = [
@@ -132,6 +133,18 @@ const routes = [
   {
     path: "/council/:chat_id",
     component: CouncilViewPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/internals",
+    component: InternalChatsListPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/internal/:chat_id",
+    component: SupportViewPage,
     exact: true,
     private: true,
   },

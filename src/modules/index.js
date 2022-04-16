@@ -10,3 +10,4 @@ export { default as SupportList } from "./SupportList";
 export { default as WithdrawalList } from "./WithdrawalList";
 export { default as CouncilList } from "./CouncilList";
 export { default as WithdrawalApprovedList } from "./WithdrawalApprovedList";
+export { default as InternalChatsList } from "./InternalChatsList";
