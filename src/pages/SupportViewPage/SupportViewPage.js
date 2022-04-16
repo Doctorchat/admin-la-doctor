@@ -52,7 +52,13 @@ export default function SupportViewPage() {
     setSending(true);
 
     try {
-      const response = await api.chats.sendMessage(chat_id, message);
+      const extra = {};
+
+      if (window.location.href.includes("internal")) {
+        extra.type = "info";
+      }
+
+      const response = await api.chats.sendMessage(chat_id, message, extra);
 
       setChatInfo((prev) => [
         ...prev,
