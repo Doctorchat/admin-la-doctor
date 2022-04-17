@@ -1,13 +1,14 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouteMatch, useParams, Link } from "react-router-dom";
-import { CloseOutlined } from "@ant-design/icons";
-import { Badge, Button, Menu, Typography } from "antd";
+import { CloseOutlined, ExclamationCircleOutlined, LogoutOutlined } from "@ant-design/icons";
+import { Badge, Button, Menu, Modal, Typography } from "antd";
 
 const { SubMenu } = Menu;
 
 import "./styles/index.scss";
+import { logout } from "../../store/actions/userAction";
 
 const menuItemsRegister = {
   "/": "dashboard",
@@ -44,6 +45,24 @@ export default function Navigation({ closeMenu }) {
     const replacer = new RegExp(Object.values(params).join("|"), "g");
     setCurrentRoute(routeMatch.url.replace(replacer, "") + window.location.search);
   }, [params, routeMatch.url]);
+
+  const dispatch = useDispatch();
+
+  const handleLogout = () => dispatch(logout());
+
+  function confirmLogout() {
+    Modal.confirm({
+      title: "Esti sigur ca vrei sa te deconectezi?",
+      icon: <ExclamationCircleOutlined />,
+      okText: "Accept",
+      cancelText: "Anulează",
+      centered: true,
+      onOk: handleLogout,
+      zIndex: 1002,
+      confirmLoading: true,
+      maskClosable: true,
+    });
+  }
 
   return (
     <>
@@ -123,6 +142,14 @@ export default function Navigation({ closeMenu }) {
           </Menu.Item>
           <Menu.Item key="global-settings">
             <Link to="/global-settings"> Setări globale</Link>
+          </Menu.Item>
+          <Menu.Item
+            key="logout"
+            className="logout-btn"
+            icon={<LogoutOutlined />}
+            onClick={confirmLogout}
+          >
+            Deconectare
           </Menu.Item>
         </Menu>
       </div>
