@@ -33,6 +33,7 @@ export const chatTypes = {
   consilium: <Tag color="#FFD700">Consiliu</Tag>,
   auto: <Tag>Auto</Tag>,
   meet: <Tag color="#34a853">Meeting</Tag>,
+  internal: <Tag color="blue">Intern</Tag>,
 };
 
 export const getChatStatus = (chat) => {
