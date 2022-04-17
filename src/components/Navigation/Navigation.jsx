@@ -86,13 +86,16 @@ export default function Navigation({ closeMenu }) {
             key="sub-doctors"
             title={
               <div className="d-flex align-items-center justify-content-between">
-                <Link to="/doctors">Lista de Doctori</Link>
+                <span>Lista de Doctori</span>
                 <Badge className="ms-2" key="doctors-list-requests" count={requestsCount.count} />
               </div>
             }
           >
             <Menu.Item key="doctors">
-              <Link to="/doctors">Doctori</Link>
+              <div className="d-flex align-items-center justify-content-between">
+                <Link to="/doctors">Doctori</Link>
+                <Badge className="ms-2" key="doctors-list-requests" count={requestsCount.count} />
+              </div>
             </Menu.Item>
             <Menu.Item key="doctors-hidden">
               <Link to="/doctors?hidden">Doctori Ascunși</Link>
