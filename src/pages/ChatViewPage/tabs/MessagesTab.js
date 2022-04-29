@@ -8,6 +8,21 @@ import { useMount } from "react-use";
 import { userRoles } from "../../../context/constants";
 import api from "../../../utils/appApi";
 import date from "../../../utils/date";
+import documnetPlaceholder from "../../../asstets/doc.png";
+
+const imageExts = ["png", "jpeg", "jpg", "bmp"];
+
+const checkFileExt = (src) => {
+  let file_ext = src.split(".");
+
+  file_ext = file_ext[file_ext.length - 1];
+
+  if (imageExts.includes(file_ext)) {
+    return file_ext;
+  }
+
+  return documnetPlaceholder;
+};
 
 export default function MessageTab() {
   const { chat_id } = useParams();
@@ -29,7 +44,15 @@ export default function MessageTab() {
   useMount(fetchChatMessages);
 
   if (error) {
-    return <Alert className="mt-5" showIcon type="error" message="Error" description="A apărut o eroare!" />;
+    return (
+      <Alert
+        className="mt-5"
+        showIcon
+        type="error"
+        message="Error"
+        description="A apărut o eroare!"
+      />
+    );
   }
 
   return (
@@ -68,7 +91,12 @@ export default function MessageTab() {
           <div className="chat-view-uploads">
             <Image.PreviewGroup>
               {msg.uploads.map((file) => (
-                <Image width={140} key={file.id} src={file.src} icon={<FileOutlined />} />
+                <Image
+                  width={140}
+                  key={file.id}
+                  src={checkFileExt(file.src)}
+                  icon={<FileOutlined />}
+                />
               ))}
             </Image.PreviewGroup>
           </div>

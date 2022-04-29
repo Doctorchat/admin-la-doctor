@@ -22,6 +22,7 @@ const initialState = {
 export const transactionsStatuses = {
   confirmed: <Tag color="green">Confirmat</Tag>,
   initied: <Tag>Inițializat</Tag>,
+  rejected: <Tag color="red">Respins</Tag>,
 };
 
 const tableStateKey = "transactions-list-state";

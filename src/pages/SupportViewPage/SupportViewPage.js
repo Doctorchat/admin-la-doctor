@@ -19,8 +19,23 @@ import { userRoles } from "../../context/constants";
 import { updateSupportCount } from "../../store/actions/supportListAction";
 import api from "../../utils/appApi";
 import date from "../../utils/date";
+import documnetPlaceholder from "../../asstets/doc.png";
 
 import "./styles/index.scss";
+
+const imageExts = ["png", "jpeg", "jpg", "bmp"];
+
+const checkFileExt = (src) => {
+  let file_ext = src.split(".");
+
+  file_ext = file_ext[file_ext.length - 1];
+
+  if (imageExts.includes(file_ext)) {
+    return file_ext;
+  }
+
+  return documnetPlaceholder;
+};
 
 export default function SupportViewPage() {
   const { chat_id } = useParams();
@@ -137,7 +152,12 @@ export default function SupportViewPage() {
                   <div className="chat-view-uploads">
                     <Image.PreviewGroup>
                       {msg?.uploads?.map((file) => (
-                        <Image width={140} key={file.id} src={file.src} icon={<FileOutlined />} />
+                        <Image
+                          width={140}
+                          key={file.id}
+                          src={checkFileExt(file.src)}
+                          icon={<FileOutlined />}
+                        />
                       ))}
                     </Image.PreviewGroup>
                   </div>
