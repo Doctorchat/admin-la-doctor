@@ -1,4 +1,4 @@
-import { FileOutlined, UserOutlined } from "@ant-design/icons";
+import { CloudDownloadOutlined, FileOutlined, UserOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Button,
@@ -19,7 +19,6 @@ import { userRoles } from "../../context/constants";
 import { updateSupportCount } from "../../store/actions/supportListAction";
 import api from "../../utils/appApi";
 import date from "../../utils/date";
-import documnetPlaceholder from "../../asstets/doc.png";
 
 import "./styles/index.scss";
 
@@ -30,11 +29,7 @@ const checkFileExt = (src) => {
 
   file_ext = file_ext[file_ext.length - 1];
 
-  if (imageExts.includes(file_ext)) {
-    return file_ext;
-  }
-
-  return documnetPlaceholder;
+  return imageExts.includes(file_ext);
 };
 
 export default function SupportViewPage() {
@@ -151,14 +146,30 @@ export default function SupportViewPage() {
                 >
                   <div className="chat-view-uploads">
                     <Image.PreviewGroup>
-                      {msg?.uploads?.map((file) => (
-                        <Image
-                          width={140}
-                          key={file.id}
-                          src={checkFileExt(file.src)}
-                          icon={<FileOutlined />}
-                        />
-                      ))}
+                      {msg?.uploads?.map((file) =>
+                        checkFileExt(file.src) ? (
+                          <Image width={140} key={file.id} src={file.src} icon={<FileOutlined />} />
+                        ) : (
+                          <a
+                            href={file.src}
+                            target="_blank"
+                            rel="noreferrer"
+                            title={file.src}
+                            style={{
+                              maxWidth: "100%",
+                              overflow: "hidden",
+                              whiteSpace: "nowrap",
+                              textOverflow: "ellipsis",
+                            }}
+                          >
+                            <CloudDownloadOutlined
+                              className="me-2"
+                              style={{ height: 17, transform: "translateY(-2px)" }}
+                            />
+                            {file.src}
+                          </a>
+                        )
+                      )}
                     </Image.PreviewGroup>
                   </div>
                 </Comment>

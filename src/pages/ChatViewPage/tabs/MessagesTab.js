@@ -8,7 +8,6 @@ import { useMount } from "react-use";
 import { userRoles } from "../../../context/constants";
 import api from "../../../utils/appApi";
 import date from "../../../utils/date";
-import documnetPlaceholder from "../../../asstets/doc.png";
 
 const imageExts = ["png", "jpeg", "jpg", "bmp"];
 
