@@ -38,10 +38,6 @@ export default function GlobalSettingsPage() {
 
         setLoading(true);
 
-        console.log({
-          NEWSETTINGS: newSettings,
-        });
-
         try {
           await api.settings.update(newSettings);
         } catch (error) {

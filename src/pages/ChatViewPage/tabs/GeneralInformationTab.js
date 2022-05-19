@@ -25,6 +25,9 @@ export default function GeneralInformationTab() {
         {(chatInfo.updated_at && date(chatInfo.updated_at).full) || "---"}
       </Descriptions.Item>
       <Descriptions.Item label="Suma">{chatInfo?.price} Lei</Descriptions.Item>
+      {chatInfo?.reservation && (
+        <Descriptions.Item label="Data meet-ului">{chatInfo?.reservation} Lei</Descriptions.Item>
+      )}
     </Descriptions>
   );
 }
