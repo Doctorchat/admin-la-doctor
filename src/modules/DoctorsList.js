@@ -4,7 +4,6 @@ import { useCallback, useMemo, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useMount, useSessionStorage, useUnmount } from "react-use";
-import usePrevious from "../hooks/usePrevious";
 import { DcTable } from "../components";
 import {
   cleanDoctorsList,
@@ -46,10 +45,11 @@ export default function DoctorsList(props) {
   useEffect(() => {
     const { page, sort_column, sort_direction } = state;
     const limit = simplified ? 10 : 20;
+    const params = new URLSearchParams(window.location.search);
 
     const hidden = {};
 
-    // if (params.has("hidden")) hidden.hidden = true;
+    if (params.has("hidden")) hidden.hidden = true;
 
     setLoading(true);
 
