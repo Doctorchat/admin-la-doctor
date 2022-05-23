@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useMount, useSessionStorage, useUnmount } from "react-use";
+import usePrevious from "../hooks/usePrevious";
 import { DcTable } from "../components";
 import {
   cleanDoctorsList,
@@ -23,7 +24,7 @@ const tableStateKey = "doctors-list-state";
 
 export default function DoctorsList(props) {
   const { simplified, title, extra, searchedList } = props;
-  const [state, setState] = useSessionStorage(tableStateKey, initialState);
+  const [state, setState] = useSessionStorage(tableStateKey + window.location.search, initialState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [activeList, setActiveList] = useState([]);
@@ -45,10 +46,10 @@ export default function DoctorsList(props) {
   useEffect(() => {
     const { page, sort_column, sort_direction } = state;
     const limit = simplified ? 10 : 20;
-    const params = new URLSearchParams(window.location.search);
 
     const hidden = {};
-    if (params.has("hidden")) hidden.hidden = true;
+
+    // if (params.has("hidden")) hidden.hidden = true;
 
     setLoading(true);
 
@@ -73,7 +74,7 @@ export default function DoctorsList(props) {
 
   useUnmount(() => {
     if (cleanOnUnmount) {
-      sessionStorage.removeItem(tableStateKey);
+      sessionStorage.removeItem(tableStateKey + window.location.search);
       dispatch(cleanDoctorsList());
     }
   });
