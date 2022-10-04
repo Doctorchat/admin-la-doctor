@@ -201,9 +201,10 @@ export default function ReviewsList(props) {
           <Form.Item label="Status" name="visibility">
             <Select
               options={[
-                { value: 0, label: "Vizibil pentru doctor" },
-                { value: 1, label: "Vizibil in chat pentru clienți" },
-                { value: 2, label: "Visibil peste tot" },
+                { value: 0, label: "Ascuns pentru toți" },
+                { value: 1, label: "Vizibil pentru doctor" },
+                { value: 2, label: "Vizibil in chat pentru clienți" },
+                { value: 3, label: "Visibil peste tot" },
               ]}
             />
           </Form.Item>
