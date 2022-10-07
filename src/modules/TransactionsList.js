@@ -151,7 +151,7 @@ export default function TransactionsList(props) {
           position: [simplified ? "none" : "bottomRight"],
           per_page: transactions?.per_page,
           total: transactions?.total,
-          current_page: transactions?.current_page,
+          current_page: state?.page,
         }}
         extra={extra}
       />
