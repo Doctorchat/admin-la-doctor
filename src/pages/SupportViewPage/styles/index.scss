@@ -30,3 +30,31 @@
   height: calc(100% - 72px);
   max-height: calc(100% - 145px);
 }
+
+.chat-view__dropdown-menu {
+  min-width: 128px;
+
+  .chat-view__flag {
+    position: relative;
+    padding-left: 28px;
+
+    &.open {
+      color: #16a34a;
+    }
+
+    &.closed {
+      color: #b91c1c;
+    }
+
+    &.in_work {
+      color: #fb923c;
+    }
+
+    span.anticon {
+      position: absolute;
+      left: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}

@@ -60,6 +60,8 @@ const api = {
     get: (params) => axiosInstance.get("/admin/chats/support", { params: { ...params } }),
     count: () => axiosInstance.get("/admin/chats/support/count"),
     sendGlobalMsg: (data) => axiosInstance.post("/chat/mass-mail", data),
+    updateFlag: (chatId, flag) =>
+      axiosInstance.post("/admin/chats/update-flag", { chat_id: chatId, flag }),
   },
   logs: {
     get: (params) => axiosInstance.get("/admin/logs", { params: { ...params } }),

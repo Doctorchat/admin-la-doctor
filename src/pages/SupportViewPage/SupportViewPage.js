@@ -19,6 +19,7 @@ import { userRoles } from "../../context/constants";
 import { updateSupportCount } from "../../store/actions/supportListAction";
 import api from "../../utils/appApi";
 import date from "../../utils/date";
+import { ChatFlag } from "./elements";
 
 import "./styles/index.scss";
 
@@ -34,7 +35,7 @@ const checkFileExt = (src) => {
 
 export default function SupportViewPage() {
   const { chat_id } = useParams();
-  const [chatInfo, setChatInfo] = useState([]);
+  const [chatInfo, setChatInfo] = useState({ messages: [], flag: null });
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [message, setMessage] = useState("");
@@ -70,15 +71,18 @@ export default function SupportViewPage() {
 
       const response = await api.chats.sendMessage(chat_id, message, extra);
 
-      setChatInfo((prev) => [
+      setChatInfo((prev) => ({
         ...prev,
-        {
-          id: response.data.id,
-          content: message,
-          user: { role: 1, name: "Service Account", id: 1 },
-          uploads: [],
-        },
-      ]);
+        messages: [
+          ...prev.messages,
+          {
+            id: response.data.id,
+            content: message,
+            user: { role: 1, name: "Service Account", id: 1 },
+            uploads: [],
+          },
+        ],
+      }));
       setMessage("");
     } catch (error) {
       notification.error({ message: "Erorare", description: error });
@@ -111,7 +115,7 @@ export default function SupportViewPage() {
             {loading ? (
               <Spin />
             ) : (
-              chatInfo.map((msg) => (
+              chatInfo.messages?.map((msg) => (
                 <Comment
                   key={msg.id}
                   className="chat-view-comment"
@@ -177,6 +181,7 @@ export default function SupportViewPage() {
             )}
           </div>
           <div className="support-view-from">
+            {chatInfo.flag && <ChatFlag chatId={chat_id} defaultFlagKey={chatInfo.flag} />}
             <Input.TextArea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
@@ -185,7 +190,7 @@ export default function SupportViewPage() {
             />
             <Button
               type="primary"
-              className="ms-3"
+              className="ms-1"
               onClick={sendResponseHadler}
               disabled={loading || sending || !message}
             >
