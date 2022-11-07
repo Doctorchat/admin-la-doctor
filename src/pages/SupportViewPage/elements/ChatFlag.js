@@ -45,8 +45,8 @@ export const ChatFlag = ({ chatId, defaultFlagKey = "OPEN" }) => {
               },
               {
                 className: "chat-view__flag IN_WORK",
-                label: "In lucru",
-                key: CHAT_FLAGS["IN_WORK"],
+                label: CHAT_FLAGS["IN_WORK"],
+                key: "IN_WORK",
                 icon: flagKey === "IN_WORK" ? <CheckOutlined /> : null,
                 onClick: updateFlagKey,
               },
