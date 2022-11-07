@@ -32,3 +32,9 @@ export const allergiesOptions = [
   { value: "5", label: "Medicamente" },
   { value: "6", label: "Altele" },
 ];
+
+export const CHAT_FLAGS = {
+  OPEN: "Deschis",
+  IN_WORK: "In lucru",
+  CLOSED: "Inchis",
+};

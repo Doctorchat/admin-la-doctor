@@ -38,15 +38,15 @@
     position: relative;
     padding-left: 28px;
 
-    &.open {
+    &.OPEN {
       color: #16a34a;
     }
 
-    &.closed {
+    &.CLOSED {
       color: #b91c1c;
     }
 
-    &.in_work {
+    &.IN_WORK {
       color: #fb923c;
     }
 

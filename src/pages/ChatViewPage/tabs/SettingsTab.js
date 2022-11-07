@@ -84,7 +84,7 @@ export default function SettingsTab() {
       {errorMessage && (
         <Alert message={errorMessage} className="mb-2" type="error" showIcon closable />
       )}
-      <Form form={form} layout="vertical" onFinish={changeDoctorHanlder}>
+      <Form form={form} layout="horizontal" onFinish={changeDoctorHanlder}>
         <Form.Item name="doctor_id" label="Doctor Asignat">
           <Select
             disabled={chatInfo.status === "closed"}

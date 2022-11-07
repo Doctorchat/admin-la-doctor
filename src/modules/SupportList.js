@@ -1,9 +1,10 @@
-import { Alert, Badge, Button, Typography } from "antd";
+import { Alert, Badge, Button, Tag, Typography } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useMount, useSessionStorage, useUnmount } from "react-use";
 import { DcTable } from "../components";
+import { CHAT_FLAGS } from "../context/constants";
 import {
   getSupportList,
   cleanSupportList,
@@ -18,6 +19,12 @@ const initialState = {
 };
 
 const tableStateKey = "support-list-state";
+
+const CHAT_FLAGS_COLORS = {
+  OPEN: "green",
+  IN_WORK: "orange",
+  CLOSED: "red",
+};
 
 export default function SupportList() {
   const [state, setState] = useSessionStorage(tableStateKey, initialState);
@@ -102,6 +109,11 @@ export default function SupportList() {
             {rowData}
           </Typography.Paragraph>
         ),
+      },
+      {
+        title: "Flag",
+        dataIndex: "flag",
+        render: (rowData) => <Tag color={CHAT_FLAGS_COLORS[rowData]}>{CHAT_FLAGS[rowData]}</Tag>,
       },
       {
         title: "Acțiuni",
