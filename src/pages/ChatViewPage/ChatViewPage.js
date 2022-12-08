@@ -61,7 +61,7 @@ export default function ChatViewPage() {
         <PageHeader className="site-page-header" onBack={history.goBack} title="Chat" />
         <ChatViewContext.Provider value={{ chatInfo, updateChatInfo }}>
           <Tabs
-            defaultActiveKey="settings"
+            defaultActiveKey="messages"
             items={[
               {
                 key: "general-information",
