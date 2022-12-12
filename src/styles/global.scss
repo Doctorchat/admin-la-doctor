@@ -125,6 +125,10 @@ html:not(.is-safari):not(.is-ios) ::-webkit-scrollbar-thumb {
   }
 }
 
+.ant-tabs-tabpane-hidden {
+  display: none;
+}
+
 .ant-table-row {
   &.review-like {
     background-color: rgba(#198754, 0.1);

@@ -232,6 +232,7 @@ export default function PromoCodesList() {
         rowClassName={(row) => row.status === "draft" && "chat-row-closed"}
         pagination={{
           position: ["none"],
+          per_page: 1000,
         }}
       />
     </>

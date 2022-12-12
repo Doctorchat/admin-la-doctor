@@ -12,8 +12,6 @@ import cs from "../../utils/classNames";
 
 import "./styles/index.scss";
 
-const { TabPane } = Tabs;
-
 export default function ChatViewPage() {
   const { chat_id } = useParams();
   const [chatInfo, setChatInfo] = useState({});
@@ -62,17 +60,26 @@ export default function ChatViewPage() {
       <Spin spinning={loading}>
         <PageHeader className="site-page-header" onBack={history.goBack} title="Chat" />
         <ChatViewContext.Provider value={{ chatInfo, updateChatInfo }}>
-          <Tabs>
-            <TabPane tab="Informație generală" key="general-information">
-              <GeneralInformationTab />
-            </TabPane>
-            <TabPane tab="Mesaje" key="messages">
-              <MessageTab />
-            </TabPane>
-            <TabPane tab={<Badge status={getSettingsTabStatus()} text="Setări" />} key="settings">
-              <SettingsTab />
-            </TabPane>
-          </Tabs>
+          <Tabs
+            defaultActiveKey="messages"
+            items={[
+              {
+                key: "general-information",
+                label: "Informație generală",
+                children: <GeneralInformationTab />,
+              },
+              {
+                key: "messages",
+                label: "Mesaje",
+                children: <MessageTab />,
+              },
+              {
+                key: "settings",
+                label: <Badge status={getSettingsTabStatus()} text="Setări" />,
+                children: <SettingsTab />,
+              },
+            ]}
+          />
         </ChatViewContext.Provider>
       </Spin>
     </div>

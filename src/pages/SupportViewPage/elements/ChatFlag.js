@@ -4,6 +4,7 @@ import { Button, Dropdown, notification } from "antd";
 import React, { useState } from "react";
 import { getApiErrorMessage } from "../../../utils/getApiErrorMessages";
 import api from "../../../utils/appApi";
+import { CHAT_FLAGS } from "../../../context/constants";
 
 export const ChatFlag = ({ chatId, defaultFlagKey = "OPEN" }) => {
   const [flagKey, setFlagKey] = useState(defaultFlagKey);
@@ -36,22 +37,22 @@ export const ChatFlag = ({ chatId, defaultFlagKey = "OPEN" }) => {
             label: "Flag",
             children: [
               {
-                className: "chat-view__flag open",
-                label: "Deschis",
+                className: "chat-view__flag OPEN",
+                label: CHAT_FLAGS["OPEN"],
                 key: "OPEN",
                 icon: flagKey === "OPEN" ? <CheckOutlined /> : null,
                 onClick: updateFlagKey,
               },
               {
-                className: "chat-view__flag in_work",
-                label: "In lucru",
+                className: "chat-view__flag IN_WORK",
+                label: CHAT_FLAGS["IN_WORK"],
                 key: "IN_WORK",
                 icon: flagKey === "IN_WORK" ? <CheckOutlined /> : null,
                 onClick: updateFlagKey,
               },
               {
-                className: "chat-view__flag closed",
-                label: "Inchis",
+                className: "chat-view__flag CLOSED",
+                label: CHAT_FLAGS["CLOSED"],
                 key: "CLOSED",
                 icon: flagKey === "CLOSED" ? <CheckOutlined /> : null,
                 onClick: updateFlagKey,

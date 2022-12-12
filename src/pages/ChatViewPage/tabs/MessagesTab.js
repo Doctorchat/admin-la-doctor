@@ -28,7 +28,7 @@ export default function MessageTab() {
   const fetchChatMessages = useCallback(async () => {
     try {
       const response = await api.chats.getMessages(chat_id);
-      setMessages(response.data);
+      setMessages(response.data.messages);
     } catch (error) {
       setError(true);
     } finally {
