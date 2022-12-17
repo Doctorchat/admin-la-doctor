@@ -128,6 +128,7 @@ export default function ReviewsList(props) {
       const data = { ...values };
 
       data.id = activeReview.id;
+      data.like = activeReview.like ? 1 : 0;
 
       try {
         const res = await api.reviews.update(data);
