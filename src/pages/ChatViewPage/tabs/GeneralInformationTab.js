@@ -26,7 +26,9 @@ export default function GeneralInformationTab() {
       </Descriptions.Item>
       <Descriptions.Item label="Suma">{chatInfo?.price} Lei</Descriptions.Item>
       {chatInfo?.reservation && (
-        <Descriptions.Item label="Data meet-ului">{chatInfo?.reservation}</Descriptions.Item>
+        <Descriptions.Item label="Data meet-ului">
+          {date(chatInfo?.reservation).full}
+        </Descriptions.Item>
       )}
     </Descriptions>
   );
