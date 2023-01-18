@@ -31,10 +31,13 @@ const tableStateKey = "reviews-list-state";
 
 export default function ReviewsList(props) {
   const { simplified, title, extra } = props;
+
   const [state, setState] = useSessionStorage(tableStateKey, initialState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [activeReview, setActiveReview] = useState(null);
+  const [open, setOpen] = useState(false);
+
   const { reviews, cleanOnUnmount } = useSelector((store) => ({
     reviews: store.reviewsList.payload,
     cleanOnUnmount: store.reviewsList.cleanOnUnmount,
@@ -99,12 +102,14 @@ export default function ReviewsList(props) {
   const onViewReview = useCallback(
     (review) => () => {
       setActiveReview(review);
+      setOpen(true);
     },
     []
   );
 
   const onCloseReview = useCallback(() => {
     setActiveReview(null);
+    setOpen(false);
   }, []);
 
   useEffect(() => {
@@ -123,6 +128,7 @@ export default function ReviewsList(props) {
       const data = { ...values };
 
       data.id = activeReview.id;
+      data.like = activeReview.like ? 1 : 0;
 
       try {
         const res = await api.reviews.update(data);
@@ -193,9 +199,15 @@ export default function ReviewsList(props) {
 
   return (
     <>
-      <Drawer visible={!!activeReview} onClose={onCloseReview} title="Editare recenzie">
-        <Form layout="vertical" form={form} onFinish={onReviewEdit}>
-          <Form.Item label="Conținut" name="content">
+      <Drawer
+        open={open}
+        placement="right"
+        onClose={onCloseReview}
+        title="Editare recenzie"
+        destroyOnClose
+      >
+        <Form className="testimonials-form" layout="vertical" form={form} onFinish={onReviewEdit}>
+          <Form.Item label="Conținut" name="content" className="d-flex">
             <Input.TextArea autoSize />
           </Form.Item>
           <Form.Item label="Status" name="visibility">
