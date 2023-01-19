@@ -13,6 +13,7 @@ import { logout } from "../../store/actions/userAction";
 const menuItemsRegister = {
   "/": "dashboard",
   "/statistics": "statistics",
+  "/transactions": "transactions",
   "/support": "support",
   "/doctors?hidden": "doctors-hidden",
   "/doctors": "doctors",
@@ -94,6 +95,9 @@ export default function Navigation({ closeMenu }) {
           </Menu.Item>
           <Menu.Item key="statistics">
             <Link to="/statistics">Statistică</Link>
+          </Menu.Item>
+          <Menu.Item key="transactions">
+            <Link to="/transactions">Tranzacții</Link>
           </Menu.Item>
           <Menu.Item key="support">
             <div className="d-flex align-items-center justify-content-between">
