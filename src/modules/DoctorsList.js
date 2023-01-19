@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { Alert, Badge, Button, Input, PageHeader, Table } from "antd";
 import { Link } from "react-router-dom";
@@ -10,6 +10,7 @@ import api from "../utils/appApi";
 import useTableState from "../hooks/usePaginatedQueryState";
 import useDebounce from "../hooks/useDebounce";
 import { useSelector } from "react-redux";
+import { useMount } from "react-use";
 
 export default function DoctorsList() {
   const { requestsCount } = useSelector((store) => ({
@@ -20,18 +21,24 @@ export default function DoctorsList() {
 
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [displayHiddenDoctors] = useState(
+    new URLSearchParams(window.location.search).has("hidden")
+  );
 
   const {
     data: doctors,
     isLoading,
     isError,
-  } = useQuery(["doctors", page, sortColumn, sortDirection, debouncedSearch], () =>
-    api.doctors.get({
-      page,
-      sort_column: sortColumn,
-      sort_direction: sortDirection === "ascend" ? "asc" : "desc",
-      search: debouncedSearch,
-    })
+  } = useQuery(
+    ["doctors", page, sortColumn, sortDirection, debouncedSearch, displayHiddenDoctors],
+    () =>
+      api.doctors.get({
+        page,
+        sort_column: sortColumn,
+        sort_direction: sortDirection === "ascend" ? "asc" : "desc",
+        search: debouncedSearch,
+        hidden: displayHiddenDoctors ? 1 : 0,
+      })
   );
 
   useDebounce(
@@ -63,7 +70,7 @@ export default function DoctorsList() {
     <>
       <PageHeader
         className="site-page-header"
-        title={`Doctori (${doctors?.total || 0})`}
+        title={`Doctori ${displayHiddenDoctors ? "ascunși" : ""} (${doctors?.total || 0})`}
         extra={[
           <Badge key="doctors-list-requests" count={requestsCount.count} showZero>
             <Link to="/requests">
