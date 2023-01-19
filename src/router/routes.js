@@ -10,7 +10,6 @@ import {
   UsersListPage,
   UserViewPage,
   GlobalSettingsPage,
-  StatsPage,
   PromocodesPage,
   LogsListPage,
   SupportListPage,
@@ -19,6 +18,8 @@ import {
   CouncilListPage,
   CouncilViewPage,
   InternalChatsListPage,
+  StatisticsPage,
+  TransactionsPage,
 } from "../pages/";
 
 const routes = [
@@ -90,7 +91,13 @@ const routes = [
   },
   {
     path: "/statistics",
-    component: StatsPage,
+    component: StatisticsPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/transactions",
+    component: TransactionsPage,
     exact: true,
     private: true,
   },

@@ -46,7 +46,7 @@ const api = {
     categories: () => axiosInstance.get("/specialities"),
   },
   stats: {
-    getCharts: () => axiosInstance.get("/admin/statistics"),
+    getStatistics: () => axiosInstance.get("/admin/statistics-extended?w").then((res) => res.data),
     getTransactions: (params) =>
       axiosInstance.get("/admin/transactions", { params: { ...params } }),
   },
