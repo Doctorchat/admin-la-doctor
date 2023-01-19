@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouteMatch, useParams, Link } from "react-router-dom";
 import { CloseOutlined, ExclamationCircleOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Badge, Button, Menu, Modal, Typography } from "antd";
+import { logout } from "../../store/actions/userAction";
 
 const { SubMenu } = Menu;
 
 import "./styles/index.scss";
-import { logout } from "../../store/actions/userAction";
 
 const menuItemsRegister = {
   "/": "dashboard",

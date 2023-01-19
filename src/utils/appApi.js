@@ -24,7 +24,8 @@ const api = {
     update: (data) => axiosInstance.put("/admin/reviews/update", data),
   },
   doctors: {
-    get: (params) => axiosInstance.get("/admin/users/doctors/", { params: { ...params } }),
+    get: (params) =>
+      axiosInstance.get("/admin/users/doctors", { params: { ...params } }).then((res) => res.data),
     getById: (id) => axiosInstance.get(`/admin/users/doctors/${id}`),
     getReviews: (id) => axiosInstance.get(`/admin/reviews/all/${id}`),
     getRequests: () => axiosInstance.get("/admin/users/doctors/requests"),
@@ -34,7 +35,8 @@ const api = {
     search: (keyword) => axiosInstance.get(`/admin/users/doctors/search/${keyword}`),
   },
   users: {
-    get: (params) => axiosInstance.get("/admin/users/clients", { params: { ...params } }),
+    get: (params) =>
+      axiosInstance.get("/admin/users/clients", { params: { ...params } }).then((res) => res.data),
     getById: (id) => axiosInstance.get(`/admin/users/clients/${id}`),
   },
   settings: {
