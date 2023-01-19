@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { Alert, Badge, Button, Input, PageHeader, Table } from "antd";
 import { Link } from "react-router-dom";
@@ -10,7 +10,6 @@ import api from "../utils/appApi";
 import useTableState from "../hooks/usePaginatedQueryState";
 import useDebounce from "../hooks/useDebounce";
 import { useSelector } from "react-redux";
-import { useMount } from "react-use";
 
 export default function DoctorsList() {
   const { requestsCount } = useSelector((store) => ({
