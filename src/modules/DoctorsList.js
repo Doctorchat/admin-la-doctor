@@ -1,147 +1,59 @@
 import PropTypes from "prop-types";
-import { Alert, Tag } from "antd";
-import { useCallback, useMemo, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { useMount, useSessionStorage, useUnmount } from "react-use";
-import { DcTable } from "../components";
-import {
-  cleanDoctorsList,
-  getDoctorsList,
-  setCleanOnUnmountFalse,
-  setCleanOnUnmountTrue,
-} from "../store/actions/doctorsListAction";
+import { useState } from "react";
+import { SearchOutlined } from "@ant-design/icons";
+import { Alert, Badge, Button, Input, PageHeader, Table } from "antd";
+import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
+
 import date from "../utils/date";
+import api from "../utils/appApi";
+import useTableState from "../hooks/usePaginatedQueryState";
+import useDebounce from "../hooks/useDebounce";
+import { useSelector } from "react-redux";
 
-const initialState = {
-  page: 1,
-  sort_column: "id",
-  sort_direction: "descend",
-};
-
-const tableStateKey = "doctors-list-state";
-
-export default function DoctorsList(props) {
-  const { simplified, title, extra, searchedList } = props;
-  const [state, setState] = useSessionStorage(tableStateKey + window.location.search, initialState);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [activeList, setActiveList] = useState([]);
-  const { doctors, cleanOnUnmount } = useSelector((store) => ({
-    doctors: store.doctorsList.payload,
-    cleanOnUnmount: store.doctorsList.cleanOnUnmount,
+export default function DoctorsList() {
+  const { requestsCount } = useSelector((store) => ({
+    requestsCount: store.requestsCount,
   }));
-  const history = useHistory();
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (searchedList) {
-      setActiveList(searchedList);
-    } else {
-      setActiveList(doctors?.data);
-    }
-  }, [doctors?.data, searchedList]);
+  const { page, sortColumn, sortDirection, setPage, onTableChange } = useTableState("doctors-list");
 
-  useEffect(() => {
-    const { page, sort_column, sort_direction } = state;
-    const limit = simplified ? 10 : 20;
-    const params = new URLSearchParams(window.location.search);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [displayHiddenDoctors] = useState(
+    new URLSearchParams(window.location.search).has("hidden")
+  );
 
-    const hidden = {};
-
-    if (params.has("hidden")) hidden.hidden = true;
-
-    setLoading(true);
-
-    dispatch(getDoctorsList({ page, sort_column, sort_direction, limit, ...hidden }))
-      .catch(() => {
-        if (error.response.status === 500) {
-          setError({
-            status: error.response.status,
-            message: error.response.data.message,
-          });
-          sessionStorage.removeItem(tableStateKey);
-        }
+  const {
+    data: doctors,
+    isLoading,
+    isError,
+  } = useQuery(
+    ["doctors", page, sortColumn, sortDirection, debouncedSearch, displayHiddenDoctors],
+    () =>
+      api.doctors.get({
+        page,
+        sort_column: sortColumn,
+        sort_direction: sortDirection === "ascend" ? "asc" : "desc",
+        search: debouncedSearch,
+        hidden: displayHiddenDoctors ? 1 : 0,
       })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [dispatch, error, simplified, state]);
+  );
 
-  useMount(() => {
-    dispatch(setCleanOnUnmountTrue());
-  });
-
-  useUnmount(() => {
-    if (cleanOnUnmount) {
-      sessionStorage.removeItem(tableStateKey + window.location.search);
-      dispatch(cleanDoctorsList());
-    }
-  });
-
-  const onTableChange = useCallback(
-    (pagination) => {
-      const newState = { ...state };
-
-      newState.page = pagination.current;
-
-      setState(newState);
+  useDebounce(
+    () => {
+      if (search.length > 2) {
+        setDebouncedSearch(search);
+        setPage(1);
+      } else {
+        setDebouncedSearch("");
+      }
     },
-    [setState, state]
+    500,
+    [search]
   );
 
-  const onTableLinksClick = useCallback(
-    (path) => async (e) => {
-      e.preventDefault();
-
-      await dispatch(setCleanOnUnmountFalse());
-      history.push(path);
-    },
-    [dispatch, history]
-  );
-
-  const columns = useMemo(
-    () => [
-      { title: "ID", dataIndex: "id" },
-      {
-        title: "Nume",
-        dataIndex: "name",
-        render: (rowData, { id }) => (
-          <a href={`/doctor/${id}`} onClick={onTableLinksClick(`/doctor/${id}`)}>
-            {rowData}
-          </a>
-        ),
-      },
-      {
-        title: "Email",
-        dataIndex: "email",
-      },
-      {
-        title: "Telefon",
-        dataIndex: "phone",
-      },
-      {
-        title: "Specialitate",
-        dataIndex: "speciality",
-        ellipsis: true,
-        render: (rowData) => rowData.join(", "),
-      },
-      {
-        title: "Ultima accesare",
-        dataIndex: "last_seen",
-        render: (rowData, row) => {
-          if (row.isOnline) {
-            return <Tag color="#06f">Online</Tag>;
-          }
-
-          return rowData ? date(rowData).full : "Necunoscut";
-        },
-      },
-    ],
-    [onTableLinksClick]
-  );
-
-  if (error) {
+  if (isError) {
     return (
       <Alert
         className="mt-5"
@@ -154,20 +66,95 @@ export default function DoctorsList(props) {
   }
 
   return (
-    <DcTable
-      title={title}
-      dataColumns={columns}
-      dataSource={activeList || []}
-      loading={loading}
-      onTabelChange={onTableChange}
-      rowClassName={(row) => row.inVacation && "chat-row-closed"}
-      pagination={{
-        position: [simplified ? "none" : "bottomRight"],
-        per_page: doctors?.per_page,
-        total: doctors?.total,
-      }}
-      extra={extra}
-    />
+    <>
+      <PageHeader
+        className="site-page-header"
+        title={`Doctori ${displayHiddenDoctors ? "ascunși" : ""} (${doctors?.total || 0})`}
+        extra={[
+          <Badge key="doctors-list-requests" count={requestsCount.count} showZero>
+            <Link to="/requests">
+              <Button type="primary">Cereri</Button>
+            </Link>
+          </Badge>,
+        ]}
+      />
+
+      <Input
+        className="mb-3"
+        placeholder="Nume, Prenume"
+        addonBefore={<SearchOutlined />}
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
+      <Table
+        bordered
+        scroll={{ x: 900 }}
+        size="small"
+        rowKey={(record) => record.id}
+        sortDirections={["descend", "ascend", "descend"]}
+        columns={[
+          {
+            title: "ID",
+            dataIndex: "id",
+            sorter: true,
+            sortOrder: sortColumn === "id" && sortDirection,
+          },
+          {
+            title: "Nume",
+            dataIndex: "name",
+            render: (rowData, { id }) => <Link to={`/doctor/${id}`}>{rowData}</Link>,
+          },
+          {
+            title: "Email",
+            dataIndex: "email",
+          },
+          {
+            title: "Telefon",
+            dataIndex: "phone",
+          },
+          {
+            title: "Specialitate",
+            dataIndex: "speciality",
+            ellipsis: true,
+          },
+          {
+            title: "Vânzări",
+            dataIndex: "sales",
+            sorter: true,
+            sortOrder: sortColumn === "sales" && sortDirection,
+            render: (rowData) => `${rowData} MDL`,
+          },
+          {
+            title: "Solicitări",
+            dataIndex: "requests",
+            sorter: true,
+            sortOrder: sortColumn === "requests" && sortDirection,
+          },
+          {
+            title: "Solicitări repetate",
+            dataIndex: "repeat_requests",
+            sorter: true,
+            sortOrder: sortColumn === "repeat_requests" && sortDirection,
+          },
+          {
+            title: "Ultima accesare",
+            dataIndex: "last_seen",
+            render: (rowData) => (rowData ? date(rowData).full : "Necunoscut"),
+          },
+        ]}
+        dataSource={doctors?.data || []}
+        loading={isLoading}
+        pagination={{
+          position: ["bottomRight"],
+          current: doctors?.current_page || 1,
+          pageSize: doctors?.per_page || 20,
+          total: doctors?.total || 0,
+          showSizeChanger: false,
+        }}
+        onChange={onTableChange}
+      />
+    </>
   );
 }
 
@@ -175,5 +162,4 @@ DoctorsList.propTypes = {
   simplified: PropTypes.bool,
   title: PropTypes.string,
   extra: PropTypes.element,
-  searchedList: PropTypes.array,
 };
