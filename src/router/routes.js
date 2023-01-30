@@ -20,6 +20,8 @@ import {
   InternalChatsListPage,
   StatisticsPage,
   TransactionsPage,
+  CallsPage,
+  CallViewPage,
 } from "../pages/";
 
 const routes = [
@@ -152,6 +154,18 @@ const routes = [
   {
     path: "/internal/:chat_id",
     component: SupportViewPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/calls",
+    component: CallsPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/calls/:user_id",
+    component: CallViewPage,
     exact: true,
     private: true,
   },
