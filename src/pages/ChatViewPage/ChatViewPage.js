@@ -9,6 +9,7 @@ import { useMount } from "react-use";
 import api from "../../utils/appApi";
 import { useHistory } from "react-router-dom";
 import cs from "../../utils/classNames";
+import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 
 import "./styles/index.scss";
 
@@ -54,6 +55,8 @@ export default function ChatViewPage() {
 
     return "success";
   }, [chatInfo]);
+
+  usePermissionsRedirect();
 
   return (
     <div className={cs("page-view", chatInfo?.status)}>

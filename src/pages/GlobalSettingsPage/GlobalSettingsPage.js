@@ -6,6 +6,7 @@ import NotificationsTab from "./tabs/NotificationsTab";
 import { GlobalSettingsContext } from "./GlobalSettingsContext";
 import api from "../../utils/appApi";
 import getApiErrorMessages from "../../utils/getApiErrorMessages";
+import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 
 import "./styles/index.scss";
 
@@ -50,6 +51,7 @@ export default function GlobalSettingsPage() {
   );
 
   useMount(fetchSettings);
+  usePermissionsRedirect();
 
   return (
     <GlobalSettingsContext.Provider

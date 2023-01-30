@@ -17,10 +17,16 @@ const LoginPage = () => {
   const onSubmit = useCallback(
     (values) => {
       setLoading(true);
-      login(values)(dispatch).catch((err) => {
-        setApiErrorsToAntdForm(err);
-        setLoading(false);
-      });
+      login(values)(dispatch)
+        .then((res) => {
+          if (res.data.user.role === 4) {
+            window.location.href = "/calls";
+          }
+        })
+        .catch((err) => {
+          setApiErrorsToAntdForm(err);
+          setLoading(false);
+        });
     },
     [dispatch, setApiErrorsToAntdForm]
   );

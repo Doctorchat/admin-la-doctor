@@ -2,6 +2,7 @@ export const userRoles = new Map([
   ["admin", 1],
   ["doctor", 2],
   ["client", 3],
+  ["manager", 4],
 ]);
 
 export const sexOptions = [

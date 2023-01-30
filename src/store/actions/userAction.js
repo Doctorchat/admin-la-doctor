@@ -28,7 +28,7 @@ export const login = (data) => (dispatch) =>
   api.user
     .login(data)
     .then((res) => {
-      if (res.data.user.role !== 1) {
+      if (![1, 4].includes(res.data.user.role)) {
         throw new Error("You do not have permission!");
       }
 

@@ -26,6 +26,7 @@ import { selectDoctorsOptions } from "../../store/selectors/bootstrapSelectors";
 import api from "../../utils/appApi";
 import date from "../../utils/date";
 import fetcher from "../../utils/fetcher";
+import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 
 import "./styles/index.scss";
 
@@ -173,6 +174,9 @@ export default function CouncilViewPage() {
       </Menu.Item>
     </Menu>
   );
+
+  usePermissionsRedirect();
+
   return (
     <>
       <PageHeader className="site-page-header" onBack={history.goBack} title="Consiliu" />

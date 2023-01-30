@@ -2,11 +2,14 @@ import { Card, Col, Divider, PageHeader, Row, Statistic, Typography } from "antd
 import { useQuery } from "react-query";
 import api from "../../utils/appApi";
 import { MembersChart, RequestsChart, YieldChart } from "./charts";
+import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 
 const StatisticsPage = () => {
   const { data: statistics } = useQuery(["statistics"], () => api.stats.getStatistics(), {
     refetchOnWindowFocus: false,
   });
+
+  usePermissionsRedirect();
 
   return (
     <div className="stats-page">

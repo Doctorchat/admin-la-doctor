@@ -7,6 +7,7 @@ import { DcTable } from "../components";
 import { DoctorForm } from "../modules";
 import { updateRequestsCount } from "../store/actions/requestsCountAction";
 import api from "../utils/appApi";
+import usePermissionsRedirect from "../hooks/usePermissionsRedirect";
 
 export default function DoctorsRequestsPage() {
   const [requests, setRequests] = useState([]);
@@ -134,6 +135,8 @@ export default function DoctorsRequestsPage() {
     ],
     [acceptHandler, prepareAcceptLoading, removeHandler, removeReqLoading]
   );
+
+  usePermissionsRedirect();
 
   if (error) {
     return (
