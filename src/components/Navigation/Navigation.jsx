@@ -1,60 +1,30 @@
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouteMatch, useParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { CloseOutlined, ExclamationCircleOutlined, LogoutOutlined } from "@ant-design/icons";
-import { Badge, Button, Menu, Modal, Typography } from "antd";
+import { Badge, Button, Menu, Modal, Space, Typography } from "antd";
 import { logout } from "../../store/actions/userAction";
-
-const { SubMenu } = Menu;
+import { userRoles } from "../../context/constants";
 
 import "./styles/index.scss";
 
-const menuItemsRegister = {
-  "/": "dashboard",
-  "/statistics": "statistics",
-  "/transactions": "transactions",
-  "/support": "support",
-  "/doctors?hidden": "doctors-hidden",
-  "/doctors": "doctors",
-  "/doctor/": "doctors",
-  "/requests": "doctors",
-  "/users": "users",
-  "/user/": "users",
-  "/chats": "chats",
-  "/internals": "chats-internal",
-  "/reviews": "reviews",
-  "/promo-codes": "promo-codes",
-  "/logs": "logs",
-  "/global-settings": "global-settings",
-  "/withdrawal": "withdrawal",
-  "/council-list": "council-list",
-  "/calls": "calls",
-  "/calls/": "calls",
-  "/completed-calls": "completed-calls",
-};
-
 export default function Navigation({ closeMenu }) {
-  const { requestsCount, supportCount, withdrawalCount, councilCount } = useSelector((store) => ({
-    requestsCount: store.requestsCount,
-    supportCount: store.supportList.count,
-    councilCount: store.supportList.councilCount,
-    withdrawalCount: store.withdrawal.count,
-  }));
-  const [currentRoute, setCurrentRoute] = useState();
-  const routeMatch = useRouteMatch();
-  const params = useParams();
-
-  useEffect(() => {
-    const replacer = new RegExp(Object.values(params).join("|"), "g");
-    setCurrentRoute(routeMatch.url.replace(replacer, "") + window.location.search);
-  }, [params, routeMatch.url]);
+  const { requestsCount, supportCount, withdrawalCount, councilCount, user } = useSelector(
+    (store) => ({
+      requestsCount: store.requestsCount,
+      supportCount: store.supportList.count,
+      councilCount: store.supportList.councilCount,
+      withdrawalCount: store.withdrawal.count,
+      user: store.user.payload,
+    })
+  );
 
   const dispatch = useDispatch();
 
-  const handleLogout = () => dispatch(logout());
+  const handleLogout = useCallback(() => dispatch(logout()), [dispatch]);
 
-  function confirmLogout() {
+  const confirmLogout = useCallback(() => {
     Modal.confirm({
       title: "Esti sigur ca vrei sa te deconectezi?",
       icon: <ExclamationCircleOutlined />,
@@ -66,7 +36,122 @@ export default function Navigation({ closeMenu }) {
       confirmLoading: true,
       maskClosable: true,
     });
-  }
+  }, [handleLogout]);
+
+  const menuItems = useMemo(() => {
+    return [
+      {
+        key: "dashboard",
+        label: <Link to="/">Dashboard</Link>,
+      },
+      {
+        key: "council-list",
+        label: (
+          <Space align="center" className="justify-content-between">
+            <Link to="/council-list">Consilii</Link>
+            <Badge className="ms-2" key="council-list-requests" count={councilCount} />
+          </Space>
+        ),
+      },
+      {
+        key: "withdrawal",
+        label: (
+          <Space align="center" className="justify-content-between">
+            <Link to="/withdrawal">Cereri de retragere</Link>
+            <Badge className="ms-2" key="withdrawal-list-requests" count={withdrawalCount} />
+          </Space>
+        ),
+      },
+      {
+        key: "statistics",
+        label: <Link to="/statistics">Statistică</Link>,
+      },
+      {
+        key: "transactions",
+        label: <Link to="/transactions">Tranzacții</Link>,
+      },
+      {
+        key: "calls",
+        label: <Link to="/calls">Apeluri</Link>,
+        roles: [userRoles.get("manager")],
+      },
+      {
+        key: "support",
+        label: (
+          <Space align="center" className="justify-content-between">
+            <Link to="/support">Support</Link>
+            <Badge className="ms-2" key="support-list-requests" count={supportCount} />
+          </Space>
+        ),
+      },
+      {
+        key: "sub-doctors",
+        label: (
+          <Space align="center" className="justify-content-between">
+            <span>Lista de Doctori</span>
+            <Badge className="ms-2" key="doctors-list-requests" count={requestsCount.count} />
+          </Space>
+        ),
+        children: [
+          {
+            key: "doctors",
+            label: (
+              <Space align="center" className="justify-content-between">
+                <Link to="/doctors">Doctori</Link>
+                <Badge className="ms-2" key="doctors-list-requests" count={requestsCount.count} />
+              </Space>
+            ),
+          },
+          {
+            key: "doctors?hidden",
+            label: <Link to="/doctors?hidden">Doctori Ascunși</Link>,
+          },
+        ],
+      },
+      {
+        key: "users",
+        label: <Link to="/users">Utilizatori</Link>,
+      },
+      {
+        key: "sub-chats",
+        label: "Lista de chat-uri",
+        children: [
+          {
+            key: "chats",
+            label: <Link to="/chats">Chat-uri cu clienți</Link>,
+          },
+          {
+            key: "chats-internal",
+            label: <Link to="/internals">Chat-uri între doctori</Link>,
+          },
+        ],
+      },
+      {
+        key: "reviews",
+        label: <Link to="/reviews">Testemoniale</Link>,
+      },
+      {
+        key: "promo-codes",
+        label: <Link to="/promo-codes">Promo coduri</Link>,
+      },
+      {
+        key: "logs",
+        label: <Link to="/logs">Istoricul</Link>,
+      },
+      {
+        key: "global-settings",
+        label: <Link to="/global-settings"> Setări globale</Link>,
+      },
+      {
+        key: "logout",
+        className: "logout-btn",
+        label: "Deconectare",
+        icon: <LogoutOutlined />,
+        onClick: confirmLogout,
+        roles: [userRoles.get("manager")],
+      },
+    ].filter((item) => user?.role === 1 || item?.roles?.includes(user?.role));
+  }, [confirmLogout, councilCount, requestsCount.count, supportCount, user?.role, withdrawalCount]);
 
   return (
     <>
@@ -80,88 +165,16 @@ export default function Navigation({ closeMenu }) {
             onClick={closeMenu}
           />
         </Typography.Title>
-        <Menu mode="inline" selectedKeys={menuItemsRegister[currentRoute]}>
-          <Menu.Item key="dashboard">
-            <Link to="/">Dashboard</Link>
-          </Menu.Item>
-          <Menu.Item key="council-list">
-            <div className="d-flex align-items-center justify-content-between">
-              <Link to="/council-list">Consilii</Link>
-              <Badge className="ms-2" key="council-list-requests" count={councilCount} />
-            </div>
-          </Menu.Item>
-          <Menu.Item key="withdrawal">
-            <div className="d-flex align-items-center justify-content-between">
-              <Link to="/withdrawal">Cereri de retragere</Link>
-              <Badge className="ms-2" key="withdrawal-list-requests" count={withdrawalCount} />
-            </div>
-          </Menu.Item>
-          <Menu.Item key="statistics">
-            <Link to="/statistics">Statistică</Link>
-          </Menu.Item>
-          <Menu.Item key="transactions">
-            <Link to="/transactions">Tranzacții</Link>
-          </Menu.Item>
-          <Menu.Item key="calls">
-            <Link to="/calls">Apeluri</Link>
-          </Menu.Item>
-          <Menu.Item key="support">
-            <div className="d-flex align-items-center justify-content-between">
-              <Link to="/support">Support</Link>
-              <Badge className="ms-2" key="support-list-requests" count={supportCount} />
-            </div>
-          </Menu.Item>
-          <SubMenu
-            key="sub-doctors"
-            title={
-              <div className="d-flex align-items-center justify-content-between">
-                <span>Lista de Doctori</span>
-                <Badge className="ms-2" key="doctors-list-requests" count={requestsCount.count} />
-              </div>
-            }
-          >
-            <Menu.Item key="doctors">
-              <div className="d-flex align-items-center justify-content-between">
-                <Link to="/doctors">Doctori</Link>
-                <Badge className="ms-2" key="doctors-list-requests" count={requestsCount.count} />
-              </div>
-            </Menu.Item>
-            <Menu.Item key="doctors-hidden">
-              <Link to="/doctors?hidden">Doctori Ascunși</Link>
-            </Menu.Item>
-          </SubMenu>
-          <Menu.Item key="users">
-            <Link to="/users">Utilizatori</Link>
-          </Menu.Item>
-          <SubMenu key="sub-chats" title="Lista de chat-uri">
-            <Menu.Item key="chats">
-              <Link to="/chats">Chat-uri cu clienți</Link>
-            </Menu.Item>
-            <Menu.Item key="chats-internal">
-              <Link to="/internals">Chat-uri între doctori</Link>
-            </Menu.Item>
-          </SubMenu>
-          <Menu.Item key="reviews">
-            <Link to="/reviews">Testemoniale</Link>
-          </Menu.Item>
-          <Menu.Item key="promo-codes">
-            <Link to="/promo-codes">Promo coduri</Link>
-          </Menu.Item>
-          <Menu.Item key="logs">
-            <Link to="/logs">Istoricul</Link>
-          </Menu.Item>
-          <Menu.Item key="global-settings">
-            <Link to="/global-settings"> Setări globale</Link>
-          </Menu.Item>
-          <Menu.Item
-            key="logout"
-            className="logout-btn"
-            icon={<LogoutOutlined />}
-            onClick={confirmLogout}
-          >
-            Deconectare
-          </Menu.Item>
-        </Menu>
+        <Menu
+          mode="inline"
+          selectedKeys={[
+            `${location.pathname.replace(/\//g, "") || "dashboard"}${location.search}`,
+          ]}
+          defaultOpenKeys={["sub-doctors", "sub-chats"].filter((key) =>
+            window.location.pathname.includes(key.split("-")[1])
+          )}
+          items={menuItems}
+        />
       </div>
     </>
   );

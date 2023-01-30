@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { PromoCodesList } from "../modules";
 import { promocodeStatuses } from "../modules/PromoCodesList/PromoCodesList";
 import { createPromocode } from "../store/actions/promocodesAction";
+import usePermissionsRedirect from "../hooks/usePermissionsRedirect";
 
 export const promoInputReplacer = (value) => {
   if (value) {
@@ -30,6 +31,8 @@ export default function PromocodesPage() {
     },
     [dispatch, form]
   );
+
+  usePermissionsRedirect();
 
   return (
     <>

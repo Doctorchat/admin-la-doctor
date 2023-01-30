@@ -3,6 +3,7 @@ import { useCallback, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import useApiErrorsWithAntd from "../hooks/useApiErrorsWithAntd";
 import api from "../utils/appApi";
+import usePermissionsRedirect from "../hooks/usePermissionsRedirect";
 
 export default function CallViewPage() {
   const { user_id } = useParams();
@@ -38,6 +39,8 @@ export default function CallViewPage() {
     },
     [replace, setApiErrorsToAntdForm, user_id]
   );
+
+  usePermissionsRedirect();
 
   return (
     <>

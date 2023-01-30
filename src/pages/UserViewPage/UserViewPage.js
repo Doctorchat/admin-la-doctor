@@ -5,6 +5,7 @@ import { useParams, useHistory } from "react-router-dom";
 import GeneralInformationTab from "./tabs/GeneralInformationTab";
 import ChatsTab from "./tabs/ChatsTab";
 import api from "../../utils/appApi";
+import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 
 import "./styles/index.scss";
 
@@ -29,6 +30,7 @@ export default function UserViewPage() {
   }, [history, user_id]);
 
   useMount(fetchUserInfo);
+  usePermissionsRedirect();
 
   return (
     <div className="page-view">

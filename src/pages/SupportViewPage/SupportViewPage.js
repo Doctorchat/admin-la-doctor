@@ -20,6 +20,7 @@ import { updateSupportCount } from "../../store/actions/supportListAction";
 import api from "../../utils/appApi";
 import date from "../../utils/date";
 import { ChatFlag } from "./elements";
+import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 
 import "./styles/index.scss";
 
@@ -100,6 +101,7 @@ export default function SupportViewPage() {
   }, []);
 
   useMount(fetchChatInfo);
+  usePermissionsRedirect();
 
   return (
     <>

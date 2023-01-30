@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ChatsList, ReviewsList, WithdrawalList } from "../../modules/";
 import api from "../../utils/appApi";
 import getApiErrorMessages from "../../utils/getApiErrorMessages";
+import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 
 import "./styles/index.scss";
 
@@ -33,6 +34,8 @@ export default function DashboardPage() {
     },
     [form]
   );
+
+  usePermissionsRedirect();
 
   return (
     <>

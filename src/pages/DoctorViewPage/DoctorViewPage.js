@@ -6,6 +6,7 @@ import { DoctorViewContext } from "./DoctorViewContext";
 import GeneralInformationTab from "./tabs/GeneralInformationTab";
 import { useHistory } from "react-router-dom";
 import ChatsTab from "./tabs/ChatsTab";
+import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 import cs from "../../utils/classNames";
 import api from "../../utils/appApi";
 import { DoctorForm } from "../../modules";
@@ -46,6 +47,8 @@ export default function DoctorViewPage() {
     },
     [docInfo]
   );
+
+  usePermissionsRedirect();
 
   return (
     <div className={cs("page-view", docInfo?.inVacation && "closed")}>
