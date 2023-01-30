@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 
 import useTableState from "../../../hooks/usePaginatedQueryState";
 import api from "../../../utils/appApi";
+import date from "../../../utils/date";
 import UserDetails from "./UserDetails";
 
 export default function ActiveCalls() {
@@ -59,7 +60,7 @@ export default function ActiveCalls() {
             dataIndex: "created_at",
             sorter: false,
             sortOrder: sortColumn === "created_at" && sortDirection,
-            render: (rowData) => new Date(rowData).toLocaleDateString("ro-RO"),
+            render: (rowData) => date(rowData).full,
           },
           {
             title: "Acțiuni",

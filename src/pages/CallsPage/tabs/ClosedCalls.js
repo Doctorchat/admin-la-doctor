@@ -6,6 +6,7 @@ import useTableState from "../../../hooks/usePaginatedQueryState";
 import api from "../../../utils/appApi";
 import { useState } from "react";
 import { EyeOutlined } from "@ant-design/icons";
+import date from "../../../utils/date";
 
 export default function ClosedCalls() {
   const { page, sortColumn, sortDirection, onTableChange } = useTableState("closed-calls");
@@ -98,7 +99,7 @@ export default function ClosedCalls() {
             dataIndex: "created_at",
             sorter: false,
             sortOrder: sortColumn === "created_at" && sortDirection,
-            render: (rowData) => new Date(rowData).toLocaleDateString("ro-RO"),
+            render: (rowData) => date(rowData).full,
           },
         ]}
         dataSource={usersToCall?.data || []}
