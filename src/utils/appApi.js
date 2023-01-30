@@ -84,6 +84,17 @@ const api = {
   internal: {
     get: (params) => axiosInstance.get("/admin/chats/internal", { params: { ...params } }),
   },
+  calls: {
+    onhold: (params) => axiosInstance.get("/admin/calls/users", { params }).then((res) => res.data),
+    active: (params) => axiosInstance.get("/admin/calls/my", { params }).then((res) => res.data),
+    closed: (params) => axiosInstance.get("/admin/calls", { params }).then((res) => res.data),
+    assign: (id) => axiosInstance.post(`/admin/calls/assign/${id}`),
+    complete: (data) => axiosInstance.post(`/admin/calls/close`, data),
+    sources: () =>
+      axiosInstance
+        .get("/admin/calls/sources")
+        .then((res) => Object.entries(res.data).map(([value, label]) => ({ value, label }))),
+  },
 };
 
 export default api;

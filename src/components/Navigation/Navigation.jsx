@@ -29,6 +29,9 @@ const menuItemsRegister = {
   "/global-settings": "global-settings",
   "/withdrawal": "withdrawal",
   "/council-list": "council-list",
+  "/calls": "calls",
+  "/calls/": "calls",
+  "/completed-calls": "completed-calls",
 };
 
 export default function Navigation({ closeMenu }) {
@@ -98,6 +101,9 @@ export default function Navigation({ closeMenu }) {
           </Menu.Item>
           <Menu.Item key="transactions">
             <Link to="/transactions">Tranzacții</Link>
+          </Menu.Item>
+          <Menu.Item key="calls">
+            <Link to="/calls">Apeluri</Link>
           </Menu.Item>
           <Menu.Item key="support">
             <div className="d-flex align-items-center justify-content-between">
