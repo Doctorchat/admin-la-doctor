@@ -6,6 +6,7 @@ import api from "../../../utils/appApi";
 import { useCallback, useState } from "react";
 import UserDetails from "./UserDetails";
 import { getApiErrorMessage } from "../../../utils/getApiErrorMessages";
+import date from "../../../utils/date";
 
 export default function OnholdCalls() {
   const { page, sortColumn, sortDirection, onTableChange } = useTableState("onhold-calls");
@@ -77,7 +78,7 @@ export default function OnholdCalls() {
             dataIndex: "created_at",
             sorter: false,
             sortOrder: sortColumn === "created_at" && sortDirection,
-            render: (rowData) => new Date(rowData).toLocaleDateString("ro-RO"),
+            render: (rowData) => date(rowData).full,
           },
           {
             title: "Acțiuni",

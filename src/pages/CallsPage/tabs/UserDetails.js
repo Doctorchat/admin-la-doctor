@@ -5,6 +5,7 @@ import { useCallback, useState } from "react";
 import api from "../../../utils/appApi";
 import useApiErrorsWithAntd from "../../../hooks/useApiErrorsWithAntd";
 import { useQuery } from "react-query";
+import date from "../../../utils/date";
 
 export default function UserDetails({ user, onClose }) {
   const [form] = Form.useForm();
@@ -59,13 +60,7 @@ export default function UserDetails({ user, onClose }) {
           <b>{user?.email}</b>
         </Descriptions.Item>
         <Descriptions.Item label="Data înregistrării">
-          <b>
-            {new Date(user?.created_at).toLocaleDateString("ro-RO", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </b>
+          <b>{date(user?.created_at).full}</b>
         </Descriptions.Item>
       </Descriptions>
 
