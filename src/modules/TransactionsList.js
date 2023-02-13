@@ -99,7 +99,7 @@ export default function TransactionsList(props) {
         render: (rowData) => date(rowData).full,
       },
       {
-        title: "Suma",
+        title: "Achitat",
         dataIndex: "amount",
         render: (rowData) => `${rowData} Lei`,
       },
