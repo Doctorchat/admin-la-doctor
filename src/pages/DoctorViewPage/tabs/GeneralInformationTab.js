@@ -148,7 +148,8 @@ export default function GeneralInformationTab() {
           <Descriptions.Item label="Educație">
             <List
               size="small"
-              dataSource={docInfo?.card?.studies || []}
+              dataSource={docInfo?.card?.studies?.length ? docInfo?.card?.studies : []}
+              rowKey={(item) => item}
               renderItem={(item) => <List.Item>{item}</List.Item>}
             />
           </Descriptions.Item>

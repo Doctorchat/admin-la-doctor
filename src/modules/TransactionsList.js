@@ -20,9 +20,9 @@ const initialState = {
 };
 
 export const transactionsStatuses = {
-  confirmed: <Tag color="green">Confirmat</Tag>,
-  initied: <Tag>Inițializat</Tag>,
-  rejected: <Tag color="red">Respins</Tag>,
+  paid: <Tag color="green">Achitat</Tag>,
+  unpaid: <Tag color="orange">Neachitat</Tag>,
+  canceled: <Tag color="red">Anulat</Tag>,
 };
 
 const tableStateKey = "transactions-list-state";
@@ -99,8 +99,13 @@ export default function TransactionsList(props) {
         render: (rowData) => date(rowData).full,
       },
       {
-        title: "Suma",
+        title: "Achitat",
         dataIndex: "amount",
+        render: (rowData) => `${rowData} Lei`,
+      },
+      {
+        title: "Din cont",
+        dataIndex: "from_balance",
         render: (rowData) => `${rowData} Lei`,
       },
       {
