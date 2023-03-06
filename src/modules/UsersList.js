@@ -26,7 +26,7 @@ export default function UsersList() {
       sort_column: sortColumn,
       sort_direction: sortDirection === "ascend" ? "asc" : "desc",
       search: debouncedSearch,
-    })
+    }),
   );
 
   useDebounce(
@@ -39,19 +39,11 @@ export default function UsersList() {
       }
     },
     500,
-    [search]
+    [search],
   );
 
   if (isError) {
-    return (
-      <Alert
-        className="mt-5"
-        showIcon
-        type="error"
-        message="Error"
-        description="A apărut o eroare!"
-      />
-    );
+    return <Alert className="mt-5" showIcon type="error" message="Error" description="A apărut o eroare!" />;
   }
 
   return (
