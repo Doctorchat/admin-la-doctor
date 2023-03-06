@@ -27,15 +27,3 @@ jobs:
           private_key: ${{ secrets.SERVER_SSH_KEY }}
           scp_source: "build/"
           scp_target: ${{ secrets.TARGET }}
-      - name: Notify Father
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-            ${{ github.actor }} created commit:
-            Commit message: ${{ github.event.commits[0].message }}
-            
-            Repository: ${{ github.repository }}
-            
-            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
