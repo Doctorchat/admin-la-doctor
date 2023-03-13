@@ -62,7 +62,8 @@ export default function ChatsTab() {
       dataSource={chats}
       loading={loading}
       pagination={{
-        position: ["none"],
+        per_page: 20,
+        total: chats?.length || 0,
       }}
     />
   );
