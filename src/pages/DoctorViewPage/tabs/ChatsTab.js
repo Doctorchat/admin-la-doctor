@@ -48,8 +48,8 @@ export default function ChatsTab() {
         render: (_, data) => getChatType(data),
       },
       {
-        title: "Actualizat",
-        dataIndex: "updated_at",
+        title: "Creat",
+        dataIndex: "created_at",
         render: (rowData) => date(rowData).full,
       },
     ],
@@ -62,7 +62,8 @@ export default function ChatsTab() {
       dataSource={chats}
       loading={loading}
       pagination={{
-        position: ["none"],
+        per_page: 20,
+        total: chats?.length || 0,
       }}
     />
   );
