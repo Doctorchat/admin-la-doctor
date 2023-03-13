@@ -48,8 +48,8 @@ export default function ChatsTab() {
         render: (_, data) => getChatType(data),
       },
       {
-        title: "Actualizat",
-        dataIndex: "updated_at",
+        title: "Creat",
+        dataIndex: "created_at",
         render: (rowData) => date(rowData).full,
       },
     ],
