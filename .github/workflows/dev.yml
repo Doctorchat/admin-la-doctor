@@ -26,4 +26,6 @@ jobs:
           password: ${{ secrets.SSH_PASS }}
           private_key: ${{ secrets.SERVER_SSH_KEY }}
           scp_source: "build/"
-          scp_target: ${{ secrets.TARGET_DEV }}
+          scp_target: ${{ secrets.TARGET_ADMIN_DEV }}
+
+
