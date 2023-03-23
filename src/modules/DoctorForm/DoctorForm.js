@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button, Drawer, Form, Input, InputNumber, notification, Select, Switch } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import RegionInfo from "./RegionInfo";
 import api from "../../utils/appApi";
 
 import "./styles/index.scss";
@@ -9,16 +10,8 @@ import { useSelector } from "react-redux";
 import { selectCategoriesOptions } from "../../store/selectors/bootstrapSelectors";
 
 export default function DoctorForm(props) {
-  const {
-    onAfterSubmit,
-    onSubmitFailed,
-    submitBtnText,
-    defaultValues,
-    visible,
-    onClose,
-    docId,
-    onSubmitSuccess,
-  } = props;
+  const { onAfterSubmit, onSubmitFailed, submitBtnText, defaultValues, visible, onClose, docId, onSubmitSuccess } =
+    props;
   const { categories } = useSelector((store) => ({ categories: selectCategoriesOptions(store) }));
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
@@ -60,7 +53,7 @@ export default function DoctorForm(props) {
         setLoading(false);
       }
     },
-    [docId, onAfterSubmit, onSubmitFailed, onSubmitSuccess]
+    [docId, onAfterSubmit, onSubmitFailed, onSubmitSuccess],
   );
 
   const initialValues = useMemo(() => {
@@ -85,6 +78,7 @@ export default function DoctorForm(props) {
         bio_ro: defaultValues.card?.bio?.ro,
         status: defaultValues.card?.status ? Boolean(defaultValues.card.status) : false,
         hidden: defaultValues.card?.hidden,
+        region: defaultValues.region_card?.find((r) => r.checked)?.region_slug,
       };
 
       if (defaultValues.card?.studies && defaultValues.card.studies?.length) {
@@ -129,12 +123,7 @@ export default function DoctorForm(props) {
             </Form.Item>
           </div>
           <div className="d-sm-flex gap-2">
-            <Form.Item
-              className="w-100"
-              name="title"
-              label="Titlu Profesional"
-              rules={[{ required: true }]}
-            >
+            <Form.Item className="w-100" name="title" label="Titlu Profesional" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
             <Form.Item className="w-100" name="specialization_ro" label="Specializare">
@@ -150,31 +139,16 @@ export default function DoctorForm(props) {
             </Form.Item>
           </div>
           <div className="d-sm-flex gap-2">
-            <Form.Item
-              className="w-100"
-              name="public_price"
-              label="Preț mesaj"
-              rules={[{ required: true }]}
-            >
+            <Form.Item className="w-100" name="public_price" label="Preț mesaj" rules={[{ required: true }]}>
               <InputNumber addonBefore="LEI" />
             </Form.Item>
 
-            <Form.Item
-              className="w-100"
-              name="private_price"
-              label="Preț mesaj (privat)"
-              rules={[{ required: true }]}
-            >
+            <Form.Item className="w-100" name="private_price" label="Preț mesaj (privat)" rules={[{ required: true }]}>
               <InputNumber addonBefore="LEI" />
             </Form.Item>
           </div>
           <div className="d-sm-flex gap-2">
-            <Form.Item
-              className="w-100"
-              name="meet_price"
-              label="Preț meeting"
-              rules={[{ required: true }]}
-            >
+            <Form.Item className="w-100" name="meet_price" label="Preț meeting" rules={[{ required: true }]}>
               <InputNumber addonBefore="LEI" />
             </Form.Item>
             <Form.Item
@@ -243,9 +217,9 @@ export default function DoctorForm(props) {
               ]}
             />
           </Form.Item>
-          <Form.Item valuePropName="checked" name="hidden" label="Categorie ascunsă">
-            <Switch />
-          </Form.Item>
+
+          <RegionInfo regions={defaultValues.region_card} />
+
           <div className="form-bottom justify-content-end mt-0">
             <Button htmlType="submit" type="primary" className="mt-1" loading={loading}>
               {submitBtnText}
