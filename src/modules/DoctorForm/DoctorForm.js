@@ -138,28 +138,6 @@ export default function DoctorForm(props) {
               <InputNumber addonBefore="ANI" />
             </Form.Item>
           </div>
-          <div className="d-sm-flex gap-2">
-            <Form.Item className="w-100" name="public_price" label="Preț mesaj" rules={[{ required: true }]}>
-              <InputNumber addonBefore="LEI" />
-            </Form.Item>
-
-            <Form.Item className="w-100" name="private_price" label="Preț mesaj (privat)" rules={[{ required: true }]}>
-              <InputNumber addonBefore="LEI" />
-            </Form.Item>
-          </div>
-          <div className="d-sm-flex gap-2">
-            <Form.Item className="w-100" name="meet_price" label="Preț meeting" rules={[{ required: true }]}>
-              <InputNumber addonBefore="LEI" />
-            </Form.Item>
-            <Form.Item
-              className="w-100"
-              name="meet_price_private"
-              label="Preț meeting (privat)"
-              rules={[{ required: true }]}
-            >
-              <InputNumber addonBefore="LEI" />
-            </Form.Item>
-          </div>
           <Form.Item name="speciality" label="Specialitate" rules={[{ required: true }]}>
             <Select mode="multiple" options={categories} />
           </Form.Item>
