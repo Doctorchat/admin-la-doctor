@@ -1,4 +1,4 @@
-name: Doctochat Admin Dev CI/CD
+name: Doctochat Dev CI/CD
 
 on:
   push:
@@ -9,21 +9,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
-          node-version: "14.x"
+          node-version: '14.x'
       - name: Install dependencies
         run: npm install
+
       - name: Build
-        run: CI=false npm run build:staging
-      - name: SSH Server Deploy
+        run: CI=false npm run build
+      - name: SSH Server Deploy MD
         uses: kostya-ten/ssh-server-deploy@v4
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           password: ${{ secrets.SSH_PASS }}
-          private_key: ${{ secrets.SERVER_SSH_KEY }}
+          private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
           scp_source: "build/"
-          scp_target: ${{ secrets.TARGET_DEV }}
+          scp_target: ${{ secrets.TARGET_APP_DEV }}
+      - name: Send notification to Telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Deployed MD
+            ${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }}
+
+            Repository: ${{ github.repository }}
+
+            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+            

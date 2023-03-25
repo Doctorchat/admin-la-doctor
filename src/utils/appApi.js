@@ -2,9 +2,9 @@ import axiosInstance from "./apiConfig";
 
 const api = {
   user: {
-    login: (data) => axiosInstance.post("/auth/login", data),
-    logout: () => axiosInstance.post("/auth/logout"),
-    get: () => axiosInstance.get("/user"),
+    login: (data) => axiosInstance.post("/md/auth/login", data),
+    logout: () => axiosInstance.post("/md/auth/logout"),
+    get: () => axiosInstance.get("/md/user"),
     update: (userId, data) => axiosInstance.put(`/admin/users/${userId}`, data),
     store: (config) => axiosInstance.post("admin/users/", config),
   },
@@ -12,8 +12,7 @@ const api = {
     get: (params) => axiosInstance.get("/admin/chats/all", { params: { ...params } }),
     getById: (id) => axiosInstance.get(`/admin/chats/${id}`),
     getMessages: (id) => axiosInstance.get(`/admin/chats/${id}/messages`),
-    changeDoctor: ({ doctor_id, id }) =>
-      axiosInstance.put("/admin/chats/reassign", { doctor_id, id }),
+    changeDoctor: ({ doctor_id, id }) => axiosInstance.put("/admin/chats/reassign", { doctor_id, id }),
     closeChat: (id) => axiosInstance.put(`/admin/chats/close/${id}`),
     last10: (id) => axiosInstance.get(`/admin/chats/latest10/${id}`),
     sendMessage: (chatId, message, extra = {}) =>
@@ -24,8 +23,7 @@ const api = {
     update: (data) => axiosInstance.put("/admin/reviews/update", data),
   },
   doctors: {
-    get: (params) =>
-      axiosInstance.get("/admin/users/doctors", { params: { ...params } }).then((res) => res.data),
+    get: (params) => axiosInstance.get("/admin/users/doctors", { params: { ...params } }).then((res) => res.data),
     getById: (id) => axiosInstance.get(`/admin/users/doctors/${id}`),
     getReviews: (id) => axiosInstance.get(`/admin/reviews/all/${id}`),
     getRequests: () => axiosInstance.get("/admin/users/doctors/requests"),
@@ -35,8 +33,7 @@ const api = {
     search: (keyword) => axiosInstance.get(`/admin/users/doctors/search/${keyword}`),
   },
   users: {
-    get: (params) =>
-      axiosInstance.get("/admin/users/clients", { params: { ...params } }).then((res) => res.data),
+    get: (params) => axiosInstance.get("/admin/users/clients", { params: { ...params } }).then((res) => res.data),
     getById: (id) => axiosInstance.get(`/admin/users/clients/${id}`),
   },
   settings: {
@@ -45,12 +42,11 @@ const api = {
   },
   bootstrap: {
     simplifiedDoctors: () => axiosInstance.get("/admin/users/doctors/simplify"),
-    categories: () => axiosInstance.get("/specialities"),
+    categories: () => axiosInstance.get("/md/specialities"),
   },
   stats: {
     getStatistics: () => axiosInstance.get("/admin/statistics-extended?w").then((res) => res.data),
-    getTransactions: (params) =>
-      axiosInstance.get("/admin/transactions", { params: { ...params } }),
+    getTransactions: (params) => axiosInstance.get("/admin/transactions", { params: { ...params } }),
   },
   promocodes: {
     get: (params) => axiosInstance.get("/promocodes", { params: { ...params } }),
@@ -62,8 +58,7 @@ const api = {
     get: (params) => axiosInstance.get("/admin/chats/support", { params: { ...params } }),
     count: () => axiosInstance.get("/admin/chats/support/count"),
     sendGlobalMsg: (data) => axiosInstance.post("/chat/mass-mail", data),
-    updateFlag: (chatId, flag) =>
-      axiosInstance.post("/admin/chats/update-flag", { chat_id: chatId, flag }),
+    updateFlag: (chatId, flag) => axiosInstance.post("/admin/chats/update-flag", { chat_id: chatId, flag }),
   },
   logs: {
     get: (params) => axiosInstance.get("/admin/logs", { params: { ...params } }),
