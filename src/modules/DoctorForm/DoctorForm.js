@@ -34,13 +34,6 @@ export default function DoctorForm(props) {
         return cat.value;
       });
 
-      // eslint-disable-next-line no-unsafe-optional-chaining
-      const updatedRegions =
-        defaultValues.card_regions?.map((region) =>
-          region.region_slug === data.region ? { ...region, checked: true } : { ...region, checked: false },
-        ) || null;
-      data.card_regions = updatedRegions;
-
       setLoading(true);
 
       try {
@@ -85,7 +78,7 @@ export default function DoctorForm(props) {
         bio_ro: defaultValues.card?.bio?.ro,
         status: defaultValues.card?.status ? Boolean(defaultValues.card.status) : false,
         hidden: defaultValues.card?.hidden,
-        region: defaultValues.card_regions?.find((r) => r.checked)?.region_slug,
+        card_regions: defaultValues.card_regions,
       };
 
       if (defaultValues.card?.studies && defaultValues.card.studies?.length) {
@@ -225,7 +218,9 @@ export default function DoctorForm(props) {
             />
           </Form.Item>
 
-          <RegionInfo regions={defaultValues.card_regions} />
+          <Form.Item name="card_regions" label="Regiune">
+            <RegionInfo />
+          </Form.Item>
 
           <div className="form-bottom justify-content-end mt-0">
             <Button htmlType="submit" type="primary" className="mt-1" loading={loading}>
