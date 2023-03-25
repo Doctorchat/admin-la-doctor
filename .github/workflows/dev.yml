@@ -27,7 +27,7 @@ jobs:
           password: ${{ secrets.SSH_PASS }}
           private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
           scp_source: "build/"
-          scp_target: ${{ secrets.TARGET_APP_DEV }}
+          scp_target: ${{ secrets.TARGET_ADMIN_DEV }}
       - name: Send notification to Telegram
         uses: appleboy/telegram-action@master
         with:
