@@ -18,7 +18,7 @@ jobs:
         run: npm install
 
       - name: Build
-        run: CI=false npm run build
+        run: CI=false npm run build:staging
       - name: SSH Server Deploy MD
         uses: kostya-ten/ssh-server-deploy@v4
         with:
