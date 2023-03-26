@@ -49,18 +49,30 @@ const PriceInputs = ({ value, onChange }) => {
     <>
       <div className="d-sm-flex gap-2 flex-column">
         <Text title={5}>Preț mesaj</Text>
-        <InputNumber addonBefore="LEI" value={value.public_price} onChange={onPriceChange("public_price")} />
+        <InputNumber
+          addonBefore={value.currency_code}
+          value={value.public_price}
+          onChange={onPriceChange("public_price")}
+        />
 
         <Text title={5}>Preț mesaj (privat)</Text>
-        <InputNumber addonBefore="LEI" value={value.private_price} onChange={onPriceChange("private_price")} />
+        <InputNumber
+          addonBefore={value.currency_code}
+          value={value.private_price}
+          onChange={onPriceChange("private_price")}
+        />
       </div>
       <div className="d-sm-flex gap-2 flex-column">
         <Text title={5}>Preț meeting</Text>
-        <InputNumber addonBefore="LEI" value={value.public_meet_price} onChange={onPriceChange("public_meet_price")} />
+        <InputNumber
+          addonBefore={value.currency_code}
+          value={value.public_meet_price}
+          onChange={onPriceChange("public_meet_price")}
+        />
 
         <Text title={5}>Preț meeting (privat)</Text>
         <InputNumber
-          addonBefore="LEI"
+          addonBefore={value.currency_code}
           value={value.private_meet_price}
           onChange={onPriceChange("private_meet_price")}
         />
