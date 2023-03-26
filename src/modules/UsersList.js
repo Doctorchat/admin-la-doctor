@@ -85,6 +85,10 @@ export default function UsersList() {
             dataIndex: "phone",
           },
           {
+            title: "Regiune",
+            dataIndex: "region",
+          },
+          {
             title: "Cheltuieli",
             dataIndex: "revenue",
             sorter: true,
