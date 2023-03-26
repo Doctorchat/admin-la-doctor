@@ -24,11 +24,7 @@ const tableStateKey = "withdrawal-approved-list-state";
 export default function WithdrawalApprovedList() {
   const [state, setState] = useSessionStorage(tableStateKey, initialState);
 
-  const {
-    data: withdrawalList,
-    isLoading,
-    error,
-  } = useQuery([tableStateKey, state], fetcher(api.withdrawal.approved));
+  const { data: withdrawalList, isLoading, error } = useQuery([tableStateKey, state], fetcher(api.withdrawal.approved));
 
   const onTableChange = useCallback(
     (pagination) => {
@@ -38,7 +34,7 @@ export default function WithdrawalApprovedList() {
 
       setState(newState);
     },
-    [setState, state]
+    [setState, state],
   );
 
   const columns = useMemo(
@@ -56,24 +52,15 @@ export default function WithdrawalApprovedList() {
       },
       {
         title: "Suma",
-        dataIndex: "amount",
-        render: (rowData) => `${rowData} Lei`,
+        render: ({ amount, currency }) => `${amount} ${currency}`,
       },
       { title: "Status", dataIndex: "status", render: (rowData) => transactionsStatuses[rowData] },
     ],
-    []
+    [],
   );
 
   if (error) {
-    return (
-      <Alert
-        className="mt-5"
-        showIcon
-        type="error"
-        message="Error"
-        description="A apărut o eroare!"
-      />
-    );
+    return <Alert className="mt-5" showIcon type="error" message="Error" description="A apărut o eroare!" />;
   }
 
   return (

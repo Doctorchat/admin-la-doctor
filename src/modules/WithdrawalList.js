@@ -82,7 +82,7 @@ export default function WithdrawalList(props) {
 
       setState(newState);
     },
-    [setState, state]
+    [setState, state],
   );
 
   const onTableLinksClick = useCallback(
@@ -90,7 +90,7 @@ export default function WithdrawalList(props) {
       await dispatch(setCleanOnUnmountFalse());
       history.push(path);
     },
-    [dispatch, history]
+    [dispatch, history],
   );
 
   const confirmHandler = useCallback(
@@ -109,7 +109,7 @@ export default function WithdrawalList(props) {
         notification.error({ message: "Eroare", description: "A apărut o eroare" });
       }
     },
-    [dispatch]
+    [dispatch],
   );
 
   const columns = useMemo(
@@ -131,8 +131,7 @@ export default function WithdrawalList(props) {
       },
       {
         title: "Suma",
-        dataIndex: "amount",
-        render: (rowData) => `${rowData} Lei`,
+        render: ({ amount, currency }) => `${amount} ${currency}`,
       },
       { title: "Status", dataIndex: "status", render: (rowData) => transactionsStatuses[rowData] },
       {
@@ -154,19 +153,11 @@ export default function WithdrawalList(props) {
         ),
       },
     ],
-    [confirmHandler, onTableLinksClick]
+    [confirmHandler, onTableLinksClick],
   );
 
   if (error) {
-    return (
-      <Alert
-        className="mt-5"
-        showIcon
-        type="error"
-        message="Error"
-        description="A apărut o eroare!"
-      />
-    );
+    return <Alert className="mt-5" showIcon type="error" message="Error" description="A apărut o eroare!" />;
   }
 
   return (
