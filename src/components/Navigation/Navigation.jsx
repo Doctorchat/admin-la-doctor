@@ -10,15 +10,13 @@ import { userRoles } from "../../context/constants";
 import "./styles/index.scss";
 
 export default function Navigation({ closeMenu }) {
-  const { requestsCount, supportCount, withdrawalCount, councilCount, user } = useSelector(
-    (store) => ({
-      requestsCount: store.requestsCount,
-      supportCount: store.supportList.count,
-      councilCount: store.supportList.councilCount,
-      withdrawalCount: store.withdrawal.count,
-      user: store.user.payload,
-    })
-  );
+  const { requestsCount, supportCount, withdrawalCount, councilCount, user } = useSelector((store) => ({
+    requestsCount: store.requestsCount,
+    supportCount: store.supportList.count,
+    councilCount: store.supportList.councilCount,
+    withdrawalCount: store.withdrawal.count,
+    user: store.user.payload,
+  }));
 
   const dispatch = useDispatch();
 
@@ -85,28 +83,13 @@ export default function Navigation({ closeMenu }) {
         ),
       },
       {
-        key: "sub-doctors",
+        key: "doctors",
         label: (
           <Space align="center" className="justify-content-between">
-            <span>Lista de Doctori</span>
+            <Link to="/doctors">Doctori</Link>
             <Badge className="ms-2" key="doctors-list-requests" count={requestsCount.count} />
           </Space>
         ),
-        children: [
-          {
-            key: "doctors",
-            label: (
-              <Space align="center" className="justify-content-between">
-                <Link to="/doctors">Doctori</Link>
-                <Badge className="ms-2" key="doctors-list-requests" count={requestsCount.count} />
-              </Space>
-            ),
-          },
-          {
-            key: "doctors?hidden",
-            label: <Link to="/doctors?hidden">Doctori Ascunși</Link>,
-          },
-        ],
       },
       {
         key: "users",
@@ -158,20 +141,13 @@ export default function Navigation({ closeMenu }) {
       <div className="dc-navigation">
         <Typography.Title level={3} className="logo">
           <Link to="/">Doctorchat</Link>
-          <Button
-            shape="circle"
-            className="close-navigation"
-            icon={<CloseOutlined />}
-            onClick={closeMenu}
-          />
+          <Button shape="circle" className="close-navigation" icon={<CloseOutlined />} onClick={closeMenu} />
         </Typography.Title>
         <Menu
           mode="inline"
-          selectedKeys={[
-            `${location.pathname.replace(/\//g, "") || "dashboard"}${location.search}`,
-          ]}
+          selectedKeys={[`${location.pathname.replace(/\//g, "") || "dashboard"}${location.search}`]}
           defaultOpenKeys={["sub-doctors", "sub-chats"].filter((key) =>
-            window.location.pathname.includes(key.split("-")[1])
+            window.location.pathname.includes(key.split("-")[1]),
           )}
           items={menuItems}
         />
