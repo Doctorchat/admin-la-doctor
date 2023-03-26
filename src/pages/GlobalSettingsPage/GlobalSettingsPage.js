@@ -1,7 +1,6 @@
 import { notification, PageHeader, Spin, Tabs } from "antd";
 import { useCallback, useState } from "react";
 import { useMount } from "react-use";
-import GeneralDataTab from "./tabs/GeneralDataTab";
 import NotificationsTab from "./tabs/NotificationsTab";
 import { GlobalSettingsContext } from "./GlobalSettingsContext";
 import api from "../../utils/appApi";
@@ -47,7 +46,7 @@ export default function GlobalSettingsPage() {
           setLoading(false);
         }
       },
-    [settings]
+    [settings],
   );
 
   useMount(fetchSettings);
@@ -64,14 +63,9 @@ export default function GlobalSettingsPage() {
       <Spin spinning={loading}>
         <div className="global-settings-page">
           <PageHeader className="site-page-header" title="Setări globale" />
-          <Tabs>
-            <TabPane tab="Setări generale" key="general-data" className="px-1">
-              <GeneralDataTab />
-            </TabPane>
-            <TabPane tab="Mesaje de notificare" key="notification-messages">
-              <NotificationsTab />
-            </TabPane>
-          </Tabs>
+          <TabPane tab="Mesaje de notificare" key="notification-messages">
+            <NotificationsTab />
+          </TabPane>
         </div>
       </Spin>
     </GlobalSettingsContext.Provider>
