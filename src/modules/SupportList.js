@@ -76,7 +76,7 @@ export default function SupportList() {
 
       setState(newState);
     },
-    [setState, state]
+    [setState, state],
   );
 
   const onTableLinksClick = useCallback(
@@ -86,7 +86,7 @@ export default function SupportList() {
       await dispatch(setCleanOnUnmountFalse());
       history.push(path);
     },
-    [dispatch, history]
+    [dispatch, history],
   );
 
   const columns = useMemo(
@@ -111,6 +111,10 @@ export default function SupportList() {
         ),
       },
       {
+        title: "Regiune",
+        dataIndex: "region",
+      },
+      {
         title: "Flag",
         dataIndex: "flag",
         render: (rowData) => <Tag color={CHAT_FLAGS_COLORS[rowData]}>{CHAT_FLAGS[rowData]}</Tag>,
@@ -128,7 +132,7 @@ export default function SupportList() {
         ),
       },
     ],
-    [onTableLinksClick]
+    [onTableLinksClick],
   );
 
   if (error) {

@@ -118,7 +118,7 @@ export default function ChatsList(props) {
 
       setState(newState);
     },
-    [setState, state]
+    [setState, state],
   );
 
   const onTableLinksClick = useCallback(
@@ -128,7 +128,7 @@ export default function ChatsList(props) {
       await dispatch(setCleanOnUnmountFalse());
       history.push(path);
     },
-    [dispatch, history]
+    [dispatch, history],
   );
 
   const columns = useMemo(
@@ -151,6 +151,10 @@ export default function ChatsList(props) {
             {name}
           </a>
         ),
+      },
+      {
+        title: "Regiune",
+        dataIndex: "region",
       },
       {
         title: "Status",
@@ -184,18 +188,12 @@ export default function ChatsList(props) {
         ),
       },
     ],
-    [onTableLinksClick]
+    [onTableLinksClick],
   );
 
   if (error) {
     return (
-      <Alert
-        className="mt-5"
-        showIcon
-        type="error"
-        message={`Error ${error.status}`}
-        description={error.message}
-      />
+      <Alert className="mt-5" showIcon type="error" message={`Error ${error.status}`} description={error.message} />
     );
   }
 
