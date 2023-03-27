@@ -1,4 +1,4 @@
-import { notification, PageHeader, Spin, Tabs } from "antd";
+import { notification, PageHeader, Spin } from "antd";
 import { useCallback, useState } from "react";
 import { useMount } from "react-use";
 import NotificationsTab from "./tabs/NotificationsTab";
@@ -8,8 +8,6 @@ import getApiErrorMessages from "../../utils/getApiErrorMessages";
 import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 
 import "./styles/index.scss";
-
-const { TabPane } = Tabs;
 
 export default function GlobalSettingsPage() {
   const [loading, setLoading] = useState(false);
@@ -63,9 +61,7 @@ export default function GlobalSettingsPage() {
       <Spin spinning={loading}>
         <div className="global-settings-page">
           <PageHeader className="site-page-header" title="Setări globale" />
-          <TabPane tab="Mesaje de notificare" key="notification-messages">
-            <NotificationsTab />
-          </TabPane>
+          <NotificationsTab />
         </div>
       </Spin>
     </GlobalSettingsContext.Provider>
