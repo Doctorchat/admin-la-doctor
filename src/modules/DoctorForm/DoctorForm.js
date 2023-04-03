@@ -73,6 +73,7 @@ export default function DoctorForm(props) {
           value: spec.id,
           label: spec.name_ro,
         })),
+        rating: defaultValues.card?.rating,
         workplace: defaultValues.card?.workplace,
         studies: defaultValues.card?.studies.map((std) => ({ value: std })),
         bio_ro: defaultValues.card?.bio?.ro,
@@ -140,6 +141,9 @@ export default function DoctorForm(props) {
           </div>
           <Form.Item name="speciality" label="Specialitate" rules={[{ required: true }]}>
             <Select mode="multiple" options={categories} />
+          </Form.Item>
+          <Form.Item name="rating" label="Rating" rules={[{ required: true, type: "number", min: 1, max: 100 }]}>
+            <InputNumber />
           </Form.Item>
           <Form.Item name="workplace" label="Locul de muncă" rules={[{ required: true }]}>
             <Input />
