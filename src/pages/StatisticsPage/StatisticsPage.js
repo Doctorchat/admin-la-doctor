@@ -1,11 +1,11 @@
-import { Card, Col, Divider, PageHeader, Row, Statistic, Typography } from "antd";
+import { Card, Col, Divider, PageHeader, Row, Statistic, Tabs, Typography } from "antd";
 import { useQuery } from "react-query";
 import api from "../../utils/appApi";
 import { MembersChart, RequestsChart, YieldChart } from "./charts";
 import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 
 const StatisticsPage = () => {
-  const { data: statistics } = useQuery(["statistics"], () => api.stats.getStatistics(), {
+  const { data: statistics, isLoading } = useQuery(["statistics"], () => api.stats.getStatistics(), {
     refetchOnWindowFocus: false,
   });
 
@@ -38,32 +38,46 @@ const StatisticsPage = () => {
         </Col>
         <Col span={24} md={8}>
           <Card className="rounded">
-            <Statistic
-              title="Număr de utilizatori"
-              value={statistics?.general?.usersCount}
-              precision={0}
-            />
+            <Statistic title="Număr de utilizatori" value={statistics?.general?.usersCount} precision={0} />
           </Card>
         </Col>
       </Row>
 
-      <YieldChart data={statistics?.year ?? []} />
-
-      <Divider orientation="left" className="mt-5">
-        <Typography.Title level={5} className="mb-0">
-          Cereri pe lună
-        </Typography.Title>
-      </Divider>
-      <RequestsChart data={statistics?.year ?? []} />
-
-      <Divider orientation="left" className="mt-5">
-        <Typography.Title level={5} className="mb-0">
-          Utilizatori și Doctori
-        </Typography.Title>
-      </Divider>
-      <MembersChart data={statistics?.year ?? []} />
+      {!isLoading && (
+        <Tabs
+          type="card"
+          size="large"
+          items={Object.entries(statistics.regions).map(([key, value], i) => {
+            return {
+              label: key,
+              key,
+              children: <StaticsCharts data={value.year} />,
+            };
+          })}
+        />
+      )}
     </div>
   );
 };
 
 export default StatisticsPage;
+
+const StaticsCharts = ({ data }) => {
+  return (
+    <>
+      <YieldChart data={data} />
+      <Divider orientation="left" className="mt-5">
+        <Typography.Title level={5} className="mb-0">
+          Cereri pe lună
+        </Typography.Title>
+      </Divider>
+      <RequestsChart data={data} />
+      <Divider orientation="left" className="mt-5">
+        <Typography.Title level={5} className="mb-0">
+          Utilizatori și Doctori
+        </Typography.Title>
+      </Divider>
+      <MembersChart data={data} />
+    </>
+  );
+};
