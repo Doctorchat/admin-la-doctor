@@ -100,13 +100,11 @@ export default function TransactionsList(props) {
       },
       {
         title: "Achitat",
-        dataIndex: "amount",
-        render: (rowData) => `${rowData} Lei`,
+        render: ({ amount, currency }) => `${amount} ${currency}`,
       },
       {
         title: "Din cont",
-        dataIndex: "from_balance",
-        render: (rowData) => `${rowData} Lei`,
+        render: ({ from_balance, currency }) => `${from_balance} ${currency}`,
       },
       {
         title: "Card",
@@ -133,15 +131,7 @@ export default function TransactionsList(props) {
   );
 
   if (error) {
-    return (
-      <Alert
-        className="mt-5"
-        showIcon
-        type="error"
-        message="Error"
-        description="A apărut o eroare!"
-      />
-    );
+    return <Alert className="mt-5" showIcon type="error" message="Error" description="A apărut o eroare!" />;
   }
 
   return (
