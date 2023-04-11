@@ -146,6 +146,7 @@ const routes = [
     private: true,
   },
   {
+    /*todo: remove, it is not using anymore*/
     path: "/internals",
     component: InternalChatsListPage,
     exact: true,
