@@ -96,18 +96,8 @@ export default function Navigation({ closeMenu }) {
         label: <Link to="/users">Utilizatori</Link>,
       },
       {
-        key: "sub-chats",
-        label: "Lista de chat-uri",
-        children: [
-          {
-            key: "chats",
-            label: <Link to="/chats">Chat-uri cu clienți</Link>,
-          },
-          {
-            key: "chats-internal",
-            label: <Link to="/internals">Chat-uri între doctori</Link>,
-          },
-        ],
+        key: "chats",
+        label: <Link to="/chats">Chat-uri</Link>,
       },
       {
         key: "reviews",
@@ -147,7 +137,7 @@ export default function Navigation({ closeMenu }) {
           mode="inline"
           selectedKeys={[`${location.pathname.replace(/\//g, "") || "dashboard"}${location.search}`]}
           defaultOpenKeys={["sub-doctors", "sub-chats"].filter((key) =>
-            window.location.pathname.includes(key.split("-")[1]),
+            window.location.pathname.includes(key.split("-")[1])
           )}
           items={menuItems}
         />
