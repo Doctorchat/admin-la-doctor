@@ -13,14 +13,12 @@ export default function ClosedCalls() {
 
   const [details, setDetails] = useState(null);
 
-  const { data: usersToCall, isLoading } = useQuery(
-    ["closed-calls", page, sortColumn, sortDirection],
-    () =>
-      api.calls.closed({
-        page,
-        sort_column: sortColumn,
-        sort_direction: sortDirection === "ascend" ? "asc" : "desc",
-      })
+  const { data: usersToCall, isLoading } = useQuery(["closed-calls", page, sortColumn, sortDirection], () =>
+    api.calls.closed({
+      page,
+      sort_column: sortColumn,
+      sort_direction: sortDirection === "ascend" ? "asc" : "desc",
+    })
   );
   const { data: sources } = useQuery(["calls-sources"], () => api.calls.sources(), {
     refetchOnWindowFocus: false,
@@ -57,7 +55,7 @@ export default function ClosedCalls() {
           {
             title: "Utilizator",
             dataIndex: "user",
-            render: ({ name }) => <Link to={`/users/${name}`}>{name}</Link>,
+            render: ({ name, id }) => <Link to={`/user/${id}`}>{name}</Link>,
           },
           {
             title: "Problema & Sugestie",
@@ -77,8 +75,7 @@ export default function ClosedCalls() {
           {
             title: "Sursă",
             dataIndex: "source",
-            render: (rowData) =>
-              sources?.find((source) => Number(source.value) === Number(rowData))?.label,
+            render: (rowData) => sources?.find((source) => Number(source.value) === Number(rowData))?.label,
           },
           {
             title: "A cumpărat?",
