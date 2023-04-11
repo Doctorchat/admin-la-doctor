@@ -108,12 +108,16 @@ export default function GeneralInformationTab() {
           <Descriptions.Item label="Sold curent">
             {docInfo?.card?.balance ? <b>{docInfo?.card?.balance} Lei</b> : "---"}
           </Descriptions.Item>
-          <Descriptions.Item label="Preț conferintă">
-            {docInfo?.card?.meet_price} Lei
-          </Descriptions.Item>
-          <Descriptions.Item label="Preț mesaj">
-            {docInfo?.card?.public_price} Lei
-          </Descriptions.Item>
+          {docInfo?.card_regions?.map(({ public_meet_price, public_price, region_name, currency_code }) => (
+            <>
+              <Descriptions.Item style={{ whiteSpace: "nowrap" }} label={"Preț conferintă (" + region_name + ")"}>
+                {public_meet_price} {currency_code}
+              </Descriptions.Item>
+              <Descriptions.Item label={"Preț mesaj (" + region_name + ")"}>
+                {public_price} {currency_code}
+              </Descriptions.Item>
+            </>
+          ))}
           <Descriptions.Item label="Disponibilitate">
             <List
               size="small"
@@ -141,9 +145,7 @@ export default function GeneralInformationTab() {
         >
           <Descriptions.Item label="Oameni ajutați">{docInfo?.card?.helped}</Descriptions.Item>
           <Descriptions.Item label="Utilizatori mulțumiți">{`Likes: ${docInfo?.card?.likes?.like} | Dislikes: ${docInfo?.card?.likes?.dislike}`}</Descriptions.Item>
-          <Descriptions.Item label="Timp de răspuns">
-            {docInfo?.card?.response_time}
-          </Descriptions.Item>
+          <Descriptions.Item label="Timp de răspuns">{docInfo?.card?.response_time}</Descriptions.Item>
           <Descriptions.Item label="Locul de muncă">{docInfo?.card?.workplace}</Descriptions.Item>
           <Descriptions.Item label="Educație">
             <List
@@ -165,9 +167,7 @@ export default function GeneralInformationTab() {
         >
           <Descriptions.Item label="Ani experientă">{docInfo?.card?.experience}</Descriptions.Item>
           <Descriptions.Item label="Titlul Profesional">{docInfo?.card?.title}</Descriptions.Item>
-          <Descriptions.Item label="Specializare">
-            {docInfo?.card?.specialization.ro}
-          </Descriptions.Item>
+          <Descriptions.Item label="Specializare">{docInfo?.card?.specialization.ro}</Descriptions.Item>
           <Descriptions.Item label="Specialitate">
             <List
               size="small"
