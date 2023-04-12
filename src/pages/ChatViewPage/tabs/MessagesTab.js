@@ -19,6 +19,14 @@ const checkFileExt = (src) => {
   return imageExts.includes(file_ext);
 };
 
+const getFileNameFromSrc = (src = "") => {
+  if (process.env.REACT_APP_API_URL) {
+    return src.replace(`${process.env.REACT_APP_API_URL.replace("/api/", "/uploads")}/chats/`, "");
+  }
+
+  return src.split("/").pop();
+};
+
 export default function MessageTab() {
   const { chat_id } = useParams();
   const [messages, setMessages] = useState([]);
@@ -39,15 +47,7 @@ export default function MessageTab() {
   useMount(fetchChatMessages);
 
   if (error) {
-    return (
-      <Alert
-        className="mt-5"
-        showIcon
-        type="error"
-        message="Error"
-        description="A apărut o eroare!"
-      />
-    );
+    return <Alert className="mt-5" showIcon type="error" message="Error" description="A apărut o eroare!" />;
   }
 
   return (
@@ -58,24 +58,13 @@ export default function MessageTab() {
           className="chat-view-comment"
           author={
             <Link
-              to={
-                userRoles.get("doctor") === msg.user?.role
-                  ? `/doctor/${msg.user.id}`
-                  : `/user/${msg.user.id}`
-              }
+              to={userRoles.get("doctor") === msg.user?.role ? `/doctor/${msg.user.id}` : `/user/${msg.user.id}`}
               className="chat-view-comment-user"
             >
               {msg.user.name}
             </Link>
           }
-          avatar={
-            <Avatar
-              className="chat-view-comment-avatar"
-              src={msg.avatar}
-              size={48}
-              icon={<UserOutlined />}
-            />
-          }
+          avatar={<Avatar className="chat-view-comment-avatar" src={msg.avatar} size={48} icon={<UserOutlined />} />}
           content={<p>{msg.content}</p>}
           datetime={
             <Tooltip title={date(msg.updated_at).full}>
@@ -101,11 +90,8 @@ export default function MessageTab() {
                       textOverflow: "ellipsis",
                     }}
                   >
-                    <CloudDownloadOutlined
-                      className="me-2"
-                      style={{ height: 17, transform: "translateY(-2px)" }}
-                    />
-                    {file.src}
+                    <CloudDownloadOutlined className="me-2" style={{ height: 17, transform: "translateY(-2px)" }} />
+                    {getFileNameFromSrc(file.src)}
                   </a>
                 )
               )}
