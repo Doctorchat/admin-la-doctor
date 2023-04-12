@@ -36,7 +36,12 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 5px;
+  flex-wrap: wrap;
+  margin: -8px;
+
+  a {
+    margin: 8px;
+  }
 }
 
 .chat-view-comment-date {
