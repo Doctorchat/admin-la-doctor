@@ -1,9 +1,10 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, forwardRef } from "react";
 import { useDispatch } from "react-redux";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Form, Input, Button, Alert } from "antd";
 import { login } from "../../store/actions/userAction";
 import useApiErrorsWithAntd from "../../hooks/useApiErrorsWithAntd";
+import PhoneInput from "react-phone-number-input";
 
 import "./loginPage.sass";
 
@@ -39,8 +40,8 @@ const LoginPage = () => {
             <b>Doctorchat</b>
           </h2>
         </div>
-        <Form.Item name="email" rules={[{ required: true }, { type: "email" }]}>
-          <Input size="large" prefix={<UserOutlined />} placeholder="Email" />
+        <Form.Item name="phone" rules={[{ required: true }, { type: "string" }]}>
+          <PhoneInputComponent />
         </Form.Item>
         <Form.Item name="password" rules={[{ required: true }]}>
           <Input.Password size="large" prefix={<LockOutlined />} placeholder="Parola" />
@@ -53,12 +54,27 @@ const LoginPage = () => {
             Autentificare
           </Button>
         </Form.Item>
-        {!!globalErrors.length && (
-          <Alert message="Error" description={globalErrors} type="error" showIcon />
-        )}
+        {!!globalErrors.length && <Alert message="Error" description={globalErrors} type="error" showIcon />}
       </Form>
     </div>
   );
 };
 
 export default LoginPage;
+
+// eslint-disable-next-line react/display-name
+const PhoneInputComponent = ({ name, ...props }) => {
+  return (
+    <label className="phone-input-customize-wrapper" htmlFor="phone">
+      <UserOutlined />
+      <PhoneInput
+        id={name}
+        name={name}
+        international
+        defaultCountry="MD"
+        className={"phone-input-customize"}
+        {...props}
+      />
+    </label>
+  );
+};
