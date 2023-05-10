@@ -1,6 +1,6 @@
 import { Button, PageHeader, Spin, Tabs } from "antd";
+import { useQuery } from "react-query";
 import { useCallback, useState } from "react";
-import { useMount } from "react-use";
 import { useParams } from "react-router-dom";
 import { DoctorViewContext } from "./DoctorViewContext";
 import GeneralInformationTab from "./tabs/GeneralInformationTab";
@@ -18,32 +18,25 @@ const { TabPane } = Tabs;
 
 export default function DoctorViewPage() {
   const { doc_id } = useParams();
-  const [docInfo, setDocInfo] = useState({});
-  const [loading, setLoading] = useState(true);
   const [editVisible, setEditVisible] = useState(false);
   const history = useHistory();
 
-  const fetchDoctorInfo = useCallback(async () => {
-    try {
-      const response = await api.doctors.getById(doc_id);
-      setDocInfo(response.data);
-    } catch (error) {
+  const { data: docInfoData, isLoading: loading } = useQuery({
+    queryKey: ["doctor-by-id"],
+    queryFn: () => api.doctors.getById(doc_id),
+    onError: () => {
       if (history.action !== "POP") history.goBack();
       else history.push("/chats");
-    } finally {
-      setLoading(false);
-    }
-  }, [doc_id, history]);
+    },
+  });
 
-  useMount(fetchDoctorInfo);
+  const docInfo = docInfoData?.data || {};
 
   const updateDocInfo = useCallback(
     (key, value) => {
       const newDocInfo = { ...docInfo };
 
       newDocInfo[key] = value;
-
-      setDocInfo(newDocInfo);
     },
     [docInfo]
   );
@@ -58,12 +51,7 @@ export default function DoctorViewPage() {
           onBack={history.goBack}
           title="Doctor"
           extra={[
-            <Button
-              key="doc-view-edit"
-              type="primary"
-              size="small"
-              onClick={() => setEditVisible(true)}
-            >
+            <Button key="doc-view-edit" type="primary" size="small" onClick={() => setEditVisible(true)}>
               Editează
             </Button>,
           ]}
