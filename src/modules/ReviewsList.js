@@ -32,6 +32,8 @@ const tableStateKey = "reviews-list-state";
 export default function ReviewsList(props) {
   const { simplified, title, extra } = props;
 
+  const limit = simplified ? 10 : 20;
+
   const [state, setState] = useSessionStorage(tableStateKey, initialState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -46,25 +48,28 @@ export default function ReviewsList(props) {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  function fetchReviewsList(page, sort_column, sort_direction) {
+    try {
+      dispatch(getReviewsList({ page, sort_column, sort_direction, limit }));
+    } catch (error) {
+      if (error.response.status === 500) {
+        setError({
+          status: error.response.status,
+          message: error.response.data.message,
+        });
+        sessionStorage.removeItem(tableStateKey);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     const { page, sort_column, sort_direction } = state;
-    const limit = simplified ? 10 : 20;
 
     setLoading(true);
 
-    dispatch(getReviewsList({ page, sort_column, sort_direction, limit }))
-      .catch(() => {
-        if (error.response.status === 500) {
-          setError({
-            status: error.response.status,
-            message: error.response.data.message,
-          });
-          sessionStorage.removeItem(tableStateKey);
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    fetchReviewsList(page, sort_column, sort_direction);
   }, [dispatch, error, simplified, state]);
 
   useMount(() => {
@@ -133,6 +138,9 @@ export default function ReviewsList(props) {
       try {
         const res = await api.reviews.update(data);
         dispatch(updateReivew(res.data));
+
+        fetchReviewsList(state.page, state.sort_column, state.sort_direction);
+
         onCloseReview();
       } catch (error) {
         notification.error({ message: "Eroare", description: "A apărut o eroare" });
@@ -199,13 +207,7 @@ export default function ReviewsList(props) {
 
   return (
     <>
-      <Drawer
-        open={open}
-        placement="right"
-        onClose={onCloseReview}
-        title="Editare recenzie"
-        destroyOnClose
-      >
+      <Drawer open={open} placement="right" onClose={onCloseReview} title="Editare recenzie" destroyOnClose>
         <Form className="testimonials-form" layout="vertical" form={form} onFinish={onReviewEdit}>
           <Form.Item label="Conținut" name="content" className="d-flex">
             <Input.TextArea autoSize />

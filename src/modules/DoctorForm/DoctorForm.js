@@ -8,6 +8,7 @@ import api from "../../utils/appApi";
 import "./styles/index.scss";
 import { useSelector } from "react-redux";
 import { selectCategoriesOptions } from "../../store/selectors/bootstrapSelectors";
+import { useQueryClient } from "react-query";
 
 export default function DoctorForm(props) {
   const { onAfterSubmit, onSubmitFailed, submitBtnText, defaultValues, visible, onClose, docId, onSubmitSuccess } =
@@ -15,6 +16,8 @@ export default function DoctorForm(props) {
   const { categories } = useSelector((store) => ({ categories: selectCategoriesOptions(store) }));
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
+
+  const queryClient = useQueryClient();
 
   const onCloseHandler = useCallback(() => {
     if (onClose) onClose();
@@ -38,7 +41,7 @@ export default function DoctorForm(props) {
 
       try {
         const response = await api.doctors.update(data);
-
+        await queryClient.invalidateQueries({ queryKey: ["doctor-by-id"] });
         notification.success({
           message: "Succes",
           description: "Datele au fost actualizate cu succes!",
@@ -53,7 +56,7 @@ export default function DoctorForm(props) {
         setLoading(false);
       }
     },
-    [docId, onAfterSubmit, onSubmitFailed, onSubmitSuccess, defaultValues],
+    [docId, onAfterSubmit, onSubmitFailed, onSubmitSuccess, defaultValues]
   );
 
   const initialValues = useMemo(() => {
