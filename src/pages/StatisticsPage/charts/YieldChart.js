@@ -1,13 +1,5 @@
 import PropTypes from "prop-types";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { useDeepCompareEffect } from "react-use";
 import { useState } from "react";
@@ -48,7 +40,36 @@ const YieldChart = ({ data }) => {
           legend: {
             position: "bottom",
           },
+          tooltip: {
+            callbacks: {
+              footer: function (items) {
+                const profits = items.find((item) => item.dataset.label === "Profit");
+                const sales = items.find((item) => item.dataset.label === "Vânzări");
+
+                if (profits && sales) {
+                  const profitDataset = profits.dataset.data;
+                  const salesDataset = sales.dataset.data;
+
+                  const profitActiveValue = profitDataset[profits.dataIndex];
+                  const salesActiveValue = salesDataset[sales.dataIndex];
+                  const profitPrevValue = profitDataset[profits.dataIndex - 1];
+
+                  const percentage = (profitActiveValue / salesActiveValue) * 100;
+
+                  let result = ["Profitabilitate:", `${percentage.toFixed(2)}%`];
+
+                  if (profitPrevValue) {
+                    const difference = ((profitActiveValue - profitPrevValue) / profitPrevValue) * 100;
+                    result.push(`(${difference.toFixed(2)}%)`);
+                  }
+
+                  return result.join(" ");
+                }
+              },
+            },
+          },
         },
+
         responsive: true,
         interaction: {
           mode: "index",

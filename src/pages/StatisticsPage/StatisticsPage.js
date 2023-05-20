@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Card, Col, Divider, PageHeader, Row, Statistic, Tabs, Typography } from "antd";
 import { useQuery } from "react-query";
 import api from "../../utils/appApi";
@@ -47,7 +48,7 @@ const StatisticsPage = () => {
         <Tabs
           type="card"
           size="large"
-          items={Object.entries(statistics.regions).map(([key, value], i) => {
+          items={Object.entries(statistics.regions).map(([key, value]) => {
             return {
               label: key,
               key,
@@ -80,4 +81,8 @@ const StaticsCharts = ({ data }) => {
       <MembersChart data={data} />
     </>
   );
+};
+
+StaticsCharts.propTypes = {
+  data: PropTypes.object,
 };
