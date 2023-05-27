@@ -74,6 +74,10 @@ export default function Navigation({ closeMenu }) {
         roles: [userRoles.get("manager")],
       },
       {
+        key: "bought",
+        label: <Link to="/bought">Serviciu achizitional</Link>,
+      },
+      {
         key: "support",
         label: (
           <Space align="center" className="justify-content-between">

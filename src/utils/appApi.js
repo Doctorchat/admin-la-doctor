@@ -17,6 +17,7 @@ const api = {
     last10: (id) => axiosInstance.get(`/admin/chats/latest10/${id}`),
     sendMessage: (chatId, message, extra = {}) =>
       axiosInstance.post("/chat/send", { chat_id: chatId, content: message, ...extra }),
+    bought: (params) => axiosInstance.get("/admin/chats/bought", { params: { ...params } }),
   },
   reviews: {
     get: (params) => axiosInstance.get("/admin/reviews/all", { params: { ...params } }),
