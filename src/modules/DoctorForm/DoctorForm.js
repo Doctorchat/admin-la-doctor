@@ -104,7 +104,7 @@ export default function DoctorForm(props) {
     <Drawer
       size="default"
       title="Actualizare doctor"
-      visible={visible}
+      open={visible}
       onClose={onCloseHandler}
       contentWrapperStyle={{
         width: 560,
