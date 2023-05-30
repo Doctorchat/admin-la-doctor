@@ -1,5 +1,5 @@
 import { CloudDownloadOutlined, FileOutlined, UserOutlined } from "@ant-design/icons";
-import { Image, Tooltip, Comment, Avatar, Spin, Alert } from "antd";
+import { Image, Tooltip, Comment, Avatar, Spin, Alert, Typography } from "antd";
 import moment from "moment";
 import { useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -39,15 +39,7 @@ export default function MessageTab() {
   useMount(fetchChatMessages);
 
   if (error) {
-    return (
-      <Alert
-        className="mt-5"
-        showIcon
-        type="error"
-        message="Error"
-        description="A apărut o eroare!"
-      />
-    );
+    return <Alert className="mt-5" showIcon type="error" message="Error" description="A apărut o eroare!" />;
   }
 
   return (
@@ -58,29 +50,25 @@ export default function MessageTab() {
           className="chat-view-comment"
           author={
             <Link
-              to={
-                userRoles.get("doctor") === msg.user?.role
-                  ? `/doctor/${msg.user.id}`
-                  : `/user/${msg.user.id}`
-              }
+              to={userRoles.get("doctor") === msg.user?.role ? `/doctor/${msg.user.id}` : `/user/${msg.user.id}`}
               className="chat-view-comment-user"
             >
               {msg.user.name}
             </Link>
           }
-          avatar={
-            <Avatar
-              className="chat-view-comment-avatar"
-              src={msg.avatar}
-              size={48}
-              icon={<UserOutlined />}
-            />
-          }
+          avatar={<Avatar className="chat-view-comment-avatar" src={msg.avatar} size={48} icon={<UserOutlined />} />}
           content={<p>{msg.content}</p>}
           datetime={
             <Tooltip title={date(msg.updated_at).full}>
               <span className="chat-view-comment-date">{moment(msg.updated_at).fromNow()}</span>
             </Tooltip>
+          }
+          actions={
+            ["info", "request-media"].includes(msg.type) && [
+              <Typography.Text key="comment-basic-system" type="secondary">
+                Acest mesaj a fost generat automat de către sistem.
+              </Typography.Text>,
+            ]
           }
         >
           <div className="chat-view-uploads">
@@ -101,10 +89,7 @@ export default function MessageTab() {
                       textOverflow: "ellipsis",
                     }}
                   >
-                    <CloudDownloadOutlined
-                      className="me-2"
-                      style={{ height: 17, transform: "translateY(-2px)" }}
-                    />
+                    <CloudDownloadOutlined className="me-2" style={{ height: 17, transform: "translateY(-2px)" }} />
                     {file.src}
                   </a>
                 )
