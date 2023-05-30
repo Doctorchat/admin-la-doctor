@@ -20,24 +20,20 @@ export default function DoctorsList() {
 
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [displayHiddenDoctors] = useState(
-    new URLSearchParams(window.location.search).has("hidden")
-  );
+  const [displayHiddenDoctors] = useState(new URLSearchParams(window.location.search).has("hidden"));
 
   const {
     data: doctors,
     isLoading,
     isError,
-  } = useQuery(
-    ["doctors", page, sortColumn, sortDirection, debouncedSearch, displayHiddenDoctors],
-    () =>
-      api.doctors.get({
-        page,
-        sort_column: sortColumn,
-        sort_direction: sortDirection === "ascend" ? "asc" : "desc",
-        search: debouncedSearch,
-        hidden: displayHiddenDoctors ? 1 : 0,
-      })
+  } = useQuery(["doctors", page, sortColumn, sortDirection, debouncedSearch, displayHiddenDoctors], () =>
+    api.doctors.get({
+      page,
+      sort_column: sortColumn,
+      sort_direction: sortDirection === "ascend" ? "asc" : "desc",
+      search: debouncedSearch,
+      hidden: displayHiddenDoctors ? 1 : 0,
+    })
   );
 
   useDebounce(
@@ -54,15 +50,7 @@ export default function DoctorsList() {
   );
 
   if (isError) {
-    return (
-      <Alert
-        className="mt-5"
-        showIcon
-        type="error"
-        message="Error"
-        description="A apărut o eroare!"
-      />
-    );
+    return <Alert className="mt-5" showIcon type="error" message="Error" description="A apărut o eroare!" />;
   }
 
   return (
@@ -117,6 +105,13 @@ export default function DoctorsList() {
             title: "Specialitate",
             dataIndex: "speciality",
             ellipsis: true,
+          },
+          {
+            title: "Balanța",
+            dataIndex: "balance",
+            sorter: true,
+            sortOrder: sortColumn === "balance" && sortDirection,
+            render: (rowData) => `${rowData} MDL`,
           },
           {
             title: "Vânzări",
