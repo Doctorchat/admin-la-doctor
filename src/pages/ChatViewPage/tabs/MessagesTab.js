@@ -19,6 +19,14 @@ const checkFileExt = (src) => {
   return imageExts.includes(file_ext);
 };
 
+const getFileNameFromSrc = (src = "") => {
+  if (process.env.REACT_APP_API_URL) {
+    return src.replace(`${process.env.REACT_APP_API_URL.replace("/api/", "/uploads")}/chats/`, "");
+  }
+
+  return src.split("/").pop();
+};
+
 export default function MessageTab() {
   const { chat_id } = useParams();
   const [messages, setMessages] = useState([]);
@@ -90,7 +98,7 @@ export default function MessageTab() {
                     }}
                   >
                     <CloudDownloadOutlined className="me-2" style={{ height: 17, transform: "translateY(-2px)" }} />
-                    {file.src}
+                    {getFileNameFromSrc(file.src)}
                   </a>
                 )
               )}
