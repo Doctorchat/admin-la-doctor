@@ -1,5 +1,5 @@
 import { CloudDownloadOutlined, FileOutlined, UserOutlined } from "@ant-design/icons";
-import { Image, Tooltip, Comment, Avatar, Spin, Alert } from "antd";
+import { Image, Tooltip, Comment, Avatar, Spin, Alert, Typography } from "antd";
 import moment from "moment";
 import { useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -70,6 +70,13 @@ export default function MessageTab() {
             <Tooltip title={date(msg.updated_at).full}>
               <span className="chat-view-comment-date">{moment(msg.updated_at).fromNow()}</span>
             </Tooltip>
+          }
+          actions={
+            ["info", "request-media"].includes(msg.type) && [
+              <Typography.Text key="comment-basic-system" type="secondary">
+                Acest mesaj a fost generat automat de către sistem.
+              </Typography.Text>,
+            ]
           }
         >
           <div className="chat-view-uploads">

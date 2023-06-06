@@ -30,6 +30,23 @@
       transform: translateY(-1px);
     }
   }
+
+  .ant-comment-content-detail p {
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  .ant-comment-actions {
+    margin-top: 6px;
+
+    & > li {
+      color: unset;
+
+      & > span {
+        color: rgba(0, 0, 0, 0.65);
+      }
+    }
+  }
 }
 
 .chat-view-uploads {
