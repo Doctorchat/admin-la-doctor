@@ -10,12 +10,13 @@ export default function usePermissionsRedirect(config = { allowedRoles: [1] }) {
   const history = useHistory();
 
   useDeepCompareEffect(() => {
-    if (user && !config.allowedRoles.includes(user.role)) {
-      if (user.role === 4) {
-        history.push("/calls");
-      } else {
-        history.push("/");
-      }
+    if (user?.id && user?.role !== 1 && !config.allowedRoles.includes(user.role)) {
+      let path = "/";
+
+      if (user.role === 5) path = "/users";
+      if (user.role === 4) path = "/calls";
+
+      history.push(path);
     }
-  }, [config.allowedRoles, history, user]);
+  }, [config.allowedRoles, history, user?.id, user?.role]);
 }
