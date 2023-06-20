@@ -94,6 +94,7 @@ export default function Navigation({ closeMenu }) {
       {
         key: "users",
         label: <Link to="/users">Utilizatori</Link>,
+        roles: [userRoles.get("denis")],
       },
       {
         key: "chats",

@@ -3,6 +3,7 @@ export const userRoles = new Map([
   ["doctor", 2],
   ["client", 3],
   ["manager", 4],
+  ["denis", 5],
 ]);
 
 export const sexOptions = [
