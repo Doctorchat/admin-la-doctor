@@ -12,6 +12,8 @@ import "./styles/index.scss";
 const { TabPane } = Tabs;
 
 export default function UserViewPage() {
+  usePermissionsRedirect();
+
   const { user_id } = useParams();
   const [userInfo, setUserInfo] = useState({});
   const [loading, setLoading] = useState(false);
@@ -30,7 +32,6 @@ export default function UserViewPage() {
   }, [history, user_id]);
 
   useMount(fetchUserInfo);
-  usePermissionsRedirect();
 
   return (
     <div className="page-view">

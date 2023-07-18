@@ -31,6 +31,8 @@ import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 import "./styles/index.scss";
 
 export default function CouncilViewPage() {
+  usePermissionsRedirect();
+
   const { chat_id } = useParams();
   const { doctors } = useSelector((store) => ({ doctors: selectDoctorsOptions(store) }));
   const [addDocLoading, setAddDocLoading] = React.useState(false);
@@ -43,11 +45,7 @@ export default function CouncilViewPage() {
   const [addDocForm] = Form.useForm();
   const [sendMessageForm] = Form.useForm();
 
-  const {
-    data: chatInfo,
-    isLoading,
-    error,
-  } = useQuery(["council", chat_id], fetcher(api.council.single));
+  const { data: chatInfo, isLoading, error } = useQuery(["council", chat_id], fetcher(api.council.single));
 
   React.useEffect(() => {
     if (error) history.push("/council-list");
@@ -93,10 +91,7 @@ export default function CouncilViewPage() {
     },
   });
 
-  const onMessageFormSubmit = React.useCallback(
-    (values) => mutationMessages.mutate(values),
-    [mutationMessages]
-  );
+  const onMessageFormSubmit = React.useCallback((values) => mutationMessages.mutate(values), [mutationMessages]);
 
   const addDocHandler = React.useCallback(
     async ({ doctor_id }) => {
@@ -124,10 +119,7 @@ export default function CouncilViewPage() {
     },
   });
 
-  const onAddDoctorFormSubmit = React.useCallback(
-    (values) => mutationDoctors.mutate(values),
-    [mutationDoctors]
-  );
+  const onAddDoctorFormSubmit = React.useCallback((values) => mutationDoctors.mutate(values), [mutationDoctors]);
 
   const closeChatHandler = React.useCallback(
     async ({ message }) => {
@@ -151,10 +143,7 @@ export default function CouncilViewPage() {
     setIsModalVisible(false);
   };
 
-  const selectedDocs = React.useMemo(
-    () => chatInfo?.doctors?.map((doc) => doc.id) || [],
-    [chatInfo?.doctors]
-  );
+  const selectedDocs = React.useMemo(() => chatInfo?.doctors?.map((doc) => doc.id) || [], [chatInfo?.doctors]);
 
   const toggleMessageType = React.useCallback(
     (type) => () => {
@@ -175,19 +164,13 @@ export default function CouncilViewPage() {
     </Menu>
   );
 
-  usePermissionsRedirect();
-
   return (
     <>
       <PageHeader className="site-page-header" onBack={history.goBack} title="Consiliu" />
 
       <div className="support-view-wrapper council-view">
         <div className="support-view-container">
-          <div
-            className={`support-view-messages ${
-              isLoading && "d-flex justify-content-center align-items-center"
-            }`}
-          >
+          <div className={`support-view-messages ${isLoading && "d-flex justify-content-center align-items-center"}`}>
             {isLoading ? (
               <Spin />
             ) : (
@@ -198,9 +181,7 @@ export default function CouncilViewPage() {
                   author={
                     <Link
                       to={
-                        userRoles.get("doctor") == msg.user?.role
-                          ? `/doctor/${msg.user?.id}`
-                          : `/user/${msg.user?.id}`
+                        userRoles.get("doctor") == msg.user?.role ? `/doctor/${msg.user?.id}` : `/user/${msg.user?.id}`
                       }
                       className="chat-view-comment-user"
                     >
@@ -208,19 +189,12 @@ export default function CouncilViewPage() {
                     </Link>
                   }
                   avatar={
-                    <Avatar
-                      className="chat-view-comment-avatar"
-                      src={msg.avatar}
-                      size={48}
-                      icon={<UserOutlined />}
-                    />
+                    <Avatar className="chat-view-comment-avatar" src={msg.avatar} size={48} icon={<UserOutlined />} />
                   }
                   content={<p>{msg.content}</p>}
                   datetime={
                     <Tooltip title={date(msg.updated_at).full}>
-                      <span className="chat-view-comment-date">
-                        {moment(msg.updated_at).fromNow()}
-                      </span>
+                      <span className="chat-view-comment-date">{moment(msg.updated_at).fromNow()}</span>
                     </Tooltip>
                   }
                 >
@@ -258,18 +232,11 @@ export default function CouncilViewPage() {
             </Link>
           </div>
           <div className="council-doctors council-section">
-            {!chatInfo?.doctors?.length && (
-              <Empty description="Nu-s date" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            )}
+            {!chatInfo?.doctors?.length && <Empty description="Nu-s date" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
             {chatInfo?.doctors?.map((doctor) => (
               <div className="council-doctor" key={doctor.id}>
                 <div className="doctor-avatar">
-                  <Avatar
-                    className="chat-view-comment-avatar"
-                    src={doctor.avatar}
-                    size={32}
-                    icon={<UserOutlined />}
-                  />
+                  <Avatar className="chat-view-comment-avatar" src={doctor.avatar} size={32} icon={<UserOutlined />} />
                 </div>
                 <div className="doctor-caption">
                   <Link to={`/doctor/${doctor.id}`}>
@@ -290,12 +257,7 @@ export default function CouncilViewPage() {
                   Închide Conversația
                 </Button>
               ) : (
-                <Form
-                  layout="inline"
-                  className="mt-3"
-                  onFinish={onAddDoctorFormSubmit}
-                  form={addDocForm}
-                >
+                <Form layout="inline" className="mt-3" onFinish={onAddDoctorFormSubmit} form={addDocForm}>
                   <Form.Item name="doctor_id">
                     <Select
                       style={{ minWidth: 170 }}

@@ -15,6 +15,8 @@ export const promoInputReplacer = (value) => {
 };
 
 export default function PromocodesPage() {
+  usePermissionsRedirect();
+
   const [addPromoVisible, setAddPromoVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
@@ -31,8 +33,6 @@ export default function PromocodesPage() {
     },
     [dispatch, form]
   );
-
-  usePermissionsRedirect();
 
   return (
     <>

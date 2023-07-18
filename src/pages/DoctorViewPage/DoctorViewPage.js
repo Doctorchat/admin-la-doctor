@@ -17,6 +17,8 @@ import "./styles/index.scss";
 const { TabPane } = Tabs;
 
 export default function DoctorViewPage() {
+  usePermissionsRedirect();
+
   const { doc_id } = useParams();
   const [editVisible, setEditVisible] = useState(false);
   const history = useHistory();
@@ -40,8 +42,6 @@ export default function DoctorViewPage() {
     },
     [docInfo]
   );
-
-  usePermissionsRedirect();
 
   return (
     <div className={cs("page-view", docInfo?.inVacation && "closed")}>
