@@ -6,6 +6,8 @@ import api from "../utils/appApi";
 import usePermissionsRedirect from "../hooks/usePermissionsRedirect";
 
 export default function CallViewPage() {
+  usePermissionsRedirect({ allowedRoles: [4] });
+
   const { user_id } = useParams();
   const { replace } = useHistory();
 
@@ -40,22 +42,12 @@ export default function CallViewPage() {
     [replace, setApiErrorsToAntdForm, user_id]
   );
 
-  usePermissionsRedirect();
-
   return (
     <>
       <PageHeader className="site-page-header" title="Finalizare apel" onBack={history.goBack} />
 
-      <Form
-        form={form}
-        disabled={!user_id}
-        layout="vertical"
-        onFinish={onCompleteCall}
-        style={{ maxWidth: 600 }}
-      >
-        {!!globalErrors.length && (
-          <Alert message="Error" description={globalErrors} type="error" showIcon />
-        )}
+      <Form form={form} disabled={!user_id} layout="vertical" onFinish={onCompleteCall} style={{ maxWidth: 600 }}>
+        {!!globalErrors.length && <Alert message="Error" description={globalErrors} type="error" showIcon />}
 
         <Form.Item hidden name="global">
           <Input />

@@ -1,15 +1,5 @@
 import { CloudDownloadOutlined, FileOutlined, UserOutlined } from "@ant-design/icons";
-import {
-  Avatar,
-  Button,
-  Comment,
-  Image,
-  Input,
-  notification,
-  PageHeader,
-  Spin,
-  Tooltip,
-} from "antd";
+import { Avatar, Button, Comment, Image, Input, notification, PageHeader, Spin, Tooltip } from "antd";
 import moment from "moment";
 import { useCallback, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -35,6 +25,8 @@ const checkFileExt = (src) => {
 };
 
 export default function SupportViewPage() {
+  usePermissionsRedirect();
+
   const { chat_id } = useParams();
   const [chatInfo, setChatInfo] = useState({ messages: [], flag: null });
   const [loading, setLoading] = useState(false);
@@ -101,7 +93,6 @@ export default function SupportViewPage() {
   }, []);
 
   useMount(fetchChatInfo);
-  usePermissionsRedirect();
 
   return (
     <>
@@ -109,11 +100,7 @@ export default function SupportViewPage() {
 
       <div className="support-view-wrapper">
         <div className="support-view-container">
-          <div
-            className={`support-view-messages ${
-              loading && "d-flex justify-content-center align-items-center"
-            }`}
-          >
+          <div className={`support-view-messages ${loading && "d-flex justify-content-center align-items-center"}`}>
             {loading ? (
               <Spin />
             ) : (
@@ -123,30 +110,19 @@ export default function SupportViewPage() {
                   className="chat-view-comment"
                   author={
                     <Link
-                      to={
-                        userRoles.get("doctor") == msg.user?.role
-                          ? `/doctor/${msg.user.id}`
-                          : `/user/${msg.user.id}`
-                      }
+                      to={userRoles.get("doctor") == msg.user?.role ? `/doctor/${msg.user.id}` : `/user/${msg.user.id}`}
                       className="chat-view-comment-user"
                     >
                       {msg.user.name}
                     </Link>
                   }
                   avatar={
-                    <Avatar
-                      className="chat-view-comment-avatar"
-                      src={msg.avatar}
-                      size={48}
-                      icon={<UserOutlined />}
-                    />
+                    <Avatar className="chat-view-comment-avatar" src={msg.avatar} size={48} icon={<UserOutlined />} />
                   }
                   content={<p>{msg.content}</p>}
                   datetime={
                     <Tooltip title={date(msg.updated_at).full}>
-                      <span className="chat-view-comment-date">
-                        {moment(msg.updated_at).fromNow()}
-                      </span>
+                      <span className="chat-view-comment-date">{moment(msg.updated_at).fromNow()}</span>
                     </Tooltip>
                   }
                 >

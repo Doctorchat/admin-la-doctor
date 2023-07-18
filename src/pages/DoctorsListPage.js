@@ -5,13 +5,13 @@ import { updateRequestsCount } from "../store/actions/requestsCountAction";
 import usePermissionsRedirect from "../hooks/usePermissionsRedirect";
 
 export default function DoctorsListPage() {
+  usePermissionsRedirect();
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(updateRequestsCount());
   }, [dispatch]);
-
-  usePermissionsRedirect();
 
   return <DoctorsList />;
 }

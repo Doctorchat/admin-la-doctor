@@ -6,11 +6,11 @@ import { MembersChart, RequestsChart, YieldChart } from "./charts";
 import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 
 const StatisticsPage = () => {
+  usePermissionsRedirect();
+
   const { data: statistics, isLoading } = useQuery(["statistics"], () => api.stats.getStatistics(), {
     refetchOnWindowFocus: false,
   });
-
-  usePermissionsRedirect();
 
   return (
     <div className="stats-page">
