@@ -9,6 +9,8 @@ import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 import "./styles/index.scss";
 
 export default function DashboardPage() {
+  usePermissionsRedirect();
+
   const [form] = Form.useForm();
   const [formSubmitDisabled, setFormSubmitDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -35,29 +37,16 @@ export default function DashboardPage() {
     [form]
   );
 
-  usePermissionsRedirect();
-
   return (
     <>
       <PageHeader className="site-page-header" title="Dashboard" />
       <div className="global-message-form">
         <h3 className="global-message-title">Mesaj Global</h3>
-        <Form
-          layout="vertical"
-          onFinish={sendGlobalMsgHandler}
-          form={form}
-          onFieldsChange={onFormChange}
-        >
-          <Form.Item
-            name="content"
-            rules={[{ required: true, message: "Acest câmp este obligatoriu" }]}
-          >
+        <Form layout="vertical" onFinish={sendGlobalMsgHandler} form={form} onFieldsChange={onFormChange}>
+          <Form.Item name="content" rules={[{ required: true, message: "Acest câmp este obligatoriu" }]}>
             <Input.TextArea autoSize={{ maxRows: 8 }} placeholder="Mesajul..." />
           </Form.Item>
-          <Form.Item
-            name="group"
-            rules={[{ required: true, message: "Acest câmp este obligatoriu" }]}
-          >
+          <Form.Item name="group" rules={[{ required: true, message: "Acest câmp este obligatoriu" }]}>
             <Select
               placeholder="Selectează grupa"
               options={[
@@ -67,12 +56,7 @@ export default function DashboardPage() {
               ]}
             />
           </Form.Item>
-          <Button
-            type="primary"
-            onClick={form.submit}
-            disabled={formSubmitDisabled}
-            loading={loading}
-          >
+          <Button type="primary" onClick={form.submit} disabled={formSubmitDisabled} loading={loading}>
             Trimite
           </Button>
         </Form>

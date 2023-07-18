@@ -6,13 +6,13 @@ import { updateSupportCount } from "../store/actions/supportListAction";
 import usePermissionsRedirect from "../hooks/usePermissionsRedirect";
 
 export default function SupportListPage() {
+  usePermissionsRedirect();
+
   const dispatch = useDispatch();
 
   useMount(() => {
     dispatch(updateSupportCount());
   });
-
-  usePermissionsRedirect();
 
   return (
     <>

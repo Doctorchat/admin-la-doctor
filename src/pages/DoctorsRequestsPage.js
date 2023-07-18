@@ -10,6 +10,8 @@ import api from "../utils/appApi";
 import usePermissionsRedirect from "../hooks/usePermissionsRedirect";
 
 export default function DoctorsRequestsPage() {
+  usePermissionsRedirect();
+
   const [requests, setRequests] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -136,27 +138,13 @@ export default function DoctorsRequestsPage() {
     [acceptHandler, prepareAcceptLoading, removeHandler, removeReqLoading]
   );
 
-  usePermissionsRedirect();
-
   if (error) {
-    return (
-      <Alert
-        className="mt-5"
-        showIcon
-        type="error"
-        message="Error"
-        description="A apărut o eroare!"
-      />
-    );
+    return <Alert className="mt-5" showIcon type="error" message="Error" description="A apărut o eroare!" />;
   }
 
   return (
     <>
-      <PageHeader
-        className="site-page-header"
-        title="Cereri de la docotri"
-        onBack={history.goBack}
-      />
+      <PageHeader className="site-page-header" title="Cereri de la docotri" onBack={history.goBack} />
       <DcTable
         dataColumns={columns}
         dataSource={requests || []}

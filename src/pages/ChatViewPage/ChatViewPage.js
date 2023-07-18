@@ -14,6 +14,8 @@ import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 import "./styles/index.scss";
 
 export default function ChatViewPage() {
+  usePermissionsRedirect();
+
   const { chat_id } = useParams();
   const [chatInfo, setChatInfo] = useState({});
   const [loading, setLoading] = useState(true);
@@ -55,8 +57,6 @@ export default function ChatViewPage() {
 
     return "success";
   }, [chatInfo]);
-
-  usePermissionsRedirect();
 
   return (
     <div className={cs("page-view", chatInfo?.status)}>
