@@ -7,6 +7,8 @@ const api = {
     get: () => axiosInstance.get("/md/user"),
     update: (userId, data) => axiosInstance.put(`/admin/users/${userId}`, data),
     store: (config) => axiosInstance.post("admin/users/", config),
+    referrals: (user_id, params) =>
+      axiosInstance.get(`/admin/users/clients/referrals/${user_id}`, { params }).then((res) => res.data),
   },
   chats: {
     get: (params) => axiosInstance.get("/admin/chats/all", { params: { ...params } }),

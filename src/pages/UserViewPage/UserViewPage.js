@@ -8,6 +8,7 @@ import api from "../../utils/appApi";
 import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 
 import "./styles/index.scss";
+import ReferralSystemTab from "./tabs/ReferralSystemTab";
 
 const { TabPane } = Tabs;
 
@@ -43,6 +44,9 @@ export default function UserViewPage() {
           </TabPane>
           <TabPane tab="Chat-uri" key="chats">
             <ChatsTab />
+          </TabPane>
+          <TabPane tab="Referral system" key="referral-system">
+            <ReferralSystemTab />
           </TabPane>
         </Tabs>
       </Spin>
