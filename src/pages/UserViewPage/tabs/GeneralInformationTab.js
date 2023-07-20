@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { Descriptions, Empty, Tabs, Tag } from "antd";
 import date from "../../../utils/date";
 import { useEffect, useState } from "react";
@@ -47,18 +48,19 @@ export default function GeneralInformationTab(props) {
           <Descriptions.Item label="Nume">{userInfo?.name}</Descriptions.Item>
           <Descriptions.Item label="Email">{userInfo?.email}</Descriptions.Item>
           <Descriptions.Item label="Telefon">{userInfo?.phone || "---"}</Descriptions.Item>
-          <Descriptions.Item label="Întrebări adresate">
-            {userInfo?.questions_count || "---"}
-          </Descriptions.Item>
+          <Descriptions.Item label="Întrebări adresate">{userInfo?.questions_count || "---"}</Descriptions.Item>
           <Descriptions.Item label="Ultima accesare">{getLastSeen()}</Descriptions.Item>
+          {userInfo?.referrer && (
+            <Descriptions.Item label="Invitat de">
+              <Link to={`/user/${userInfo.referrer?.id}`}>{userInfo.referrer?.name}</Link>
+            </Descriptions.Item>
+          )}
         </Descriptions>
       </TabPane>
       <TabPane tab="Învestigări" key="user-info-investigations">
         <div className="investigations-container">
           {userInfo?.investigations?.length ? (
-            userInfo.investigations.map((invg) => (
-              <InvestigationCard key={invg.id} investigation={invg} />
-            ))
+            userInfo.investigations.map((invg) => <InvestigationCard key={invg.id} investigation={invg} />)
           ) : (
             <Empty description="Nu-s date" />
           )}
