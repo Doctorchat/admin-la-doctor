@@ -4,11 +4,11 @@ import { useMount } from "react-use";
 import { useParams, useHistory } from "react-router-dom";
 import GeneralInformationTab from "./tabs/GeneralInformationTab";
 import ChatsTab from "./tabs/ChatsTab";
+import ReferralSystemTab from "./tabs/ReferralSystemTab";
 import api from "../../utils/appApi";
 import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 
 import "./styles/index.scss";
-import ReferralSystemTab from "./tabs/ReferralSystemTab";
 
 const { TabPane } = Tabs;
 
