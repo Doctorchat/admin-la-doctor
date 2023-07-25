@@ -6,6 +6,7 @@ import { DoctorViewContext } from "./DoctorViewContext";
 import GeneralInformationTab from "./tabs/GeneralInformationTab";
 import { useHistory } from "react-router-dom";
 import ChatsTab from "./tabs/ChatsTab";
+import ReferralSystemTab from "./tabs/ReferralSystemTab";
 import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 import cs from "../../utils/classNames";
 import api from "../../utils/appApi";
@@ -70,6 +71,9 @@ export default function DoctorViewPage() {
             </TabPane>
             <TabPane tab="Chat-uri" key="chats">
               <ChatsTab />
+            </TabPane>
+            <TabPane tab="Referral system" key="referral-system">
+              <ReferralSystemTab />
             </TabPane>
             {docInfo?.support_chat && (
               <TabPane
