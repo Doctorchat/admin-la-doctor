@@ -14,14 +14,14 @@ const initialState = {
 };
 
 export default function ReferralSystemTab() {
-  const { user_id } = useParams();
+  const { doc_id } = useParams();
 
   const [state, setState] = useSessionStorage("referral-system", initialState);
 
   const { data, isLoading, error } = useQuery(
-    ["referral-system", user_id, state],
-    () => api.user.referrals(user_id, state),
-    { enabled: !!user_id }
+    ["referral-system", doc_id, state],
+    () => api.user.referrals(doc_id, state),
+    { enabled: !!doc_id }
   );
 
   const onTableChange = React.useCallback(
