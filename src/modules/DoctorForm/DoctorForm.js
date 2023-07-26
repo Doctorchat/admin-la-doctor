@@ -83,7 +83,7 @@ export default function DoctorForm(props) {
         status: defaultValues.card?.status ? Boolean(defaultValues.card.status) : false,
         hidden: defaultValues.card?.hidden,
         card_regions: defaultValues.card_regions,
-        corporate_program: defaultValues.card?.companies_program,
+        companies_program: defaultValues.card?.companies_program,
         companies_price: defaultValues.card?.companies_price,
       };
 
@@ -210,7 +210,7 @@ export default function DoctorForm(props) {
           </Form.Item>
 
           <div className="d-sm-flex gap-2">
-            <Form.Item name="corporate_program" label="Participă în program corporativ" className="w-100">
+            <Form.Item name="companies_program" label="Participă în program corporativ" className="w-100">
               <Select
                 placeholder="Selectează"
                 options={[
@@ -219,9 +219,9 @@ export default function DoctorForm(props) {
                 ]}
               />
             </Form.Item>
-            <Form.Item noStyle shouldUpdate={(prev, next) => prev.corporate_program !== next.corporate_program}>
+            <Form.Item noStyle shouldUpdate={(prev, next) => prev.companies_program !== next.companies_program}>
               {({ getFieldValue }) =>
-                getFieldValue("corporate_program") && (
+                getFieldValue("companies_program") && (
                   <Form.Item name="companies_price" label="Prețul" rules={[{ required: true }]}>
                     <InputNumber />
                   </Form.Item>
