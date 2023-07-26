@@ -21,3 +21,5 @@ export { default as InternalChatsListPage } from "./InternalChatsListPage";
 export { default as TransactionsPage } from "./TransactionsPage/TransactionsPage";
 export { default as CallsPage } from "./CallsPage";
 export { default as CallViewPage } from "./CallViewPage";
+export { default as CompaniesPage } from "./CompaniesPage";
+export { default as CompanyViewPage } from "./CompanyViewPage";

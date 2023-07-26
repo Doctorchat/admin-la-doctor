@@ -90,6 +90,15 @@ const api = {
         .get("/admin/calls/sources")
         .then((res) => Object.entries(res.data).map(([value, label]) => ({ value, label }))),
   },
+  companies: {
+    list: (params) => axiosInstance.get("/admin/companies", { params }).then((res) => res.data),
+    get: (id) => axiosInstance.get(`/admin/companies/${id}`).then((res) => res.data),
+    create: (data) => axiosInstance.post("/admin/companies", data),
+    update: (id, data) => axiosInstance.put(`/admin/companies/${id}`, data),
+    delete: (id) => axiosInstance.delete(`/admin/companies/${id}`),
+    employees: (id, params) =>
+      axiosInstance.get(`/admin/companies/${id}/employees`, { params }).then((res) => res.data),
+  },
 };
 
 export default api;

@@ -138,6 +138,12 @@ html:not(.is-safari):not(.is-ios) ::-webkit-scrollbar-thumb {
   }
 }
 
+.ant-form {
+  .ant-form-item.ant-form-item-with-help {
+    margin-bottom: 36px;
+  }
+}
+
 @media (max-width: 951px) {
   .dc-layout-content {
     padding: 0px 12px 10px;

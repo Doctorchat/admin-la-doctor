@@ -83,6 +83,10 @@ export default function Navigation({ closeMenu }) {
         ),
       },
       {
+        key: "companies",
+        label: <Link to="/companies">Companii</Link>,
+      },
+      {
         key: "doctors",
         label: (
           <Space align="center" className="justify-content-between">
