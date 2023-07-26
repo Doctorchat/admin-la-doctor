@@ -11,3 +11,4 @@ export { default as WithdrawalList } from "./WithdrawalList";
 export { default as CouncilList } from "./CouncilList";
 export { default as WithdrawalApprovedList } from "./WithdrawalApprovedList";
 export { default as InternalChatsList } from "./InternalChatsList";
+export { default as CompanyForm } from "./CompanyForm";

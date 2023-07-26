@@ -22,6 +22,8 @@ import {
   TransactionsPage,
   CallsPage,
   CallViewPage,
+  CompaniesPage,
+  CompanyViewPage,
 } from "../pages/";
 
 const routes = [
@@ -167,6 +169,18 @@ const routes = [
   {
     path: "/calls/:user_id",
     component: CallViewPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/companies",
+    component: CompaniesPage,
+    exact: true,
+    private: true,
+  },
+  {
+    path: "/company/:company_id",
+    component: CompanyViewPage,
     exact: true,
     private: true,
   },
