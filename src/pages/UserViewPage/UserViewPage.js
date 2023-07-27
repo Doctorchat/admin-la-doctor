@@ -4,6 +4,7 @@ import { useMount } from "react-use";
 import { useParams, useHistory } from "react-router-dom";
 import GeneralInformationTab from "./tabs/GeneralInformationTab";
 import ChatsTab from "./tabs/ChatsTab";
+import ReferralSystemTab from "./tabs/ReferralSystemTab";
 import api from "../../utils/appApi";
 import usePermissionsRedirect from "../../hooks/usePermissionsRedirect";
 
@@ -43,6 +44,9 @@ export default function UserViewPage() {
           </TabPane>
           <TabPane tab="Chat-uri" key="chats">
             <ChatsTab />
+          </TabPane>
+          <TabPane tab="Referral system" key="referral-system">
+            <ReferralSystemTab />
           </TabPane>
         </Tabs>
       </Spin>
