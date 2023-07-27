@@ -132,6 +132,14 @@ export default function GeneralInformationTab() {
               )}
             />
           </Descriptions.Item>
+          <Descriptions.Item label="Participă în program corporativ">
+            {docInfo?.card?.companies_program ? <b>Da</b> : "Nu"}
+          </Descriptions.Item>
+          {docInfo?.card?.companies_program && (
+            <Descriptions.Item label="Prețul conversației în program corporativ">
+              {docInfo?.card?.companies_price} MDL
+            </Descriptions.Item>
+          )}
           <Descriptions.Item label="Ultima accesare">{getLastSeen()}</Descriptions.Item>
         </Descriptions>
       </TabPane>

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Button, Drawer, Form, Input, InputNumber, notification, Select, Switch } from "antd";
+import { Button, Drawer, Form, Input, InputNumber, notification, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import RegionInfo from "./RegionInfo";
 import api from "../../utils/appApi";
@@ -56,7 +56,7 @@ export default function DoctorForm(props) {
         setLoading(false);
       }
     },
-    [docId, onAfterSubmit, onSubmitFailed, onSubmitSuccess, defaultValues]
+    [docId, queryClient, onAfterSubmit, onSubmitSuccess, onSubmitFailed]
   );
 
   const initialValues = useMemo(() => {
@@ -83,6 +83,8 @@ export default function DoctorForm(props) {
         status: defaultValues.card?.status ? Boolean(defaultValues.card.status) : false,
         hidden: defaultValues.card?.hidden,
         card_regions: defaultValues.card_regions,
+        companies_program: defaultValues.card?.companies_program,
+        companies_price: defaultValues.card?.companies_price,
       };
 
       if (defaultValues.card?.studies && defaultValues.card.studies?.length) {
@@ -206,6 +208,27 @@ export default function DoctorForm(props) {
           <Form.Item name="card_regions" label="Regiune">
             <RegionInfo />
           </Form.Item>
+
+          <div className="d-sm-flex gap-2">
+            <Form.Item name="companies_program" label="Participă în program corporativ" className="w-100">
+              <Select
+                placeholder="Selectează"
+                options={[
+                  { value: true, label: "Da" },
+                  { value: false, label: "Nu" },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item noStyle shouldUpdate={(prev, next) => prev.companies_program !== next.companies_program}>
+              {({ getFieldValue }) =>
+                getFieldValue("companies_program") && (
+                  <Form.Item name="companies_price" label="Prețul" rules={[{ required: true }]}>
+                    <InputNumber />
+                  </Form.Item>
+                )
+              }
+            </Form.Item>
+          </div>
 
           <div className="form-bottom justify-content-end mt-0">
             <Button htmlType="submit" type="primary" className="mt-1" loading={loading}>
