@@ -85,6 +85,7 @@ export default function DoctorForm(props) {
         card_regions: defaultValues.card_regions,
         companies_program: defaultValues.card?.companies_program,
         companies_price: defaultValues.card?.companies_price,
+        companies_doctor_revenue: defaultValues.card?.companies_doctor_revenue,
       };
 
       if (defaultValues.card?.studies && defaultValues.card.studies?.length) {
@@ -209,21 +210,36 @@ export default function DoctorForm(props) {
             <RegionInfo />
           </Form.Item>
 
+          <Form.Item name="companies_program" label="Participă în program corporativ" className="w-100">
+            <Select
+              placeholder="Selectează"
+              options={[
+                { value: true, label: "Da" },
+                { value: false, label: "Nu" },
+              ]}
+            />
+          </Form.Item>
+
           <div className="d-sm-flex gap-2">
-            <Form.Item name="companies_program" label="Participă în program corporativ" className="w-100">
-              <Select
-                placeholder="Selectează"
-                options={[
-                  { value: true, label: "Da" },
-                  { value: false, label: "Nu" },
-                ]}
-              />
+            <Form.Item noStyle shouldUpdate={(prev, next) => prev.companies_program !== next.companies_program}>
+              {({ getFieldValue }) =>
+                getFieldValue("companies_program") && (
+                  <Form.Item name="companies_price" label="Prețul" rules={[{ required: true }]} className="w-100">
+                    <InputNumber addonBefore="MDL" />
+                  </Form.Item>
+                )
+              }
             </Form.Item>
             <Form.Item noStyle shouldUpdate={(prev, next) => prev.companies_program !== next.companies_program}>
               {({ getFieldValue }) =>
                 getFieldValue("companies_program") && (
-                  <Form.Item name="companies_price" label="Prețul" rules={[{ required: true }]}>
-                    <InputNumber />
+                  <Form.Item
+                    name="companies_doctor_revenue"
+                    label="Venitul doctorului"
+                    rules={[{ required: true }]}
+                    className="w-100"
+                  >
+                    <InputNumber addonBefore="MDL" />
                   </Form.Item>
                 )
               }
