@@ -15,7 +15,7 @@ export default function CompanyForm({ open, onClose, defaultValues, onSubmitSucc
     try {
       setIsSubmitting(true);
 
-      if (defaultValues.id) await api.companies.update(defaultValues.id, values);
+      if (defaultValues?.id) await api.companies.update(defaultValues?.id, values);
       else await api.companies.create(values);
 
       await onSubmitSuccess();
@@ -52,17 +52,17 @@ export default function CompanyForm({ open, onClose, defaultValues, onSubmitSucc
           <Input placeholder="maib@example.com" />
         </Form.Item>
         <Form.Item
-          label={defaultValues.id ? "Parola nouă" : "Parola"}
+          label={defaultValues?.id ? "Parola nouă" : "Parola"}
           name="password"
-          rules={[{ required: Boolean(defaultValues.id) === false }]}
+          rules={[{ required: Boolean(defaultValues?.id) === false }]}
         >
           <Input type="password" placeholder="********" />
         </Form.Item>
         <Form.Item
-          label={defaultValues.id ? "Confirmă parola nouă" : "Confirmă parola"}
+          label={defaultValues?.id ? "Confirmă parola nouă" : "Confirmă parola"}
           name="password_confirmation"
           rules={[
-            { required: Boolean(defaultValues.id) === false },
+            { required: Boolean(defaultValues?.id) === false },
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (!value || getFieldValue("password") === value) {
