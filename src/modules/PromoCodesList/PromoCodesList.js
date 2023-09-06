@@ -1,14 +1,4 @@
-import {
-  Alert,
-  Button,
-  Drawer,
-  Form,
-  Input,
-  InputNumber,
-  notification,
-  Popconfirm,
-  Select,
-} from "antd";
+import { Alert, Button, Drawer, Form, Input, InputNumber, notification, Popconfirm, Select } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMount, useSessionStorage, useUnmount } from "react-use";
@@ -186,12 +176,7 @@ export default function PromoCodesList() {
               okText="Accept"
               cancelText="Anulează"
             >
-              <Button
-                type="primary"
-                size="small"
-                danger
-                loading={removePromocodeLoading === row.id}
-              >
+              <Button type="primary" size="small" danger loading={removePromocodeLoading === row.id}>
                 Șterge
               </Button>
             </Popconfirm>
@@ -208,22 +193,24 @@ export default function PromoCodesList() {
 
   return (
     <>
-      <Drawer visible={!!activePromocode} onClose={onClosePromocode} title="Editare promo-cod">
-        <Form layout="vertical" form={form} onFinish={onEditSubmit}>
-          <Form.Item name="name" label="Cod" normalize={(value) => promoInputReplacer(value)}>
-            <Input placeholder="WINTER10" disabled autoComplete="off" />
-          </Form.Item>
-          <Form.Item name="discount" label="Reducere">
-            <InputNumber step={1} addonBefore="%" min={1} max={100} placeholder="10" />
-          </Form.Item>
-          <Form.Item name="status" label="Status">
-            <Select placeholder="Selectează" options={promocodeStatuses} />
-          </Form.Item>
-          <Button type="primary" htmlType="submit" loading={editLoading}>
-            Salveză
-          </Button>
-        </Form>
-      </Drawer>
+      {Boolean(activePromocode) && (
+        <Drawer visible={!!activePromocode} onClose={onClosePromocode} title="Editare promo-cod">
+          <Form layout="vertical" form={form} onFinish={onEditSubmit}>
+            <Form.Item name="name" label="Cod" normalize={(value) => promoInputReplacer(value)}>
+              <Input placeholder="WINTER10" disabled autoComplete="off" />
+            </Form.Item>
+            <Form.Item name="discount" label="Reducere">
+              <InputNumber step={1} addonBefore="%" min={1} max={100} placeholder="10" />
+            </Form.Item>
+            <Form.Item name="status" label="Status">
+              <Select placeholder="Selectează" options={promocodeStatuses} />
+            </Form.Item>
+            <Button type="primary" htmlType="submit" loading={editLoading}>
+              Salveză
+            </Button>
+          </Form>
+        </Drawer>
+      )}
       <DcTable
         dataColumns={columns}
         dataSource={promocodes}
