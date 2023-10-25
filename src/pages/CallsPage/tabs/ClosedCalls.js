@@ -43,9 +43,9 @@ export default function ClosedCalls() {
         columns={[
           {
             title: "ID",
-            dataIndex: "id",
+            dataIndex: "user_id",
             sorter: false,
-            sortOrder: sortColumn === "id" && sortDirection,
+            sortOrder: sortColumn === "user_id" && sortDirection,
           },
           {
             title: "Manager",
