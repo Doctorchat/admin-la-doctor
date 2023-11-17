@@ -32,9 +32,7 @@ export default function SettingsTab() {
 
   useEffect(() => {
     if (chatInfo.doctor) {
-      form.setFields([
-        { name: "doctor_id", value: chatInfo.doctor.id === 1 ? null : chatInfo.doctor.id },
-      ]);
+      form.setFields([{ name: "doctor_id", value: chatInfo.doctor.id === 1 ? null : chatInfo.doctor.id }]);
     }
   }, [chatInfo.doctor, form]);
 
@@ -78,19 +76,28 @@ export default function SettingsTab() {
     }
   }, [chat_id, dispatch, updateChatInfo]);
 
+  const closeWithoutRefundHanlder = useCallback(async () => {
+    setLoadingBtns("close_refund");
+
+    try {
+      await api.chats.closeWithoutRefund(chat_id);
+
+      dispatch(updateChatsListRow(+chat_id, { status: "closed" }));
+      updateChatInfo("status", "closed");
+    } catch (error) {
+      notification.error({ message: "Eroare", description: "A apărut o eraore" });
+    } finally {
+      setLoadingBtns(null);
+    }
+  }, [chat_id, dispatch, updateChatInfo]);
+
   return (
     <div className="chat-settings-tab">
       <Typography.Title level={5}>Schimă doctor-ul</Typography.Title>
-      {errorMessage && (
-        <Alert message={errorMessage} className="mb-2" type="error" showIcon closable />
-      )}
+      {errorMessage && <Alert message={errorMessage} className="mb-2" type="error" showIcon closable />}
       <Form form={form} layout="horizontal" onFinish={changeDoctorHanlder}>
         <Form.Item name="doctor_id" label="Doctor Asignat">
-          <Select
-            disabled={chatInfo.status === "closed"}
-            options={doctors || []}
-            placeholder="Selecteză doctor"
-          />
+          <Select disabled={chatInfo.status === "closed"} options={doctors || []} placeholder="Selecteză doctor" />
         </Form.Item>
         <Button
           htmlType="submit"
@@ -110,7 +117,17 @@ export default function SettingsTab() {
         disabled={chatInfo.status === "closed"}
         onClick={closeChatHanlder}
       >
-        Închide Conversația
+        Cu rambursare
+      </Button>
+      <Button
+        className="closed-padding"
+        type="primary"
+        danger
+        loading={loadingBtns === "close_refund"}
+        disabled={chatInfo.status === "closed"}
+        onClick={closeWithoutRefundHanlder}
+      >
+        Fără rambursare
       </Button>
     </div>
   );
