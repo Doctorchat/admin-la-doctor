@@ -16,6 +16,7 @@ const api = {
     getMessages: (id) => axiosInstance.get(`/admin/chats/${id}/messages`),
     changeDoctor: ({ doctor_id, id }) => axiosInstance.put("/admin/chats/reassign", { doctor_id, id }),
     closeChat: (id) => axiosInstance.put(`/admin/chats/close/${id}`),
+    closeWithoutRefund: (id) => axiosInstance.put(`/admin/chats/close/${id}?payMoney=false`),
     last10: (id) => axiosInstance.get(`/admin/chats/latest10/${id}`),
     sendMessage: (chatId, message, extra = {}) =>
       axiosInstance.post("/chat/send", { chat_id: chatId, content: message, ...extra }),
