@@ -5,6 +5,8 @@ import { ChatViewContext } from "./ChatViewContext";
 import GeneralInformationTab from "./tabs/GeneralInformationTab";
 import MessageTab from "./tabs/MessagesTab";
 import SettingsTab from "./tabs/SettingsTab";
+import TransactionTab from "./tabs/TransactionTab";
+import ChatLogsTab from "./tabs/ChatLogsTab";
 import { useMount } from "react-use";
 import api from "../../utils/appApi";
 import { useHistory } from "react-router-dom";
@@ -81,6 +83,16 @@ export default function ChatViewPage() {
                 label: <Badge status={getSettingsTabStatus()} text="Setări" />,
                 children: <SettingsTab />,
               },
+              {
+                key: "transactions",
+                label: "Transactions",
+                children: <TransactionTab/>
+              },
+              {
+                key: "chatLogs",
+                label: "Chat logs",
+                children: <ChatLogsTab/>
+              }
             ]}
           />
         </ChatViewContext.Provider>
