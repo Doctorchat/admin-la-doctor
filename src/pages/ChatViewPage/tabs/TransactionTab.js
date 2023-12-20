@@ -1,11 +1,9 @@
 import { React, useState, useEffect } from "react";
-import { Button, Space, Comment, Avatar, Input, Pagination, Modal } from "antd";
+import { Button, Comment, Avatar, Input, Pagination, Modal } from "antd";
 import Highlighter from 'react-highlight-words';
-import { UnorderedListOutlined, TableOutlined, SearchOutlined, ArrowDownOutlined, ArrowUpOutlined, MenuOutlined,SortDescendingOutlined, SortAscendingOutlined,} from '@ant-design/icons';
+import { UnorderedListOutlined, TableOutlined, SearchOutlined, ArrowDownOutlined, ArrowUpOutlined, MenuOutlined} from '@ant-design/icons';
 import { useChatViewContext } from "../ChatViewContext";
 import date from "../../../utils/date";
-import { keyboard } from "@testing-library/user-event/dist/keyboard";
-
 
 export default function TransactionTab() {
   const { chatInfo } = useChatViewContext();
@@ -52,11 +50,10 @@ export default function TransactionTab() {
 
   const toggleFilterType = (type) => {
     if (type === 'amount') {
-      setFilterType((prevFilterType) => (prevFilterType === 'big' ? 'small' : 'big'));
+      return setFilterType((prevFilterType) => (prevFilterType === 'big' ? 'small' : 'big'));
     } else if (type === 'date') {
-      setFilterType((prevFilterType) => (prevFilterType === 'newerDate' ? 'olderDate' : 'newerDate'));
+      return setFilterType((prevFilterType) => (prevFilterType === 'newerDate' ? 'olderDate' : 'newerDate'));
     }
-
   };
 
   const handleChangePage = (page) => {
@@ -165,7 +162,7 @@ export default function TransactionTab() {
                   <div >Sort by amount</div>
                   <Button
                     icon={filterType === 'big' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-                    onClick={() => { toggleFilterType('amount'), setSortType('amount') }}
+                    onClick={() => { toggleFilterType('amount'); setSortType('amount') }}
                   >
                     {''}
                   </Button>
@@ -174,7 +171,7 @@ export default function TransactionTab() {
                   <div>Sort by date</div>
                   <Button
                     icon={filterType === 'olderDate' ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
-                    onClick={() => { toggleFilterType('date'), setSortType('date') }}
+                    onClick={() => { toggleFilterType('date'); setSortType('date') }}
                   >
                     {''}
                   </Button>
@@ -211,7 +208,7 @@ export default function TransactionTab() {
             <div>Amount</div>
             <Button
               icon={filterType === 'big' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-              onClick={() => { toggleFilterType('amount'), setSortType('amount') }}
+              onClick={() => { toggleFilterType('amount'); setSortType('amount') }}
               style={{ position: 'absolute', top: '1px', right: '10px' }}
             >
               {''}
@@ -227,7 +224,7 @@ export default function TransactionTab() {
             <span>Created at</span>
             <Button
               icon={filterType === 'olderDate' ?   <ArrowDownOutlined /> : <ArrowUpOutlined />}
-              onClick={() => { toggleFilterType('date'), setSortType('date') }}
+              onClick={() => { toggleFilterType('date'); setSortType('date') }}
               style={{ position: 'absolute', top: '1px', right: '10px', display:'none' }}
             >
               {''}
@@ -238,7 +235,7 @@ export default function TransactionTab() {
       {
         handleFilter().map((item, index) => (
           layoutTransaction === "horizontal" ? (
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', lineHeight: '35px' }} key={index}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', lineHeight: '35px' }} key={item.index}>
               <div style={{ width: '80px', textAlign: 'center' }}>
                 <Highlighter
                   searchWords={[searchText]}
@@ -276,7 +273,7 @@ export default function TransactionTab() {
             </div>
           ) : (
             <Comment
-              key={index}
+              key={item.index}
               avatar={
                 <Avatar
                   style={{
@@ -350,7 +347,7 @@ export default function TransactionTab() {
               <div >Amount</div>
               <Button
                 icon={filterType === 'big' ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
-                onClick={() => { toggleFilterType('amount'), setSortType('amount') }}
+                onClick={() => { toggleFilterType('amount'); setSortType('amount') }}
               >
                 {''}
               </Button>
@@ -359,7 +356,7 @@ export default function TransactionTab() {
               <div>Date</div>
               <Button
                 icon={filterType === 'olderDate' ?  <ArrowDownOutlined /> : <ArrowUpOutlined /> }
-                onClick={() => { toggleFilterType('date'), setSortType('date') }}
+                onClick={() => { toggleFilterType('date'); setSortType('date') }}
               >
                 {''}
               </Button>

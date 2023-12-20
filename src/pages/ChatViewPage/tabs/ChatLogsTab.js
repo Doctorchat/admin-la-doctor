@@ -44,11 +44,8 @@ export default function ChatLogs() {
 
 
   const pageSize = 5;
-  // const startIndex = (currentPage - 1) * pageSize;
-  // const totalFilteredLogs = chatInfo?.chatLogs.filter(item => date(item.created_at).full.toLowerCase().includes(searchText.toLowerCase())).length || 0;
   const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toLowerCase().includes(searchText.toLowerCase())).length || 0;
 
-  // Change pagination page
   const handleChangePage = (page) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -93,7 +90,6 @@ export default function ChatLogs() {
 
   };
 
-  // Sorting by alphabet
   const handleFilter = () => {
     let sortedLogs;
     if(sortType === 'id'){
@@ -131,8 +127,6 @@ export default function ChatLogs() {
     handleFilter();
   }, [filterType]);
 
-
-  // Display filtered logs on one page
   const getVisibleLogs = () => {
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
@@ -144,17 +138,9 @@ export default function ChatLogs() {
 
   };
 
-
-  // Open modal
   const showModal = () => {
     setIsModalVisible(true);
   }
-
-
-
-
-
-
 
   return (
     <>
@@ -185,7 +171,7 @@ export default function ChatLogs() {
                   <div >Sort by action</div>
                   <Button
                     icon={filterType === 'AZ' ? <SortAscendingOutlined /> : <SortDescendingOutlined />}
-                    onClick={() => { toggleFilterType('action'), setSortType('action') }}
+                    onClick={() => { toggleFilterType('action'); setSortType('action') }}
                   >
                     {''}
                   </Button>
@@ -194,7 +180,7 @@ export default function ChatLogs() {
                   <div>Sort by date</div>
                   <Button
                     icon={filterType === 'newerDate' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-                    onClick={() => { toggleFilterType('date'), setSortType('date') }}
+                    onClick={() => { toggleFilterType('date'); setSortType('date') }}
                   >
                     {''}
                   </Button>
@@ -224,7 +210,6 @@ export default function ChatLogs() {
       )
       }
       <div>
-        {/* Отобразить лейблы только один раз в начале */}
         {layoutLog === 'horizontal' && (
           <div style={{
             display: 'flex', justifyContent: 'space-between', background: '#f0f0f0', borderBottom: '1px solid #ccc', fontWeight: 'bold', borderLeft: '1px solid #ccc',
@@ -235,7 +220,7 @@ export default function ChatLogs() {
               {/* <span style={{ fontSize: '16px', marginRight: '10px', fontWeight:'normal' }}>Sort: </span> */}
               <Button
                 icon={filterType === 'AZ' ? <SortAscendingOutlined /> : <SortDescendingOutlined />}
-                onClick={() => { toggleFilterType('action'), setSortType('action') }}
+                onClick={() => { toggleFilterType('action'); setSortType('action') }}
                 style={{ position: 'absolute', right: '10px', top: '1px' }}
               >
                 {''}
@@ -244,7 +229,7 @@ export default function ChatLogs() {
             <div style={{ width: '200px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' }}><span>Created at</span>
               <Button
                 icon={filterType === 'newerDate' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-                onClick={() => { toggleFilterType('date'), setSortType('date') }}
+                onClick={() => { toggleFilterType('date'); setSortType('date') }}
                 style={{ position: 'absolute', right: '10px', top: '1px' }}
               >
                 {''}
@@ -257,7 +242,7 @@ export default function ChatLogs() {
         {handleFilter().map((item, index) => (
           layoutLog === 'vertical' ? (
             <Comment
-              key={index}
+              key={item.index}
               author={<b>
                 <Highlighter
                   searchWords={[searchText]}
@@ -283,7 +268,7 @@ export default function ChatLogs() {
                 /></p>}
             />
           ) : (
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', lineHeight: '35px' }} key={index}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', lineHeight: '35px' }} key={item.index}>
               <div style={{ width: '30px', textAlign: 'center', borderRight: '1px solid #ccc', boxSizing: 'border-box', height: '100%' }}>{item.id + 1}</div>
               <div style={{ flex: 1, textAlign: 'center' }}>
                 <Highlighter
@@ -350,7 +335,7 @@ export default function ChatLogs() {
                   <div >Action</div>
                   <Button
                     icon={filterType === 'AZ' ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
-                    onClick={() => { toggleFilterType('action'), setSortType('action') }}
+                    onClick={() => { toggleFilterType('action'); setSortType('action') }}
                   >
                     {''}
                   </Button>
@@ -359,7 +344,7 @@ export default function ChatLogs() {
                   <div>Date</div>
                   <Button
                     icon={filterType === 'newerDate' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-                    onClick={() => { toggleFilterType('date'), setSortType('date') }}
+                    onClick={() => { toggleFilterType('date'); setSortType('date') }}
                   >
                     {''}
                   </Button>
@@ -374,73 +359,3 @@ export default function ChatLogs() {
   )
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import 'antd/dist/antd.css';
-// import { useState, useEffect } from "react";
-// import { Descriptions, Comment, Avatar, Button, Pagination, Input, Modal } from "antd";
-
-// export default function ChatLogs() {
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const pageSize = 5;
-//   const startIndex = (currentPage - 1) * pageSize;
-//   const array = Array.from({ length: 100 }, (_, index) => index + 1);
-//   const handleChangePage = (page) => {
-//     setCurrentPage(page);
-//     window.scrollTo({ top: 0, behavior: 'smooth' });
-//   };
-
-//   const getVisibleLogs = () => {
-//     const startIndex = (currentPage - 1) * pageSize;
-//     const endIndex = startIndex + pageSize;
-//     return array.slice(startIndex, endIndex) || [];
-//   };
-
-
-//   return(
-
-//     <>
-//     {
-//   getVisibleLogs().map((item, index) => (
-//     <div style={{ marginBottom: '45px' }} key={index}>
-//       <Descriptions key={index} bordered size="small" layout="horizontal" column={1} labelStyle={{ width: 180 }}>
-
-//         <Descriptions.Item label="Action">{item}</Descriptions.Item>
-//         <Descriptions.Item label="Created at">{`asdasdasd`}</Descriptions.Item>
-
-//       </Descriptions>
-//     </div>
-//   ))
-// }
-// {array.length > pageSize && (
-//   <Pagination
-//     current={currentPage}
-//     pageSize={pageSize}
-//     total={array.length}
-//     onChange={handleChangePage}
-//     showSizeChanger={false}
-//   />
-// )}</>
-//   )
-// }
-
