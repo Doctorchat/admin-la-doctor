@@ -9,117 +9,44 @@ import { useFunctions } from "./common";
 
 
 export default function TransactionTab() {
+  const [transactionsResult, setTransactionsResult] = useState([]);
   const { chatInfo } = useChatViewContext();
-  const [clientWidth, setClientWidth] = useState(window.innerWidth);
-  const [layoutTransaction, setLayoutTransaction] = useState("horizontal");
-  const [filterType, setFilterType] = useState('olderDate');
-  const [sortType, setSortType] = useState('date');
-
-  const transactions = chatInfo?.transactions.map((item, index) => ({ ...item, id: index })) || [];
-
   const {
+    toggleView,
+    pageSize,
+    clientWidth,
+    layout,
     searchText,
     setSearchText,
     currentPage,
-    setCurrentPage,
     inputValue,
     setInputValue,
     isModalVisible,
     setIsModalVisible,
     handleChangePage,
     handleSearch,
-    handleKeyDown
+    handleKeyDown,
+    filterType,
+    setFilterType,
+    sortType,
+    setSortType,
+    toggleFilterType,
+    handleFilter,
+    showModal
   } = useFunctions();
-  
-
-  useEffect(() => {
-    const handleResize = () => {
-      setClientWidth(window.innerWidth);
-    };
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-
-    if (clientWidth > 600) {
-
-      setLayoutTransaction('horizontal');
-    } else {
-      setLayoutTransaction('vertical');
-    }
-  }, [clientWidth]);
-
-  const toggleView = () => {
-    setLayoutTransaction((prevView) => (prevView === 'horizontal' ? 'vertical' : 'horizontal'));
-  }
-
-  const pageSize = 5;
+  const transactions = chatInfo?.transactions.map((item, index) => ({ ...item, id: index })) || [];
   const totalFilteredTransactions = transactions.filter(item => date(item.created_at).full.toLowerCase().includes(searchText.toLowerCase())).length || 0;
-
-  const toggleFilterType = (type) => {
-    if (type === 'amount') {
-      setFilterType((prevFilterType) => (prevFilterType === 'big' ? 'small' : 'big'));
-    } else if (type === 'date') {
-      setFilterType((prevFilterType) => (prevFilterType === 'newerDate' ? 'olderDate' : 'newerDate'));
-    }
-
-  };
-
-  const handleFilter = () => {
-    let sortedLogs;
-
-    if (sortType === 'amount') {
-      sortedLogs = getVisibleLogs().slice().sort((a, b) => Number(a.amount) - Number(b.amount));
-      if (filterType === 'small') {
-
-        sortedLogs.reverse();
-        return sortedLogs;
-      } else if (filterType === 'big') {
-        return sortedLogs;
-      }
-      setCurrentPage(1);
-    } else if (sortType === 'date') {
-      sortedLogs = getVisibleLogs().slice().sort((a, b) => date(a.created_at).full - date(b.created_at).full);
-      if (filterType === 'newerDate') {
-
-        return sortedLogs;
-      } else if (filterType === 'olderDate') {
-
-        sortedLogs.reverse();
-        return sortedLogs;
-      }
-      setCurrentPage(1);
-    }
-
-
-    return sortedLogs;
-
-  };
+  
   useEffect(() => {
-    handleFilter();
-  });
-
-
-  const getVisibleLogs = () => {
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-    const filteredTransactions = transactions.filter(item => (
+    const transactionsFilterConditions = item => (
       date(item.created_at).full.toLowerCase().includes(searchText.toLowerCase()) ||
       String(item.user_id).toLowerCase().includes(searchText.toLowerCase()) ||
       item.amount.toLowerCase().includes(searchText.toLowerCase())
-    )) || [];
-    return filteredTransactions.slice(startIndex, endIndex) || [];
+    );
+    const result = handleFilter(transactions, transactionsFilterConditions);
+    setTransactionsResult(result);
+  }, [searchText,  sortType, filterType, currentPage,]);
 
-  };
-
-  // Open modal
-  const showModal = () => {
-    setIsModalVisible(true);
-  }
 
   return (
     <>
@@ -138,14 +65,14 @@ export default function TransactionTab() {
             />
           </div>
           <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '15px' }}>
-            {layoutTransaction === 'vertical' && (
+            {layout === 'vertical' && (
               <div style={{ borderRight: '1px solid #e5e5e5', height: '100%', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 
                 <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center', paddingRight: '10px' }}>
                   <div >Sort by amount</div>
                   <Button
                     icon={filterType === 'big' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-                    onClick={() => { toggleFilterType('amount'); setSortType('amount') }}
+                    onClick={() => { toggleFilterType('amount',setFilterType); setSortType('amount') }}
                   >
                     {''}
                   </Button>
@@ -154,7 +81,7 @@ export default function TransactionTab() {
                   <div>Sort by date</div>
                   <Button
                     icon={filterType === 'olderDate' ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
-                    onClick={() => { toggleFilterType('date'); setSortType('date') }}
+                    onClick={() => { toggleFilterType('date',setFilterType); setSortType('date') }}
                   >
                     {''}
                   </Button>
@@ -165,7 +92,7 @@ export default function TransactionTab() {
             <div style={{ paddingRight: '10px', height: '100%', display: 'flex', alignItems: 'center' }}>
               <span style={{ fontSize: '16px', marginRight: '10px' }}>View: </span>
               <Button
-                icon={layoutTransaction === 'horizontal' ? <UnorderedListOutlined /> : <TableOutlined />}
+                icon={layout === 'horizontal' ? <UnorderedListOutlined /> : <TableOutlined />}
                 onClick={toggleView}
               >
                 {''}
@@ -181,7 +108,7 @@ export default function TransactionTab() {
         </div>
       )}
 
-      {layoutTransaction === 'horizontal' && (
+      {layout === 'horizontal' && (
         <div style={{
           display: 'flex', justifyContent: 'space-between', background: '#f0f0f0', borderBottom: '1px solid #ccc', fontWeight: 'bold', borderLeft: '1px solid #ccc',
           borderRight: '1px solid #ccc', lineHeight: '35px'
@@ -191,7 +118,7 @@ export default function TransactionTab() {
             <div>Amount</div>
             <Button
               icon={filterType === 'big' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-              onClick={() => { toggleFilterType('amount'); setSortType('amount') }}
+              onClick={() => { toggleFilterType('amount',setFilterType); setSortType('amount') }}
               style={{ position: 'absolute', top: '1px', right: '10px' }}
             >
               {''}
@@ -207,7 +134,7 @@ export default function TransactionTab() {
             <span>Created at</span>
             <Button
               icon={filterType === 'olderDate' ?   <ArrowDownOutlined /> : <ArrowUpOutlined />}
-              onClick={() => { toggleFilterType('date'); setSortType('date') }}
+              onClick={() => { toggleFilterType('date',setFilterType); setSortType('date') }}
               style={{ position: 'absolute', top: '1px', right: '10px', display:'none' }}
             >
               {''}
@@ -216,8 +143,8 @@ export default function TransactionTab() {
         </div>
       )}
       {
-        handleFilter().map((item) => (
-          layoutTransaction === "horizontal" ? (
+        transactionsResult.map((item) => (
+          layout === "horizontal" ? (
             <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', lineHeight: '35px' }} key={item.id}>
               <div style={{ width: '80px', textAlign: 'center' }}>
                 <Highlighter
@@ -291,7 +218,7 @@ export default function TransactionTab() {
           pageSize={pageSize}
           total={totalFilteredTransactions}
           onChange={handleChangePage}
-          style={layoutTransaction === 'horizontal'? {float:'right', marginTop:'10px'} :{float:'left', marginTop:'10px'}}
+          style={layout === 'horizontal'? {float:'right', marginTop:'10px'} :{float:'left', marginTop:'10px'}}
           size= 'small'
         />
       )}
@@ -319,7 +246,7 @@ export default function TransactionTab() {
             <div>
               <span style={{ fontSize: '16px', marginRight: '10px' }}>View: </span>
               <Button
-                icon={layoutTransaction === 'horizontal' ? <UnorderedListOutlined /> : <TableOutlined />}
+                icon={layout === 'horizontal' ? <UnorderedListOutlined /> : <TableOutlined />}
                 onClick={toggleView}
               >
                 {''}

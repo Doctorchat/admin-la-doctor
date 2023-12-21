@@ -5,134 +5,46 @@ import { useChatViewContext } from "../ChatViewContext";
 import Highlighter from 'react-highlight-words';
 import date from "../../../utils/date";
 import 'antd/dist/antd.css';
-import{useFunctions} from './common.js'
+import { useFunctions } from './common.js'
 
 export default function ChatLogs() {
 
   const { chatInfo } = useChatViewContext();
-  const [layoutLog, setLayoutLog] = useState("vertical");
-  const [filterType, setFilterType] = useState('AZ');
-  const [clientWidth, setClientWidth] = useState(window.innerWidth);
-  const [sortType, setSortType] = useState('id');
-
-const chatLogs = chatInfo?.chatLogs.map((item, index) => ({ ...item, id: index })) || [];
-
-const {
-  searchText,
-  setSearchText,
-  currentPage,
-  setCurrentPage,
-  inputValue,
-  setInputValue,
-  isModalVisible,
-  setIsModalVisible,
-  handleChangePage,
-  handleSearch,
-  handleKeyDown
-} = useFunctions();
-
-const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toLowerCase().includes(searchText.toLowerCase())).length || 0;
-  
-
-  useEffect(() => {
-    const handleResize = () => {
-      setClientWidth(window.innerWidth);
-    };
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  const chatLogs = chatInfo?.chatLogs.map((item, index) => ({ ...item, id: index })) || [];
+  const {
+    toggleView,
+    pageSize,
+    clientWidth,
+    layout,
+    searchText,
+    setSearchText,
+    currentPage,
+    inputValue,
+    setInputValue,
+    isModalVisible,
+    setIsModalVisible,
+    handleChangePage,
+    handleSearch,
+    handleKeyDown,
+    sortType,
+    setSortType,
+    filterType,
+    setFilterType,
+    handleFilter,
+    toggleFilterType,
+    showModal
+  } = useFunctions();
+  const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toLowerCase().includes(searchText.toLowerCase())).length || 0;
+  const [chatLogsResult, setChatLogsResult] = useState([]);
 
   useEffect(() => {
-
-    if (clientWidth > 600) {
-
-      setLayoutLog('horizontal');
-    } else {
-      setLayoutLog('vertical');
-    }
-  }, [clientWidth]);
-
-
-  const pageSize = 5;
-  
-  
-  const toggleView = () => {
-    setLayoutLog((prevView) => (prevView === 'horizontal' ? 'vertical' : 'horizontal'));
-  }
-
-  const toggleFilterType = (type) => {
-    if (type === 'action') {
-      setFilterType((prevFilterType) => (prevFilterType === 'AZ' ? 'ZA' : 'AZ'));
-    } else if (type === 'date') {
-      setFilterType((prevFilterType) => (prevFilterType === 'newerDate' ? 'olderDate' : 'newerDate'));
-    }
-
-  };
-
-  // Sorting by alphabet
-  const handleFilter = () => {
-    let sortedLogs;
-    if(sortType === 'id'){
-      sortedLogs = getVisibleLogs().slice().sort((a,b)=> a.id - b.id);
-    }
-
-    if (sortType === 'action') {
-      sortedLogs = getVisibleLogs().slice().sort((a, b) => a.action.localeCompare(b.action));
-      if (filterType === 'AZ') {
-
-        sortedLogs.reverse();
-        return sortedLogs;
-      } else if (filterType === 'ZA') {
-        return sortedLogs;
-      }
-      setCurrentPage(1);
-    } else if (sortType === 'date') {
-      sortedLogs = getVisibleLogs().slice().sort((a, b) => date(a.created_at).full - date(b.created_at).full);
-      if (filterType === 'olderDate') {
-
-        return sortedLogs;
-      } else if (filterType === 'newerDate') {
-
-        sortedLogs.reverse();
-        return sortedLogs;
-      }
-      setCurrentPage(1);
-    }
-
-
-    return sortedLogs;
-
-  };
-  useEffect(() => {
-    handleFilter();
-  });
-
-  // Display filtered logs on one page
-  const getVisibleLogs = () => {
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-    const filteredLogs = chatLogs.filter(item => (
+    const chatLogsFilterConditions = item => (
       date(item.created_at).full.toLowerCase().includes(searchText.toLowerCase()) ||
       item.action.toLowerCase().includes(searchText.toLowerCase())
-    )) || [];
-    return filteredLogs.slice(startIndex, endIndex) || [];
-
-  };
-
-
-  // Open modal
-  const showModal = () => {
-    setIsModalVisible(true);
-  }
-
-
-
-
-
-
+    );
+    const result = handleFilter(chatLogs, chatLogsFilterConditions);
+    setChatLogsResult(result);
+  }, [searchText, sortType, filterType, currentPage])
 
   return (
     <>
@@ -156,23 +68,23 @@ const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toL
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '30px' }}>
-            {layoutLog === 'vertical' && (
-              <div style={{  borderRight: '1px solid #e5e5e5', height: '100%', display: 'flex', alignItems: 'center',gap:'10px' }}>
-                
-                <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center', paddingRight:'10px'  }}>
+            {layout === 'vertical' && (
+              <div style={{ borderRight: '1px solid #e5e5e5', height: '100%', display: 'flex', alignItems: 'center', gap: '10px' }}>
+
+                <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center', paddingRight: '10px' }}>
                   <div >Sort by action</div>
                   <Button
                     icon={filterType === 'AZ' ? <SortAscendingOutlined /> : <SortDescendingOutlined />}
-                    onClick={() => { toggleFilterType('action'); setSortType('action') }}
+                    onClick={() => { toggleFilterType('action', setFilterType); setSortType('action') }}
                   >
                     {''}
                   </Button>
                 </div>
-                <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center',paddingRight:'10px',borderRight: '1px solid #e5e5e5' }}>
+                <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center', paddingRight: '10px', borderRight: '1px solid #e5e5e5' }}>
                   <div>Sort by date</div>
                   <Button
                     icon={filterType === 'newerDate' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-                    onClick={() => { toggleFilterType('date'); setSortType('date') }}
+                    onClick={() => { toggleFilterType('date', setFilterType); setSortType('date') }}
                   >
                     {''}
                   </Button>
@@ -183,7 +95,7 @@ const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toL
             <div style={{ paddingRight: '10px', height: '100%', display: 'flex', alignItems: 'center' }}>
               <span style={{ fontSize: '16px', marginRight: '10px' }}>View: </span>
               <Button
-                icon={layoutLog === 'horizontal' ? <UnorderedListOutlined /> : <TableOutlined />}
+                icon={layout === 'horizontal' ? <UnorderedListOutlined /> : <TableOutlined />}
                 onClick={toggleView}
               >
                 {''}
@@ -203,7 +115,7 @@ const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toL
       }
       <div>
         {/* Отобразить лейблы только один раз в начале */}
-        {layoutLog === 'horizontal' && (
+        {layout === 'horizontal' && (
           <div style={{
             display: 'flex', justifyContent: 'space-between', background: '#f0f0f0', borderBottom: '1px solid #ccc', fontWeight: 'bold', borderLeft: '1px solid #ccc',
             borderRight: '1px solid #ccc', lineHeight: '35px'
@@ -213,7 +125,7 @@ const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toL
               {/* <span style={{ fontSize: '16px', marginRight: '10px', fontWeight:'normal' }}>Sort: </span> */}
               <Button
                 icon={filterType === 'AZ' ? <SortAscendingOutlined /> : <SortDescendingOutlined />}
-                onClick={() => { toggleFilterType('action'); setSortType('action') }}
+                onClick={() => { toggleFilterType('action', setFilterType); setSortType('action') }}
                 style={{ position: 'absolute', right: '10px', top: '1px' }}
               >
                 {''}
@@ -222,7 +134,7 @@ const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toL
             <div style={{ width: '200px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' }}><span>Created at</span>
               <Button
                 icon={filterType === 'newerDate' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-                onClick={() => { toggleFilterType('date'); setSortType('date') }}
+                onClick={() => { toggleFilterType('date', setFilterType); setSortType('date') }}
                 style={{ position: 'absolute', right: '10px', top: '1px' }}
               >
                 {''}
@@ -230,10 +142,8 @@ const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toL
             </div>
           </div>
         )}
-
-        {/* Отобразить элементы без лейблов */}
-        {handleFilter().map((item) => (
-          layoutLog === 'vertical' ? (
+        {chatLogsResult.map((item) => (
+          layout === 'vertical' ? (
             <Comment
               key={item.index}
               author={<b>
@@ -286,7 +196,7 @@ const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toL
             pageSize={pageSize}
             total={totalFilteredLogs}
             onChange={handleChangePage}
-            style={layoutLog === 'horizontal'? {float:'right', marginTop:'10px'} :{float:'left', marginTop:'10px'}}
+            style={layout === 'horizontal' ? { float: 'right', marginTop: '10px' } : { float: 'left', marginTop: '10px' }}
             size='small'
           />
         )}
@@ -316,7 +226,7 @@ const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toL
             <div>
               <span style={{ fontSize: '16px', marginRight: '10px' }}>View: </span>
               <Button
-                icon={layoutLog === 'horizontal' ? <TableOutlined /> : <UnorderedListOutlined />}
+                icon={layout === 'horizontal' ? <TableOutlined /> : <UnorderedListOutlined />}
                 onClick={toggleView}
               >
                 {''}
@@ -324,27 +234,27 @@ const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toL
             </div>
           </div>
 
-          <div style={{  height: '100%', display: 'flex', alignItems: 'center',gap:'10px', marginTop:'15px' }}>
-                <span style={{ fontSize: '16px' }}>Sort: </span>
-                <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center', paddingRight:'10px',borderRight: '1px solid #e5e5e5'  }}>
-                  <div >Action</div>
-                  <Button
-                    icon={filterType === 'AZ' ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
-                    onClick={() => { toggleFilterType('action'); setSortType('action') }}
-                  >
-                    {''}
-                  </Button>
-                </div>
-                <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center' }}>
-                  <div>Date</div>
-                  <Button
-                    icon={filterType === 'newerDate' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-                    onClick={() => { toggleFilterType('date'); setSortType('date') }}
-                  >
-                    {''}
-                  </Button>
-                </div>
-              </div>
+          <div style={{ height: '100%', display: 'flex', alignItems: 'center', gap: '10px', marginTop: '15px' }}>
+            <span style={{ fontSize: '16px' }}>Sort: </span>
+            <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center', paddingRight: '10px', borderRight: '1px solid #e5e5e5' }}>
+              <div >Action</div>
+              <Button
+                icon={filterType === 'AZ' ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
+                onClick={() => { toggleFilterType('action'); setSortType('action') }}
+              >
+                {''}
+              </Button>
+            </div>
+            <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center' }}>
+              <div>Date</div>
+              <Button
+                icon={filterType === 'newerDate' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
+                onClick={() => { toggleFilterType('date'); setSortType('date') }}
+              >
+                {''}
+              </Button>
+            </div>
+          </div>
         </div>
       </Modal>
 
