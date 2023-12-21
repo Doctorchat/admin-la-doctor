@@ -1,11 +1,13 @@
 import { React, useState, useEffect } from "react";
-import { Button, Comment, Avatar, Input, Pagination, Modal } from "antd";
+import { Button, Input, Pagination, Modal } from "antd";
 import Highlighter from 'react-highlight-words';
-import { UnorderedListOutlined, TableOutlined, SearchOutlined, ArrowDownOutlined, ArrowUpOutlined, MenuOutlined} from '@ant-design/icons';
+import { UnorderedListOutlined, TableOutlined, SearchOutlined, ArrowDownOutlined, ArrowUpOutlined, MenuOutlined } from '@ant-design/icons';
 import { useChatViewContext } from "../ChatViewContext";
 import date from "../../../utils/date";
 import { useFunctions } from "./common";
-
+import MobileView from "./MobileView";
+import TableHeader from "./TableHeader";
+import TabControls from "./TabControls";
 
 
 export default function TransactionTab() {
@@ -36,7 +38,7 @@ export default function TransactionTab() {
   } = useFunctions();
   const transactions = chatInfo?.transactions.map((item, index) => ({ ...item, id: index })) || [];
   const totalFilteredTransactions = transactions.filter(item => date(item.created_at).full.toLowerCase().includes(searchText.toLowerCase())).length || 0;
-  
+
   useEffect(() => {
     const transactionsFilterConditions = item => (
       date(item.created_at).full.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -45,61 +47,35 @@ export default function TransactionTab() {
     );
     const result = handleFilter(transactions, transactionsFilterConditions);
     setTransactionsResult(result);
-  }, [searchText,  sortType, filterType, currentPage,]);
+  }, [searchText, sortType, filterType, currentPage,]);
 
+  const columns = [
+    { id: 0, title: 'ID', style: { width: '80px', textAlign: 'center' }, sortable: false },
+    { id: 1, title: 'Amount', style: { width: '300px', textAlign: 'center', position: 'relative', borderLeft: '1px solid #ccc' }, sortable: true, sortType: 'amount', buttonStyle: { position: 'absolute', top: '1px', right: '10px' }, sortAscendingIcon: <ArrowUpOutlined />, sortDescendingIcon: <ArrowDownOutlined />, filterType: 'big' },
+    { id: 2, title: 'Currency', style: { width: '70px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' } },
+    { id: 3, title: 'Promocode', style: { width: '200px', flex: 1, textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' } },
+    { id: 4, title: 'Status', style: { width: '70px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' } },
+    { id: 5, title: 'Created at', style: { width: '300px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' }, sortable: false, sortType: 'date', buttonStyle: { position: 'absolute', top: '1px', right: '10px', display: 'none' } },
+  ];
+  const filterButtons = [
+    { id: 0, title: 'Sort by amount', type: 'amount', icon: filterType === 'big' ? <ArrowDownOutlined /> : <ArrowUpOutlined /> }
+  ];
 
   return (
     <>
       {clientWidth >= 600 ? (
-        <div style={{ display: 'flex', justifyContent: 'start', gap: '15px', borderBottom: '1px solid #e5e5e5', paddingBottom: '15px' }}>
-          <div style={{ display: 'flex', width: '50%', alignItems: 'center', paddingRight: '10px', borderRight: '1px solid #e5e5e5' }}>
-            <span style={{ fontSize: '16px', marginRight: '10px' }}> Filtering: </span>
-            <Input
-              placeholder="Enter date or action"
-              onKeyDown={handleKeyDown}
-              prefix={<SearchOutlined />}
-              onInput={(e) => {
-                setSearchText(e.target.value)
-              }}
-              style={{ width: '100%' }}
-            />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '15px' }}>
-            {layout === 'vertical' && (
-              <div style={{ borderRight: '1px solid #e5e5e5', height: '100%', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                
-                <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center', paddingRight: '10px' }}>
-                  <div >Sort by amount</div>
-                  <Button
-                    icon={filterType === 'big' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-                    onClick={() => { toggleFilterType('amount',setFilterType); setSortType('amount') }}
-                  >
-                    {''}
-                  </Button>
-                </div>
-                <div style={{ display: 'none', gap: '5px', fontSize: '16px', alignItems: 'center', paddingRight: '10px', borderRight: '1px solid #e5e5e5' }}>
-                  <div>Sort by date</div>
-                  <Button
-                    icon={filterType === 'olderDate' ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
-                    onClick={() => { toggleFilterType('date',setFilterType); setSortType('date') }}
-                  >
-                    {''}
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            <div style={{ paddingRight: '10px', height: '100%', display: 'flex', alignItems: 'center' }}>
-              <span style={{ fontSize: '16px', marginRight: '10px' }}>View: </span>
-              <Button
-                icon={layout === 'horizontal' ? <UnorderedListOutlined /> : <TableOutlined />}
-                onClick={toggleView}
-              >
-                {''}
-              </Button>
-            </div>
-          </div>
-        </div>
+        <TabControls
+          searchText={searchText}
+          setSearchText={setSearchText}
+          layout={layout}
+          toggleView={toggleView}
+          filterType={filterType}
+          toggleFilterType={toggleFilterType}
+          setSortType={setSortType}
+          filterButtons={filterButtons}
+          setFilterType={setFilterType}
+          handleKeyDown={handleKeyDown}
+        />
       ) : (
         <div style={{ display: 'flex', justifyContent: 'end' }}>
           <Button icon={<MenuOutlined />} onClick={showModal}   >
@@ -109,38 +85,7 @@ export default function TransactionTab() {
       )}
 
       {layout === 'horizontal' && (
-        <div style={{
-          display: 'flex', justifyContent: 'space-between', background: '#f0f0f0', borderBottom: '1px solid #ccc', fontWeight: 'bold', borderLeft: '1px solid #ccc',
-          borderRight: '1px solid #ccc', lineHeight: '35px'
-        }}>
-          <div style={{ width: '80px', textAlign: 'center' }}> <span>ID</span></div>
-          <div style={{ width: '300px', textAlign: 'center', position: 'relative', borderLeft: '1px solid #ccc' }}>
-            <div>Amount</div>
-            <Button
-              icon={filterType === 'big' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-              onClick={() => { toggleFilterType('amount',setFilterType); setSortType('amount') }}
-              style={{ position: 'absolute', top: '1px', right: '10px' }}
-            >
-              {''}
-            </Button>
-          </div>
-          <div style={{ width: '70px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' }}><span>Currency </span>
-          </div>
-          <div style={{ width: '200px', flex: 1, textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' }}><span>Promocode </span>
-          </div>
-          <div style={{ width: '70px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' }}><span>Status </span>
-          </div>
-          <div style={{ width: '300px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' }}>
-            <span>Created at</span>
-            <Button
-              icon={filterType === 'olderDate' ?   <ArrowDownOutlined /> : <ArrowUpOutlined />}
-              onClick={() => { toggleFilterType('date',setFilterType); setSortType('date') }}
-              style={{ position: 'absolute', top: '1px', right: '10px', display:'none' }}
-            >
-              {''}
-            </Button>
-          </div>
-        </div>
+        <TableHeader columns={columns} toggleFilterType={toggleFilterType} setFilterType={setFilterType} setSortType={setSortType} filterType={filterType} />
       )}
       {
         transactionsResult.map((item) => (
@@ -182,34 +127,7 @@ export default function TransactionTab() {
               </div>
             </div>
           ) : (
-            <Comment
-              key={item.id}
-              avatar={
-                <Avatar
-                  style={{
-                    marginTop: '6px',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {item.id + 1}
-                </Avatar>
-              }
-              content={<p>
-                <Highlighter
-                  searchWords={[searchText]}
-                  textToHighlight={item.amount + ' ' + item.currency + ', ' + item.status + (item.promocode ? ', ' + item.promocode : '')}
-                  highlightStyle={{ color: 'red', fontWeight: 'bold', padding: '0' }}
-                />
-              </p>}
-              author={<b>
-                <Highlighter
-                  searchWords={[searchText]}
-                  textToHighlight={date(item.created_at).full}
-                  highlightStyle={{ color: 'red', fontWeight: 'bold', padding: '0' }}
-                />
-              </b>}
-            />
+            <MobileView key={item.id} item={item} type={'transactions'} searchText={searchText} />
           )
         ))}
       {chatInfo?.transactions.length > 0 && (
@@ -218,8 +136,8 @@ export default function TransactionTab() {
           pageSize={pageSize}
           total={totalFilteredTransactions}
           onChange={handleChangePage}
-          style={layout === 'horizontal'? {float:'right', marginTop:'10px'} :{float:'left', marginTop:'10px'}}
-          size= 'small'
+          style={layout === 'horizontal' ? { float: 'right', marginTop: '10px' } : { float: 'left', marginTop: '10px' }}
+          size='small'
         />
       )}
 
@@ -267,7 +185,7 @@ export default function TransactionTab() {
             <div style={{ display: 'none', gap: '5px', fontSize: '16px', alignItems: 'center' }}>
               <div>Date</div>
               <Button
-                icon={filterType === 'olderDate' ?  <ArrowDownOutlined /> : <ArrowUpOutlined /> }
+                icon={filterType === 'olderDate' ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
                 onClick={() => { toggleFilterType('date'); setSortType('date') }}
               >
                 {''}

@@ -11,7 +11,7 @@ export const useFunctions = () => {
     const [inputValue, setInputValue] = useState("");
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [filterType, setFilterType] = useState('olderDate');
-    const [sortType, setSortType] = useState('date')
+    const [sortType, setSortType] = useState('id')
 
 
     useEffect(() => {
@@ -90,7 +90,6 @@ export const useFunctions = () => {
         });
     };
 
-    // -------------
     const handleFilter = (data, filterConditions) => {
         let sortedLogs;
 
@@ -106,7 +105,7 @@ export const useFunctions = () => {
             sortedLogs.sort((a, b) => a.id - b.id);
         } else if (sortType === 'action') {
             sortedLogs.sort((a, b) => a.action.localeCompare(b.action));
-            if (filterType === 'AZ') {
+            if (filterType === 'ZA') {
                 sortedLogs.reverse();
             }
         } else if (sortType === 'date') {
@@ -124,10 +123,6 @@ export const useFunctions = () => {
         setCurrentPage(1);
         return sortedLogs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
     };
-    // useEffect(() => {
-    //     handleFilter();
-    // },[]);
-
 
     const showModal = () => {
         setIsModalVisible(true);

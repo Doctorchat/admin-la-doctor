@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
-import { Comment, Avatar, Button, Pagination, Input, Modal } from "antd";
+import { Button, Pagination, Input, Modal } from "antd";
 import { UnorderedListOutlined, TableOutlined, SearchOutlined, SortDescendingOutlined, SortAscendingOutlined, MenuOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import { useChatViewContext } from "../ChatViewContext";
 import Highlighter from 'react-highlight-words';
 import date from "../../../utils/date";
 import 'antd/dist/antd.css';
 import { useFunctions } from './common.js'
+import MobileView from "./MobileView.js";
+import TableHeader from "./TableHeader.js";
+import TabControls from "./TabControls.js";
 
 export default function ChatLogs() {
 
@@ -16,8 +19,8 @@ export default function ChatLogs() {
     pageSize,
     clientWidth,
     layout,
-    searchText,
     setSearchText,
+    searchText,
     currentPage,
     inputValue,
     setInputValue,
@@ -46,65 +49,48 @@ export default function ChatLogs() {
     setChatLogsResult(result);
   }, [searchText, sortType, filterType, currentPage])
 
+  const columns = [
+    { id: 7, title: '№', style: { width: '30px', textAlign: 'center', borderRight: '1px solid #ccc', boxSizing: 'border-box', height: '100%' } },
+    {
+      id: 8,
+      title: 'Action',
+      style: { flex: 1, textAlign: 'center', position: 'relative' }, sortable: true, sortType: 'action', buttonStyle: { position: 'absolute', right: '10px', top: '1px' },
+      sortAscendingIcon: <SortAscendingOutlined />,
+      sortDescendingIcon: <SortDescendingOutlined />,
+      filterType: 'AZ'
+    },
+    {
+      title: 'Created at',
+      style: { width: '200px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' }, sortable: true, sortType: 'date', buttonStyle: { position: 'absolute', right: '10px', top: '1px' },
+      sortAscendingIcon: <ArrowUpOutlined />,
+      sortDescendingIcon: <ArrowDownOutlined />,
+      filterType: 'newerDate',
+    },
+
+  ];
+
+  const filterButtons = [
+    { id: 0, title: 'Sort by action', type: 'action', icon: filterType === 'AZ' ? <SortDescendingOutlined /> : <SortAscendingOutlined /> },
+    { id: 1, title: 'Sort by date', type: 'date', icon: filterType === 'newerDate' ? <ArrowDownOutlined /> : <ArrowUpOutlined /> },
+  ];
+
   return (
     <>
       {clientWidth >= 600 ? (
-        <div style={{ display: 'flex', justifyContent: 'start', gap: '15px', borderBottom: '1px solid #e5e5e5', paddingBottom: '15px' }}>
 
-          <div style={{ display: 'flex', width: '50%', alignItems: 'center', paddingRight: '10px', borderRight: '1px solid #e5e5e5' }}>
-            <span style={{ fontSize: '16px', marginRight: '10px' }}> Filtering: </span>
-            <Input
-              placeholder="Enter date or action"
-              onKeyDown={handleKeyDown}
-              prefix={<SearchOutlined />}
+        <TabControls
+          searchText={searchText}
+          setSearchText={setSearchText}
+          layout={layout}
+          toggleView={toggleView}
+          filterType={filterType}
+          toggleFilterType={toggleFilterType}
+          setSortType={setSortType}
+          filterButtons={filterButtons}
+          setFilterType={setFilterType}
+          handleKeyDown={handleKeyDown}
 
-
-              onInput={(e) => {
-                setSearchText(e.target.value)
-
-              }}
-              style={{ width: '100%' }}
-            />
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '30px' }}>
-            {layout === 'vertical' && (
-              <div style={{ borderRight: '1px solid #e5e5e5', height: '100%', display: 'flex', alignItems: 'center', gap: '10px' }}>
-
-                <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center', paddingRight: '10px' }}>
-                  <div >Sort by action</div>
-                  <Button
-                    icon={filterType === 'AZ' ? <SortAscendingOutlined /> : <SortDescendingOutlined />}
-                    onClick={() => { toggleFilterType('action', setFilterType); setSortType('action') }}
-                  >
-                    {''}
-                  </Button>
-                </div>
-                <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center', paddingRight: '10px', borderRight: '1px solid #e5e5e5' }}>
-                  <div>Sort by date</div>
-                  <Button
-                    icon={filterType === 'newerDate' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-                    onClick={() => { toggleFilterType('date', setFilterType); setSortType('date') }}
-                  >
-                    {''}
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            <div style={{ paddingRight: '10px', height: '100%', display: 'flex', alignItems: 'center' }}>
-              <span style={{ fontSize: '16px', marginRight: '10px' }}>View: </span>
-              <Button
-                icon={layout === 'horizontal' ? <UnorderedListOutlined /> : <TableOutlined />}
-                onClick={toggleView}
-              >
-                {''}
-              </Button>
-            </div>
-
-
-          </div>
-        </div>
+        />
       ) : (
         <div style={{ display: 'flex', justifyContent: 'end' }}>
           <Button icon={<MenuOutlined />} onClick={showModal}   >
@@ -114,62 +100,12 @@ export default function ChatLogs() {
       )
       }
       <div>
-        {/* Отобразить лейблы только один раз в начале */}
         {layout === 'horizontal' && (
-          <div style={{
-            display: 'flex', justifyContent: 'space-between', background: '#f0f0f0', borderBottom: '1px solid #ccc', fontWeight: 'bold', borderLeft: '1px solid #ccc',
-            borderRight: '1px solid #ccc', lineHeight: '35px'
-          }}>
-            <div style={{ width: '30px', textAlign: 'center', borderRight: '1px solid #ccc', boxSizing: 'border-box', height: '100%' }}>№</div>
-            <div style={{ flex: 1, textAlign: 'center', position: 'relative' }}><span>Action</span>
-              {/* <span style={{ fontSize: '16px', marginRight: '10px', fontWeight:'normal' }}>Sort: </span> */}
-              <Button
-                icon={filterType === 'AZ' ? <SortAscendingOutlined /> : <SortDescendingOutlined />}
-                onClick={() => { toggleFilterType('action', setFilterType); setSortType('action') }}
-                style={{ position: 'absolute', right: '10px', top: '1px' }}
-              >
-                {''}
-              </Button>
-            </div>
-            <div style={{ width: '200px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' }}><span>Created at</span>
-              <Button
-                icon={filterType === 'newerDate' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-                onClick={() => { toggleFilterType('date', setFilterType); setSortType('date') }}
-                style={{ position: 'absolute', right: '10px', top: '1px' }}
-              >
-                {''}
-              </Button>
-            </div>
-          </div>
+          <TableHeader columns={columns} toggleFilterType={toggleFilterType} setFilterType={setFilterType} setSortType={setSortType} filterType={filterType} />
         )}
         {chatLogsResult.map((item) => (
           layout === 'vertical' ? (
-            <Comment
-              key={item.index}
-              author={<b>
-                <Highlighter
-                  searchWords={[searchText]}
-                  textToHighlight={date(item.created_at).full}
-                  highlightStyle={{ color: 'red', fontWeight: 'bold', padding: '0' }}
-                /></b>}
-              avatar={
-                <Avatar
-                  style={{
-                    marginTop: '6px',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {item.id + 1}
-                </Avatar>
-              }
-              content={<p>
-                <Highlighter
-                  searchWords={[searchText]}
-                  textToHighlight={item.action}
-                  highlightStyle={{ color: 'red', fontWeight: 'bold', padding: '0' }}
-                /></p>}
-            />
+            <MobileView key={item.id} item={item} type={'logs'} searchText={searchText} />
           ) : (
             <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', lineHeight: '35px' }} key={item.id}>
               <div style={{ width: '30px', textAlign: 'center', borderRight: '1px solid #ccc', boxSizing: 'border-box', height: '100%' }}>{item.id + 1}</div>
@@ -202,7 +138,6 @@ export default function ChatLogs() {
         )}
       </div>
 
-      {/* Modal */}
       <Modal
         title="Choose an option"
         open={isModalVisible}
@@ -257,8 +192,6 @@ export default function ChatLogs() {
           </div>
         </div>
       </Modal>
-
-
     </>
 
   )
