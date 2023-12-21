@@ -4,21 +4,33 @@ import Highlighter from 'react-highlight-words';
 import { UnorderedListOutlined, TableOutlined, SearchOutlined, ArrowDownOutlined, ArrowUpOutlined, MenuOutlined} from '@ant-design/icons';
 import { useChatViewContext } from "../ChatViewContext";
 import date from "../../../utils/date";
+import { useFunctions } from "./common";
+
+
 
 export default function TransactionTab() {
   const { chatInfo } = useChatViewContext();
   const [clientWidth, setClientWidth] = useState(window.innerWidth);
   const [layoutTransaction, setLayoutTransaction] = useState("horizontal");
-  const [searchText, setSearchText] = useState("");
-  const [searching, setSearching] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
   const [filterType, setFilterType] = useState('olderDate');
   const [sortType, setSortType] = useState('date');
 
   const transactions = chatInfo?.transactions.map((item, index) => ({ ...item, id: index })) || [];
 
+  const {
+    searchText,
+    setSearchText,
+    currentPage,
+    setCurrentPage,
+    inputValue,
+    setInputValue,
+    isModalVisible,
+    setIsModalVisible,
+    handleChangePage,
+    handleSearch,
+    handleKeyDown
+  } = useFunctions();
+  
 
   useEffect(() => {
     const handleResize = () => {
@@ -50,41 +62,12 @@ export default function TransactionTab() {
 
   const toggleFilterType = (type) => {
     if (type === 'amount') {
-      return setFilterType((prevFilterType) => (prevFilterType === 'big' ? 'small' : 'big'));
+      setFilterType((prevFilterType) => (prevFilterType === 'big' ? 'small' : 'big'));
     } else if (type === 'date') {
-      return setFilterType((prevFilterType) => (prevFilterType === 'newerDate' ? 'olderDate' : 'newerDate'));
+      setFilterType((prevFilterType) => (prevFilterType === 'newerDate' ? 'olderDate' : 'newerDate'));
     }
-  };
 
-  const handleChangePage = (page) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-  const handleSearch = () => {
-    setCurrentPage(1);
-    setSearching(true);
-    setSearchText(inputValue);
-  };
-
-  useEffect(() => {
-    if (searching) {
-      setSearching(false);
-    }
-  }, [searchText, searching]);
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-      setIsModalVisible(false);
-    } else if (e.key === 'Escape') {
-      setSearchText('');
-      setInputValue('');
-      setSearching(false);
-      handleChangePage(1);
-      e.preventDefault();
-    }
-  };
-
 
   const handleFilter = () => {
     let sortedLogs;
@@ -118,7 +101,7 @@ export default function TransactionTab() {
   };
   useEffect(() => {
     handleFilter();
-  }, [filterType]);
+  });
 
 
   const getVisibleLogs = () => {
@@ -233,9 +216,9 @@ export default function TransactionTab() {
         </div>
       )}
       {
-        handleFilter().map((item, index) => (
+        handleFilter().map((item) => (
           layoutTransaction === "horizontal" ? (
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', lineHeight: '35px' }} key={item.index}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', lineHeight: '35px' }} key={item.id}>
               <div style={{ width: '80px', textAlign: 'center' }}>
                 <Highlighter
                   searchWords={[searchText]}
@@ -273,7 +256,7 @@ export default function TransactionTab() {
             </div>
           ) : (
             <Comment
-              key={item.index}
+              key={item.id}
               avatar={
                 <Avatar
                   style={{
@@ -288,7 +271,7 @@ export default function TransactionTab() {
               content={<p>
                 <Highlighter
                   searchWords={[searchText]}
-                  textToHighlight={`${item.amount} ${item.currency}, ${item.status}, ${item.promocode || '----'}`}
+                  textToHighlight={item.amount + ' ' + item.currency + ', ' + item.status + (item.promocode ? ', ' + item.promocode : '')}
                   highlightStyle={{ color: 'red', fontWeight: 'bold', padding: '0' }}
                 />
               </p>}
@@ -302,12 +285,14 @@ export default function TransactionTab() {
             />
           )
         ))}
-      {chatInfo?.transactions.length > pageSize && (
+      {chatInfo?.transactions.length > 0 && (
         <Pagination
           current={currentPage}
           pageSize={pageSize}
           total={totalFilteredTransactions}
           onChange={handleChangePage}
+          style={layoutTransaction === 'horizontal'? {float:'right', marginTop:'10px'} :{float:'left', marginTop:'10px'}}
+          size= 'small'
         />
       )}
 
@@ -352,7 +337,7 @@ export default function TransactionTab() {
                 {''}
               </Button>
             </div>
-            <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center' }}>
+            <div style={{ display: 'none', gap: '5px', fontSize: '16px', alignItems: 'center' }}>
               <div>Date</div>
               <Button
                 icon={filterType === 'olderDate' ?  <ArrowDownOutlined /> : <ArrowUpOutlined /> }

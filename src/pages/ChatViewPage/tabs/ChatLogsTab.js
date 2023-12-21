@@ -5,21 +5,34 @@ import { useChatViewContext } from "../ChatViewContext";
 import Highlighter from 'react-highlight-words';
 import date from "../../../utils/date";
 import 'antd/dist/antd.css';
+import{useFunctions} from './common.js'
 
 export default function ChatLogs() {
 
   const { chatInfo } = useChatViewContext();
   const [layoutLog, setLayoutLog] = useState("vertical");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchText, setSearchText] = useState("");
-  const [searching, setSearching] = useState(false);
-  const [inputValue, setInputValue] = useState("");
   const [filterType, setFilterType] = useState('AZ');
   const [clientWidth, setClientWidth] = useState(window.innerWidth);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [sortType, setSortType] = useState('id');
 
-  const chatLogs = chatInfo?.chatLogs.map((item, index) => ({ ...item, id: index })) || [];
+const chatLogs = chatInfo?.chatLogs.map((item, index) => ({ ...item, id: index })) || [];
+
+const {
+  searchText,
+  setSearchText,
+  currentPage,
+  setCurrentPage,
+  inputValue,
+  setInputValue,
+  isModalVisible,
+  setIsModalVisible,
+  handleChangePage,
+  handleSearch,
+  handleKeyDown
+} = useFunctions();
+
+const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toLowerCase().includes(searchText.toLowerCase())).length || 0;
+  
 
   useEffect(() => {
     const handleResize = () => {
@@ -44,39 +57,8 @@ export default function ChatLogs() {
 
 
   const pageSize = 5;
-  const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toLowerCase().includes(searchText.toLowerCase())).length || 0;
-
-  const handleChangePage = (page) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-
-  const handleSearch = () => {
-    setCurrentPage(1);
-    setSearching(true);
-    setSearchText(inputValue);
-  };
-
-  useEffect(() => {
-    if (searching) {
-      setSearching(false);
-    }
-  }, [searchText, searching]);
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-      setIsModalVisible(false);
-    } else if (e.key === 'Escape') {
-      setSearchText('');
-      setInputValue('');
-      setSearching(false);
-      handleChangePage(1);
-      e.preventDefault();
-    }
-  };
-
+  
+  
   const toggleView = () => {
     setLayoutLog((prevView) => (prevView === 'horizontal' ? 'vertical' : 'horizontal'));
   }
@@ -90,6 +72,7 @@ export default function ChatLogs() {
 
   };
 
+  // Sorting by alphabet
   const handleFilter = () => {
     let sortedLogs;
     if(sortType === 'id'){
@@ -125,8 +108,9 @@ export default function ChatLogs() {
   };
   useEffect(() => {
     handleFilter();
-  }, [filterType]);
+  });
 
+  // Display filtered logs on one page
   const getVisibleLogs = () => {
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
@@ -138,9 +122,17 @@ export default function ChatLogs() {
 
   };
 
+
+  // Open modal
   const showModal = () => {
     setIsModalVisible(true);
   }
+
+
+
+
+
+
 
   return (
     <>
@@ -210,6 +202,7 @@ export default function ChatLogs() {
       )
       }
       <div>
+        {/* Отобразить лейблы только один раз в начале */}
         {layoutLog === 'horizontal' && (
           <div style={{
             display: 'flex', justifyContent: 'space-between', background: '#f0f0f0', borderBottom: '1px solid #ccc', fontWeight: 'bold', borderLeft: '1px solid #ccc',
@@ -239,7 +232,7 @@ export default function ChatLogs() {
         )}
 
         {/* Отобразить элементы без лейблов */}
-        {handleFilter().map((item, index) => (
+        {handleFilter().map((item) => (
           layoutLog === 'vertical' ? (
             <Comment
               key={item.index}
@@ -268,7 +261,7 @@ export default function ChatLogs() {
                 /></p>}
             />
           ) : (
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', lineHeight: '35px' }} key={item.index}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', lineHeight: '35px' }} key={item.id}>
               <div style={{ width: '30px', textAlign: 'center', borderRight: '1px solid #ccc', boxSizing: 'border-box', height: '100%' }}>{item.id + 1}</div>
               <div style={{ flex: 1, textAlign: 'center' }}>
                 <Highlighter
@@ -287,12 +280,14 @@ export default function ChatLogs() {
             </div>
           )
         ))}
-        {chatInfo?.chatLogs.length > pageSize && (
+        {chatInfo?.chatLogs.length > 0 && (
           <Pagination
             current={currentPage}
             pageSize={pageSize}
             total={totalFilteredLogs}
             onChange={handleChangePage}
+            style={layoutLog === 'horizontal'? {float:'right', marginTop:'10px'} :{float:'left', marginTop:'10px'}}
+            size='small'
           />
         )}
       </div>
