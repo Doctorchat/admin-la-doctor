@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Button, Pagination, Input, Modal } from "antd";
-import { UnorderedListOutlined, TableOutlined, SearchOutlined, SortDescendingOutlined, SortAscendingOutlined, MenuOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import { Button, Pagination } from "antd";
+import { SortDescendingOutlined, SortAscendingOutlined, MenuOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import { useChatViewContext } from "../ChatViewContext";
 import Highlighter from 'react-highlight-words';
 import date from "../../../utils/date";
@@ -9,6 +9,7 @@ import { useFunctions } from './common.js'
 import MobileView from "./MobileView.js";
 import TableHeader from "./TableHeader.js";
 import TabControls from "./TabControls.js";
+import Popup from "./Popup.js";
 
 export default function ChatLogs() {
 
@@ -62,8 +63,8 @@ export default function ChatLogs() {
     {
       title: 'Created at',
       style: { width: '200px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' }, sortable: true, sortType: 'date', buttonStyle: { position: 'absolute', right: '10px', top: '1px' },
-      sortAscendingIcon: <ArrowUpOutlined />,
-      sortDescendingIcon: <ArrowDownOutlined />,
+      sortAscendingIcon: <ArrowDownOutlined />,
+      sortDescendingIcon: <ArrowUpOutlined />,
       filterType: 'newerDate',
     },
 
@@ -71,13 +72,12 @@ export default function ChatLogs() {
 
   const filterButtons = [
     { id: 0, title: 'Sort by action', type: 'action', icon: filterType === 'AZ' ? <SortDescendingOutlined /> : <SortAscendingOutlined /> },
-    { id: 1, title: 'Sort by date', type: 'date', icon: filterType === 'newerDate' ? <ArrowDownOutlined /> : <ArrowUpOutlined /> },
+    { id: 1, title: 'Sort by date', type: 'date', icon: filterType === 'newerDate' ? <ArrowUpOutlined /> : <ArrowDownOutlined /> },
   ];
 
   return (
     <>
       {clientWidth >= 600 ? (
-
         <TabControls
           searchText={searchText}
           setSearchText={setSearchText}
@@ -89,7 +89,6 @@ export default function ChatLogs() {
           filterButtons={filterButtons}
           setFilterType={setFilterType}
           handleKeyDown={handleKeyDown}
-
         />
       ) : (
         <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -138,60 +137,20 @@ export default function ChatLogs() {
         )}
       </div>
 
-      <Modal
-        title="Choose an option"
-        open={isModalVisible}
-        onOk={() => { setIsModalVisible(false) }}
-        onCancel={() => { setIsModalVisible(false) }}
-      >
-        <div>
-          <Input
-            placeholder="Enter date or action"
-            onKeyDown={handleKeyDown}
-            suffix={
-              <Button icon={<SearchOutlined />} onClick={() => { handleSearch(); setIsModalVisible(false) }} >
-                {''}
-              </Button>
-            }
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            style={{ width: '100%' }}
-          />
-          <div style={{ display: 'flex', justifyContent: 'start', gap: '30px', marginTop: '15px' }}>
-            <div>
-              <span style={{ fontSize: '16px', marginRight: '10px' }}>View: </span>
-              <Button
-                icon={layout === 'horizontal' ? <TableOutlined /> : <UnorderedListOutlined />}
-                onClick={toggleView}
-              >
-                {''}
-              </Button>
-            </div>
-          </div>
-
-          <div style={{ height: '100%', display: 'flex', alignItems: 'center', gap: '10px', marginTop: '15px' }}>
-            <span style={{ fontSize: '16px' }}>Sort: </span>
-            <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center', paddingRight: '10px', borderRight: '1px solid #e5e5e5' }}>
-              <div >Action</div>
-              <Button
-                icon={filterType === 'AZ' ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
-                onClick={() => { toggleFilterType('action'); setSortType('action') }}
-              >
-                {''}
-              </Button>
-            </div>
-            <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center' }}>
-              <div>Date</div>
-              <Button
-                icon={filterType === 'newerDate' ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-                onClick={() => { toggleFilterType('date'); setSortType('date') }}
-              >
-                {''}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </Modal>
+      <Popup
+        isModalVisible={isModalVisible}
+        handleKeyDown={handleKeyDown}
+        inputValue={inputValue}
+        layout={layout}
+        toggleView={toggleView}
+        setFilterType={setFilterType}
+        setIsModalVisible={setIsModalVisible}
+        handleSearch={handleSearch}
+        setInputValue={setInputValue}
+        filterButtons={filterButtons}
+        toggleFilterType={toggleFilterType}
+        setSortType={setSortType}
+      />
     </>
 
   )

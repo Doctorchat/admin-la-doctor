@@ -1,13 +1,14 @@
 import { React, useState, useEffect } from "react";
-import { Button, Input, Pagination, Modal } from "antd";
+import { Button,Pagination } from "antd";
 import Highlighter from 'react-highlight-words';
-import { UnorderedListOutlined, TableOutlined, SearchOutlined, ArrowDownOutlined, ArrowUpOutlined, MenuOutlined } from '@ant-design/icons';
+import { ArrowDownOutlined, ArrowUpOutlined, MenuOutlined } from '@ant-design/icons';
 import { useChatViewContext } from "../ChatViewContext";
 import date from "../../../utils/date";
 import { useFunctions } from "./common";
 import MobileView from "./MobileView";
 import TableHeader from "./TableHeader";
 import TabControls from "./TabControls";
+import Popup from "./Popup";
 
 
 export default function TransactionTab() {
@@ -141,59 +142,20 @@ export default function TransactionTab() {
         />
       )}
 
-      <Modal
-        title="Choose an option"
-        open={isModalVisible}
-        onOk={() => { setIsModalVisible(false) }}
-        onCancel={() => { setIsModalVisible(false) }}
-      >
-        <div>
-          <Input
-            placeholder="Enter date or action"
-            onKeyDown={handleKeyDown}
-            suffix={
-              <Button icon={<SearchOutlined />} onClick={() => { handleSearch(); setIsModalVisible(false) }} >
-                {''}
-              </Button>
-            }
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            style={{ width: '100%' }}
-          />
-          <div style={{ display: 'flex', justifyContent: 'start', gap: '30px', marginTop: '15px' }}>
-            <div>
-              <span style={{ fontSize: '16px', marginRight: '10px' }}>View: </span>
-              <Button
-                icon={layout === 'horizontal' ? <UnorderedListOutlined /> : <TableOutlined />}
-                onClick={toggleView}
-              >
-                {''}
-              </Button>
-            </div>
-          </div>
-          <div style={{ height: '100%', display: 'flex', alignItems: 'center', gap: '10px', marginTop: '15px' }}>
-            <span style={{ fontSize: '16px' }}>Sort: </span>
-            <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center', paddingRight: '10px', borderRight: '1px solid #e5e5e5' }}>
-              <div >Amount</div>
-              <Button
-                icon={filterType === 'big' ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
-                onClick={() => { toggleFilterType('amount'); setSortType('amount') }}
-              >
-                {''}
-              </Button>
-            </div>
-            <div style={{ display: 'none', gap: '5px', fontSize: '16px', alignItems: 'center' }}>
-              <div>Date</div>
-              <Button
-                icon={filterType === 'olderDate' ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
-                onClick={() => { toggleFilterType('date'); setSortType('date') }}
-              >
-                {''}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </Modal>
+      <Popup
+        isModalVisible={isModalVisible}
+        handleKeyDown={handleKeyDown}
+        inputValue={inputValue}
+        layout={layout}
+        toggleView={toggleView}
+        setFilterType={setFilterType}
+        setIsModalVisible={setIsModalVisible}
+        handleSearch={handleSearch}
+        setInputValue={setInputValue}
+        filterButtons={filterButtons}
+        toggleFilterType={toggleFilterType}
+        setSortType={setSortType}
+      />
     </>
   );
 

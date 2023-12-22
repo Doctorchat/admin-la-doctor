@@ -11,7 +11,7 @@ export const useFunctions = () => {
     const [inputValue, setInputValue] = useState("");
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [filterType, setFilterType] = useState('olderDate');
-    const [sortType, setSortType] = useState('id')
+    const [sortType, setSortType] = useState('date')
 
 
     useEffect(() => {
@@ -110,7 +110,7 @@ export const useFunctions = () => {
             }
         } else if (sortType === 'date') {
             sortedLogs.sort((a, b) => date(a.created_at).full - date(b.created_at).full);
-            if (filterType === 'olderDate') {
+            if (filterType === 'newerDate') {
                 sortedLogs.reverse();
             }
         } else if (sortType === 'amount') {
