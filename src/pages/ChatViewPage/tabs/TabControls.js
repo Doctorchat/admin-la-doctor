@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 
 const TabControls = ({
+    renderFilterButtons,
     setSearchText,
     layout,
     toggleView,
@@ -32,19 +33,8 @@ const TabControls = ({
             </div>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '15px' }}>
                 {layout === 'vertical' && (
-                    filterButtons.map((button, index) => (
-                        <div key={button.id} style={{ borderRight: index < filterButtons.length - 1 ? '1px solid #e5e5e5' : 'none', height: '100%', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center', paddingRight: '10px' }}>
-                                <div>{button.title}</div>
-                                <Button
-                                    icon={button.icon}
-                                    onClick={() => { toggleFilterType(button.type, setFilterType); setSortType(button.type) }}
-                                >
-                                    {''}
-                                </Button>
-                            </div>
-                        </div>
-                    )))}
+                    renderFilterButtons(filterButtons, toggleFilterType, setFilterType, setSortType)
+                    )}
                 <div style={{ paddingRight: '10px', height: '100%', display: 'flex', alignItems: 'center' }}>
                     <span style={{ fontSize: '16px', marginRight: '10px' }}>View: </span>
                     <Button
@@ -60,6 +50,7 @@ const TabControls = ({
 };
 
 TabControls.propTypes = {
+    renderFilterButtons: PropTypes.func.isRequired,
     setSearchText: PropTypes.func.isRequired,
     handleKeyDown: PropTypes.func.isRequired,
     layout: PropTypes.string.isRequired,

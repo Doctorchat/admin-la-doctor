@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import date from "../../../utils/date";
+import { Button } from "antd";
 
 export const useFunctions = () => {
     const pageSize = 5;
@@ -128,7 +129,24 @@ export const useFunctions = () => {
         setIsModalVisible(true);
     }
 
+    const renderFilterButtons = (filterButtons, toggleFilterType, setFilterType, setSortType) => {
+        return filterButtons.map((button, index) => (
+            <div key={button.id} style={{ borderRight: index < filterButtons.length - 1 ? '1px solid #e5e5e5' : 'none', height: '100%', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ display: 'flex', gap: '5px', fontSize: '16px', alignItems: 'center', paddingRight: '10px' }}>
+                    <div>{button.title}</div>
+                    <Button
+                        icon={button.icon}
+                        onClick={() => { toggleFilterType(button.type, setFilterType); setSortType(button.type) }}
+                    >
+                        {''}
+                    </Button>
+                </div>
+            </div>
+        ));
+    };
+
     return {
+        renderFilterButtons,
         toggleView,
         pageSize,
         clientWidth,

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Button, Pagination } from "antd";
 import { SortDescendingOutlined, SortAscendingOutlined, MenuOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import { useChatViewContext } from "../ChatViewContext";
-import Highlighter from 'react-highlight-words';
 import date from "../../../utils/date";
 import 'antd/dist/antd.css';
 import { useFunctions } from './common.js'
@@ -10,12 +9,13 @@ import MobileView from "./MobileView.js";
 import TableHeader from "./TableHeader.js";
 import TabControls from "./TabControls.js";
 import Popup from "./Popup.js";
-
+import TableRow from "./TableRow.js";
 export default function ChatLogs() {
 
   const { chatInfo } = useChatViewContext();
   const chatLogs = chatInfo?.chatLogs.map((item, index) => ({ ...item, id: index })) || [];
   const {
+    renderFilterButtons,
     toggleView,
     pageSize,
     clientWidth,
@@ -53,21 +53,11 @@ export default function ChatLogs() {
   const columns = [
     { id: 7, title: '№', style: { width: '30px', textAlign: 'center', borderRight: '1px solid #ccc', boxSizing: 'border-box', height: '100%' } },
     {
-      id: 8,
-      title: 'Action',
-      style: { flex: 1, textAlign: 'center', position: 'relative' }, sortable: true, sortType: 'action', buttonStyle: { position: 'absolute', right: '10px', top: '1px' },
-      sortAscendingIcon: <SortAscendingOutlined />,
-      sortDescendingIcon: <SortDescendingOutlined />,
-      filterType: 'AZ'
+      id: 8,title: 'Action',style: { flex: 1, textAlign: 'center', position: 'relative' }, sortable: true, sortType: 'action', buttonStyle: { position: 'absolute', right: '10px', top: '1px' },sortAscendingIcon: <SortAscendingOutlined />,sortDescendingIcon: <SortDescendingOutlined />,filterType: 'AZ'
     },
     {
-      title: 'Created at',
-      style: { width: '200px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' }, sortable: true, sortType: 'date', buttonStyle: { position: 'absolute', right: '10px', top: '1px' },
-      sortAscendingIcon: <ArrowDownOutlined />,
-      sortDescendingIcon: <ArrowUpOutlined />,
-      filterType: 'newerDate',
+      title: 'Created at',style: { width: '200px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%', position: 'relative' }, sortable: true, sortType: 'date', buttonStyle: { position: 'absolute', right: '10px', top: '1px' },sortAscendingIcon: <ArrowDownOutlined />,sortDescendingIcon: <ArrowUpOutlined />,filterType: 'newerDate',
     },
-
   ];
 
   const filterButtons = [
@@ -89,6 +79,7 @@ export default function ChatLogs() {
           filterButtons={filterButtons}
           setFilterType={setFilterType}
           handleKeyDown={handleKeyDown}
+          renderFilterButtons={renderFilterButtons}
         />
       ) : (
         <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -106,23 +97,7 @@ export default function ChatLogs() {
           layout === 'vertical' ? (
             <MobileView key={item.id} item={item} type={'logs'} searchText={searchText} />
           ) : (
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', lineHeight: '35px' }} key={item.id}>
-              <div style={{ width: '30px', textAlign: 'center', borderRight: '1px solid #ccc', boxSizing: 'border-box', height: '100%' }}>{item.id + 1}</div>
-              <div style={{ flex: 1, textAlign: 'center' }}>
-                <Highlighter
-                  searchWords={[searchText]}
-                  textToHighlight={item.action}
-                  highlightStyle={{ color: 'red', fontWeight: 'bold', padding: '0' }}
-                />
-              </div>
-              <div style={{ width: '200px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%' }}>
-                <Highlighter
-                  searchWords={[searchText]}
-                  textToHighlight={date(item.created_at).full}
-                  highlightStyle={{ color: 'red', fontWeight: 'bold', padding: '0' }}
-                />
-              </div>
-            </div>
+            <TableRow item={item} searchText={searchText} type="logs" />
           )
         ))}
         {chatInfo?.chatLogs.length > 0 && (
@@ -138,6 +113,7 @@ export default function ChatLogs() {
       </div>
 
       <Popup
+        renderFilterButtons={renderFilterButtons}
         isModalVisible={isModalVisible}
         handleKeyDown={handleKeyDown}
         inputValue={inputValue}

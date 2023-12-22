@@ -1,6 +1,5 @@
 import { React, useState, useEffect } from "react";
 import { Button,Pagination } from "antd";
-import Highlighter from 'react-highlight-words';
 import { ArrowDownOutlined, ArrowUpOutlined, MenuOutlined } from '@ant-design/icons';
 import { useChatViewContext } from "../ChatViewContext";
 import date from "../../../utils/date";
@@ -9,12 +8,14 @@ import MobileView from "./MobileView";
 import TableHeader from "./TableHeader";
 import TabControls from "./TabControls";
 import Popup from "./Popup";
+import TableRow from "./TableRow";
 
 
 export default function TransactionTab() {
   const [transactionsResult, setTransactionsResult] = useState([]);
   const { chatInfo } = useChatViewContext();
   const {
+    renderFilterButtons,
     toggleView,
     pageSize,
     clientWidth,
@@ -76,6 +77,7 @@ export default function TransactionTab() {
           filterButtons={filterButtons}
           setFilterType={setFilterType}
           handleKeyDown={handleKeyDown}
+          renderFilterButtons={renderFilterButtons}
         />
       ) : (
         <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -91,42 +93,7 @@ export default function TransactionTab() {
       {
         transactionsResult.map((item) => (
           layout === "horizontal" ? (
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc', lineHeight: '35px' }} key={item.id}>
-              <div style={{ width: '80px', textAlign: 'center' }}>
-                <Highlighter
-                  searchWords={[searchText]}
-                  textToHighlight={item.user_id + ''}
-                  highlightStyle={{ color: 'red', fontWeight: 'bold', padding: '0' }}
-                />
-              </div>
-              <div style={{ width: '300px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%' }}>
-                <Highlighter
-                  searchWords={[searchText]}
-                  textToHighlight={`${item.amount}`}
-                  highlightStyle={{ color: 'red', fontWeight: 'bold', padding: '0' }}
-                />
-              </div>
-              <div style={{ width: '70px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%' }}>
-                <Highlighter
-                  searchWords={[searchText]}
-                  textToHighlight={item.currency}
-                  highlightStyle={{ color: 'red', fontWeight: 'bold', padding: '0' }}
-                />
-              </div>
-              <div style={{ flex: 1, width: '200px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%' }}>
-                {item.promocode || '----'}
-              </div>
-              <div style={{ width: '70px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%' }}>
-                {item.status}
-              </div>
-              <div style={{ width: '300px', textAlign: 'center', borderLeft: '1px solid #ccc', boxSizing: 'border-box', height: '100%' }}>
-                <Highlighter
-                  searchWords={[searchText]}
-                  textToHighlight={date(item.created_at).full}
-                  highlightStyle={{ color: 'red', fontWeight: 'bold', padding: '0' }}
-                />
-              </div>
-            </div>
+            <TableRow item={item} searchText={searchText} type="transactions" />
           ) : (
             <MobileView key={item.id} item={item} type={'transactions'} searchText={searchText} />
           )
@@ -155,6 +122,7 @@ export default function TransactionTab() {
         filterButtons={filterButtons}
         toggleFilterType={toggleFilterType}
         setSortType={setSortType}
+        renderFilterButtons={renderFilterButtons}
       />
     </>
   );
