@@ -73,8 +73,10 @@ export const useFunctions = () => {
     const getVisibleItems = (items, searchText, currentPage, pageSize, filterFunction) => {
         const startIndex = (currentPage - 1) * pageSize;
         const endIndex = startIndex + pageSize;
-        const filteredItems = items.filter(filterFunction) || [];
-        return filteredItems.slice(startIndex, endIndex) || [];
+      
+        const filteredItems = items.filter(filterFunction);
+      
+        return filteredItems.slice(startIndex, endIndex);
     };
 
     const toggleFilterType = (type, setFilterType) => {
@@ -120,9 +122,8 @@ export const useFunctions = () => {
                 sortedLogs.reverse();
             }
         }
-
-        setCurrentPage(1);
-        return sortedLogs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+        console.log('Sorted Logs:', sortedLogs);
+        return sortedLogs;
     };
 
     const showModal = () => {

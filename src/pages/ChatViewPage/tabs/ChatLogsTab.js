@@ -36,7 +36,8 @@ export default function ChatLogs() {
     setFilterType,
     handleFilter,
     toggleFilterType,
-    showModal
+    showModal,
+    
   } = useFunctions();
   const totalFilteredLogs = chatLogs.filter(item => date(item.created_at).full.toLowerCase().includes(searchText.toLowerCase())).length || 0;
   const [chatLogsResult, setChatLogsResult] = useState([]);
@@ -46,9 +47,12 @@ export default function ChatLogs() {
       date(item.created_at).full.toLowerCase().includes(searchText.toLowerCase()) ||
       item.action.toLowerCase().includes(searchText.toLowerCase())
     );
-    const result = handleFilter(chatLogs, chatLogsFilterConditions);
+    
+    let result = handleFilter(chatLogs, chatLogsFilterConditions);
+    console.log( 'result2',result);
     setChatLogsResult(result);
-  }, [searchText, sortType, filterType, currentPage])
+
+  }, [searchText, sortType, filterType,currentPage])
 
   const columns = [
     { id: 7, title: '№', style: { width: '30px', textAlign: 'center', borderRight: '1px solid #ccc', boxSizing: 'border-box', height: '100%' } },
