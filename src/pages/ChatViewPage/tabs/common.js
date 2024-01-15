@@ -3,7 +3,7 @@ import date from "../../../utils/date";
 import { Button } from "antd";
 
 export const useFunctions = () => {
-    const pageSize = 5;
+    const pageSize = 20;
     const [clientWidth, setClientWidth] = useState(window.innerWidth);
     const [layout, setLayout] = useState("vertical");
     const [searching, setSearching] = useState(false);
@@ -122,7 +122,7 @@ export const useFunctions = () => {
                 sortedLogs.reverse();
             }
         }
-        console.log('Sorted Logs:', sortedLogs);
+
         return sortedLogs;
     };
 

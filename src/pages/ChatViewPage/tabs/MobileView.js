@@ -22,7 +22,7 @@ const MobileView = ({ item, type, searchText }) => {
       author={
         <b>
           <Highlighter
-            searchWords={[searchText]}
+            searchWords={[searchText.replace(/\./g, '\\.')]}
             textToHighlight={date(item.created_at).full}
             highlightStyle={{ color: 'red', fontWeight: 'bold', padding: '0' }}
           />
@@ -42,7 +42,7 @@ const MobileView = ({ item, type, searchText }) => {
       content={
         <p>
           <Highlighter
-            searchWords={[searchText]}
+            searchWords={[searchText.replace(/\./g, '\\.')]}
             textToHighlight={textToHighlight}
             highlightStyle={{ color: 'red', fontWeight: 'bold', padding: '0' }}
           />

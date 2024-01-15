@@ -45,7 +45,7 @@ export default function TransactionTab() {
     const transactionsFilterConditions = item => (
       date(item.created_at).full.toLowerCase().includes(searchText.toLowerCase()) ||
       String(item.user_id).toLowerCase().includes(searchText.toLowerCase()) ||
-      item.amount.toLowerCase().includes(searchText.toLowerCase())
+      String(item.amount).toLowerCase().includes(searchText.toLowerCase())
     );
     const result = handleFilter(transactions, transactionsFilterConditions);
     setTransactionsResult(result);
@@ -78,6 +78,7 @@ export default function TransactionTab() {
           setFilterType={setFilterType}
           handleKeyDown={handleKeyDown}
           renderFilterButtons={renderFilterButtons}
+          prop={'id, amount, date'}
         />
       ) : (
         <div style={{ display: 'flex', justifyContent: 'end' }}>

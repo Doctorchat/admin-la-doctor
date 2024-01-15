@@ -84,6 +84,7 @@ export default function ChatLogs() {
           setFilterType={setFilterType}
           handleKeyDown={handleKeyDown}
           renderFilterButtons={renderFilterButtons}
+          prop={'action, date'}
         />
       ) : (
         <div style={{ display: 'flex', justifyContent: 'end' }}>
