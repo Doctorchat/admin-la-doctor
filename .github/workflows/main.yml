@@ -1,4 +1,4 @@
-name: Admin La Doctor CI/CD
+name: Admin La Doctor CI/CD updated
 
 on:
   push:
@@ -22,10 +22,10 @@ jobs:
       - name: SSH Server Deploy MD
         uses: kostya-ten/ssh-server-deploy@v4
         with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          password: ${{ secrets.SSH_PASS }}
-          private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           scp_source: "build/"
           scp_target: ${{ secrets.TARGET_ADMIN_LADOCTOR }}
       - name: Send notification to Telegram
