@@ -25,7 +25,6 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
-          private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           scp_source: "build/"
           scp_target: ${{ secrets.TARGET_ADMIN_LADOCTOR }}
       - name: Send notification to Telegram
