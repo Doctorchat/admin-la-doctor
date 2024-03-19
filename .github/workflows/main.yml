@@ -1,4 +1,4 @@
-name: Admin-LaDoctor CI/CD
+name: Admin LaDoctor CI/CD
 
 on:
   push:
