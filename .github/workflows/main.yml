@@ -13,7 +13,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: '18.x'
       - name: Install dependencies
         run: npm install
 
@@ -27,7 +27,7 @@ jobs:
           password: ${{ secrets.SSH_PASS }}
           private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
           scp_source: "build/"
-          scp_target: "/www/wwwroot/admin.ladoctor.md"
+          scp_target: ${{ secrets.TARGET_ADMIN_LADOCTOR }}
       - name: Send notification to Telegram
         uses: appleboy/telegram-action@master
         with:
