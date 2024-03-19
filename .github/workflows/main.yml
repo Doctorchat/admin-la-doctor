@@ -1,4 +1,4 @@
-name: Doctochat Prod CI/CD
+name: Admin-LaDoctor CI/CD
 
 on:
   push:
@@ -27,14 +27,14 @@ jobs:
           password: ${{ secrets.SSH_PASS }}
           private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
           scp_source: "build/"
-          scp_target: ${{ secrets.TARGET_ADMIN_PROD }}
+          scp_target: "/www/wwwroot/admin.ladoctor.md"
       - name: Send notification to Telegram
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            Deployed MD Prod Admin
+            Deployed Admin - LaDoctor
             ${{ github.actor }} created commit:
             Commit message: ${{ github.event.commits[0].message }}
 
