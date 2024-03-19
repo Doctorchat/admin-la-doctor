@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { Alert, Button, notification, Popconfirm, Tag } from "antd";
+import { Alert, Button, notification, Popconfirm, Tag, PageHeader } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMount, useSessionStorage, useUnmount } from "react-use";
@@ -82,7 +82,7 @@ export default function WithdrawalList(props) {
 
       setState(newState);
     },
-    [setState, state],
+    [setState, state]
   );
 
   const onTableLinksClick = useCallback(
@@ -90,7 +90,7 @@ export default function WithdrawalList(props) {
       await dispatch(setCleanOnUnmountFalse());
       history.push(path);
     },
-    [dispatch, history],
+    [dispatch, history]
   );
 
   const confirmHandler = useCallback(
@@ -109,7 +109,7 @@ export default function WithdrawalList(props) {
         notification.error({ message: "Eroare", description: "A apărut o eroare" });
       }
     },
-    [dispatch],
+    [dispatch]
   );
 
   const columns = useMemo(
@@ -153,7 +153,7 @@ export default function WithdrawalList(props) {
         ),
       },
     ],
-    [confirmHandler, onTableLinksClick],
+    [confirmHandler, onTableLinksClick]
   );
 
   if (error) {
@@ -162,6 +162,7 @@ export default function WithdrawalList(props) {
 
   return (
     <>
+      <PageHeader className="site-page-header" title={`Solicitari (${withdrawalList?.total || 0})`} />
       <DcTable
         title={title}
         dataColumns={columns}

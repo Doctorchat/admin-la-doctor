@@ -15,14 +15,11 @@ import {
   SupportListPage,
   SupportViewPage,
   WithdrawalPage,
-  CouncilListPage,
   CouncilViewPage,
   InternalChatsListPage,
   StatisticsPage,
   TransactionsPage,
-  CallsPage,
   CallViewPage,
-  CompaniesPage,
   CompanyViewPage,
 } from "../pages/";
 
@@ -136,12 +133,6 @@ const routes = [
     private: true,
   },
   {
-    path: "/council-list",
-    component: CouncilListPage,
-    exact: true,
-    private: true,
-  },
-  {
     path: "/council/:chat_id",
     component: CouncilViewPage,
     exact: true,
@@ -161,20 +152,8 @@ const routes = [
     private: true,
   },
   {
-    path: "/calls",
-    component: CallsPage,
-    exact: true,
-    private: true,
-  },
-  {
     path: "/calls/:user_id",
     component: CallViewPage,
-    exact: true,
-    private: true,
-  },
-  {
-    path: "/companies",
-    component: CompaniesPage,
     exact: true,
     private: true,
   },

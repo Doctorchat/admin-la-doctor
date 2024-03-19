@@ -43,15 +43,6 @@ export default function Navigation({ closeMenu }) {
         label: <Link to="/">Dashboard</Link>,
       },
       {
-        key: "council-list",
-        label: (
-          <Space align="center" className="justify-content-between">
-            <Link to="/council-list">Consilii</Link>
-            <Badge className="ms-2" key="council-list-requests" count={councilCount} />
-          </Space>
-        ),
-      },
-      {
         key: "withdrawal",
         label: (
           <Space align="center" className="justify-content-between">
@@ -69,11 +60,6 @@ export default function Navigation({ closeMenu }) {
         label: <Link to="/transactions">Tranzacții</Link>,
       },
       {
-        key: "calls",
-        label: <Link to="/calls">Apeluri</Link>,
-        roles: [userRoles.get("manager")],
-      },
-      {
         key: "support",
         label: (
           <Space align="center" className="justify-content-between">
@@ -81,10 +67,6 @@ export default function Navigation({ closeMenu }) {
             <Badge className="ms-2" key="support-list-requests" count={supportCount} />
           </Space>
         ),
-      },
-      {
-        key: "companies",
-        label: <Link to="/companies">Companii</Link>,
       },
       {
         key: "doctors",

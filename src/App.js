@@ -21,7 +21,6 @@ function App() {
       dispatch(updateRequestsCount());
       dispatch(updateSupportCount());
       dispatch(updateWithdrawalCount());
-      dispatch(updateCouncilCount());
     }
   }, [dispatch, isAuthorized]);
 
