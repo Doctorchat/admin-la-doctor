@@ -27,7 +27,7 @@ jobs:
           password: ${{ secrets.SSH_PASS }}
           private_key: ${{ secrets.SERVER_PRIVATE_KEY }}
           scp_source: "build/"
-          scp_target: "/www/wwwroot/admin.ladoctor.md/"
+          scp_target: "/www/wwwroot/admin.ladoctor.md"
       - name: Send notification to Telegram
         uses: appleboy/telegram-action@master
         with:
